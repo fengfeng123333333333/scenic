@@ -162,6 +162,160 @@ const themes = {
   },
 
   // ---------------------------------------
+  // 山地禅意
+  // ---------------------------------------
+  "mountain-zen": {
+    name: "山地禅意（mountain）",
+    description:
+      "静谧质朴，适合山岳景区、禅修基地、徒步线路等。松石绿、岩石灰与土褐，呈现沉稳、自然与禅意的视觉语境。",
+    vars: {
+      // 主色系（松石/苔绿色系）
+      "--color-primary": "#2F6B57",
+      "--color-primary-dark": "#23503F",
+      "--color-primary-hover": "#23503F",
+      "--color-primary-bg-light": "rgba(47, 107, 87, 0.06)",
+      "--color-primary-border-light": "rgba(47, 107, 87, 0.12)",
+      "--color-text-on-primary": "#FFFFFF",
+
+      // 辅色与点缀（土褐 / 岩石色 / 木色）
+      "--color-secondary": "#A57C4A",
+      "--color-accent": "#C9B89A",
+      "--color-warning": "#A57C4A",
+      "--color-danger": "#B35A3A",
+      // 扩展变量（山地禅意专属）
+      "--color-ink": "#2B2B28",
+      "--color-terracotta": "#B35A3A",
+
+      // 中性色（岩石灰 / 泥土 / 纸色）
+      "--color-bg": "#FBFBF8",
+      "--color-bg-card": "#FFFFFF",
+      "--color-text": "#2E2C28",
+      "--color-text-secondary": "#726962",
+      "--color-border-light": "#ECE6DF",
+      "--color-disabled": "#CFC6BC",
+
+      // 骨架屏（Skeleton）
+      "--color-skeleton-base": "#ECE6DF",
+      "--color-skeleton-highlight": "rgba(255, 255, 255, 0.6)",
+
+      // 圆角（偏稳重的温和圆角）
+      "--radius-card": "24rpx",
+      "--radius-button": "20rpx",
+      "--radius-sm": "12rpx",
+      "--skeleton-radius": "12rpx",
+
+      // 阴影（中性低不透明度）
+      "--shadow-soft": "0 10rpx 28rpx rgba(0, 0, 0, 0.06)",
+      "--shadow-modal": "0 22rpx 52rpx rgba(0, 0, 0, 0.12)",
+      // 扩展：暖土调微影
+      "--shadow-soft-earth": "0 10rpx 26rpx rgba(165, 124, 74, 0.04)",
+    },
+  },
+
+  // ---------------------------------------
+  // 活力游乐
+  // ---------------------------------------
+  "fun-play": {
+    name: "活力游乐（fun）",
+    description:
+      "欢乐动感主题，明快亲切，适用于游乐园、亲子乐园、嘉年华等场景。活力天蓝 + 明亮暖黄点缀，辅以活泼粉/绿作次级强调。",
+    vars: {
+      // 主色系（活力天蓝）
+      "--color-primary": "#00AEEF",
+      "--color-primary-dark": "#008FD1",
+      "--color-primary-hover": "#008FD1",
+      "--color-primary-bg-light": "rgba(0, 174, 239, 0.08)",
+      "--color-primary-border-light": "rgba(0, 174, 239, 0.14)",
+      "--color-text-on-primary": "#FFFFFF",
+
+      // 辅色与点缀（暖黄 / 活泼粉 / 草绿）
+      "--color-secondary": "#FFD24A",
+      "--color-accent": "#FF6BC1",
+      "--color-warning": "#FFD24A",
+      "--color-danger": "#FF4B4B",
+      // 扩展变量（活力游乐专属）
+      "--color-accent-pink": "#FF6BC1",
+      "--color-accent-green": "#6CE67A",
+
+      // 中性色（明亮亲和的灰系）
+      "--color-bg": "#FFFDFC",
+      "--color-bg-card": "#FFFFFF",
+      "--color-text": "#2A2E33",
+      "--color-text-secondary": "#6D7378",
+      "--color-border-light": "#F0F3F5",
+      "--color-disabled": "#D9DFE2",
+
+      // 骨架屏（Skeleton）
+      "--color-skeleton-base": "#F2F6F8",
+      "--color-skeleton-highlight": "rgba(255, 255, 255, 0.6)",
+
+      // 圆角
+      "--radius-card": "24rpx",
+      "--radius-button": "20rpx",
+      "--radius-sm": "12rpx",
+      "--skeleton-radius": "12rpx",
+
+      // 阴影（轻盈浅影）
+      "--shadow-soft": "0 12rpx 32rpx rgba(0, 174, 239, 0.06)",
+      "--shadow-modal": "0 24rpx 56rpx rgba(0, 0, 0, 0.12)",
+      // 扩展：点缀色暖影（节日/促销卡片）
+      "--shadow-accent": "0 8rpx 24rpx rgba(255, 210, 74, 0.06)",
+    },
+  },
+
+  // ---------------------------------------
+  // 精致花展
+  // ---------------------------------------
+  "flower-bloom": {
+    name: "精致花展（flower）",
+    description:
+      "浪漫清新，适合花海、植物园与花展主题公园。柔粉、薄荷与淡紫为主，花蕊黄点缀，营造浪漫、轻盈且高雅的氛围。",
+    vars: {
+      // 主色系（柔粉 / 桃粉）
+      "--color-primary": "#F39AB9",
+      "--color-primary-dark": "#E06A97",
+      "--color-primary-hover": "#E06A97",
+      "--color-primary-bg-light": "rgba(243, 154, 185, 0.06)",
+      "--color-primary-border-light": "rgba(243, 154, 185, 0.12)",
+      "--color-text-on-primary": "#FFFFFF",
+
+      // 辅色与点缀（薄荷 / 淡紫 / 花蕊黄）
+      "--color-secondary": "#FFD16B",
+      "--color-accent": "#7FE3C7",
+      "--color-warning": "#FFD16B",
+      "--color-danger": "#E94B3C",
+      // 扩展变量（精致花展专属）
+      "--color-accent-mint": "#7FE3C7",
+      "--color-accent-lilac": "#C7A8F0",
+      "--color-accent-stamen": "#FFD16B",
+
+      // 中性色（纸白 / 花园土灰）
+      "--color-bg": "#FFFDFB",
+      "--color-bg-card": "#FFFFFF",
+      "--color-text": "#2F2D2B",
+      "--color-text-secondary": "#7A6F6E",
+      "--color-border-light": "#F3ECEB",
+      "--color-disabled": "#DCD3CF",
+
+      // 骨架屏（Skeleton）
+      "--color-skeleton-base": "#F5EEF0",
+      "--color-skeleton-highlight": "rgba(255, 255, 255, 0.6)",
+
+      // 圆角
+      "--radius-card": "24rpx",
+      "--radius-button": "20rpx",
+      "--radius-sm": "12rpx",
+      "--skeleton-radius": "12rpx",
+
+      // 阴影（轻柔浅影）
+      "--shadow-soft": "0 12rpx 32rpx rgba(243, 154, 185, 0.06)",
+      "--shadow-modal": "0 24rpx 56rpx rgba(0, 0, 0, 0.12)",
+      // 扩展：薄荷色调影
+      "--shadow-mint": "0 10rpx 28rpx rgba(127, 227, 199, 0.05)",
+    },
+  },
+
+  // ---------------------------------------
   // 自然生态类
   // ---------------------------------------
   "natural-ecology": {
@@ -212,7 +366,7 @@ const themes = {
 // ============================================================================
 
 /** 默认主题 key */
-const DEFAULT_THEME = "culture-classic";
+const DEFAULT_THEME = "water-relax";
 
 /** localStorage 存储 key */
 const STORAGE_KEY = "app-theme";
