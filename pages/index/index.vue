@@ -1,6 +1,6 @@
 <template>
-  <!-- 页面根容器 -->
-  <view class="page-index">
+  <!-- 页面根容器（绑定主题 CSS 变量） -->
+  <view class="page-index" :style="$themeStyle">
     <!-- 全页骨架屏：API 请求期间展示，pageReady 后切换为真实内容 -->
     <IndexSkeleton v-if="!pageReady" />
 
@@ -914,7 +914,7 @@ page {
   height: 12rpx !important;
   border-radius: 50%;
   margin: 0 6rpx !important;
-  border: 1rpx solid rgba(58, 167, 109, 0.25);
+  border: 1rpx solid var(--color-primary-border-light);
 }
 
 :deep(.hero__swiper .wx-swiper-dot-active),
@@ -983,7 +983,7 @@ page {
 }
 
 .row__icon--secondary {
-  background-color: rgba(58, 167, 109, 0.06);
+  background-color: var(--color-primary-bg-light);
 }
 
 .row__content {
@@ -1078,7 +1078,7 @@ page {
   width: 112rpx;
   height: 112rpx;
   border-radius: 50%;
-  background-color: rgba(58, 167, 109, 0.06);
+  background-color: var(--color-primary-bg-light);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1228,7 +1228,7 @@ page {
   margin-right: 8rpx;
   font-size: var(--font-size-small, 22rpx);
   color: var(--color-secondary);
-  border: 1rpx solid rgba(78, 166, 200, 0.4);
+  border: 1rpx solid var(--color-secondary);
   padding: 4rpx 12rpx;
   border-radius: var(--radius-sm, 16rpx);
 }

@@ -1,5 +1,5 @@
 <template>
-  <view class="kong">
+  <view class="kong" :style="$themeStyle">
     <view class="kong__icon-box">
       <u-icon
         name="coupon"

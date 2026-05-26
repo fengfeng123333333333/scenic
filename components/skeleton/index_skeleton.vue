@@ -1,6 +1,6 @@
 <template>
   <!-- 首页全页骨架屏 —— 匹配 index.vue 各模块布局 -->
-  <view class="skeleton-page">
+  <view class="skeleton-page" :style="$themeStyle">
     <!-- Navbar 占位 -->
     <view class="sk-navbar">
       <view class="sk-navbar__back shimmer-bg"></view>

@@ -19,11 +19,12 @@ icon {
   box-sizing: border-box;
 }
 
-/* ====== 自然生态类景区设计 Token（390px 基准 → rpx，1px=2rpx） = */
+/* ====== 默认主题：通用默认（天蓝主色 + 橙色点缀）（编译期兜底默认值） = */
+/* 注意：主题配置的权威来源在 styles/themes.js，此处为编译期兜底默认值 */
 page {
-  --color-primary: #3AA76D;
-  --color-primary-dark: #2E8B57;
-  --color-secondary: #4EA6C8;
+  --color-primary: #2DA8F6;
+  --color-primary-dark: #1B8BE0;
+  --color-secondary: #FF8C42;
   --color-bg: #F6FBF7;
   --color-bg-card: #FFFFFF;
   --color-text: #2F3A35;
@@ -33,7 +34,7 @@ page {
   --radius-card: 28rpx;
   --radius-button: 24rpx;
   --radius-sm: 16rpx;
-  --shadow-soft: 0 12rpx 32rpx rgba(46, 139, 87, 0.06);
+  --shadow-soft: 0 12rpx 32rpx rgba(45, 168, 246, 0.06);
   --shadow-modal: 0 24rpx 60rpx rgba(0, 0, 0, 0.12);
   --space-2: 16rpx;
   --space-3: 24rpx;
@@ -49,4 +50,23 @@ page {
   --line-height-h2: 40rpx;
   --line-height-body: 40rpx;
   --line-height-caption: 36rpx;
+  --btn-height-lg: 104rpx;
+  --btn-padding-lg: 32rpx 48rpx;
+  --btn-font-lg: 32rpx;
+  --btn-height-md: 88rpx;
+  --btn-padding-md: 24rpx 40rpx;
+  --btn-font-md: 28rpx;
+  --btn-height-sm: 64rpx;
+  --btn-padding-sm: 16rpx 28rpx;
+  --btn-font-sm: 24rpx;
+  --btn-transition: transform 120ms ease-in-out, opacity 200ms ease-in-out, background-color 200ms ease-in-out, box-shadow 200ms ease-in-out;
+  --btn-icon-entry: 112rpx;
+  --btn-icon-size-lg: 56rpx;
+  --btn-icon-toolbar: 80rpx;
+  --btn-icon-size-md: 40rpx;
+  --spinner-lg: 96rpx;
+  --spinner-md: 64rpx;
+  --spinner-sm: 32rpx;
+  --spinner-duration: 0.75s;
+  --skeleton-duration: 1.5s;
 }

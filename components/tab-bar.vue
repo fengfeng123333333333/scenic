@@ -1,5 +1,5 @@
 <template>
-  <view class="tabbar" role="tablist">
+  <view class="tabbar" role="tablist" :style="$themeStyle">
     <view class="tabbar__inner">
       <view
         v-for="(item, idx) in itemsLocal"

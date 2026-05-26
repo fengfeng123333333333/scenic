@@ -1,4 +1,6 @@
 <script>
+import { initTheme } from "@/styles/themes.js";
+
 export default {
   globalData: {
     myData: "",
@@ -7,21 +9,10 @@ export default {
     labKid: "",
     InvoiceUrl: "",
     fromSource: {},
-    scenicCategory: "default", // 可存储景区分类，用于主题切换
-  },
-  data() {
-    return {
-      themeStyle: {}, // 绑定到根 view 的 CSS 变量对象
-    };
-  },
-  computed: {
-    rootStyle() {
-      // 从 uni 全局变量读取
-      console.log("uni 全局变量读取");
-      return uni.$themeVars || "";
-    },
   },
   onLaunch: function (option) {
+    // 初始化主题（读取持久化 key 并注入全局 CSS 变量）
+    initTheme();
     // 处理第三方跳转参数（原有逻辑）
     if (JSON.stringify(option.referrerInfo) != "{}") {
       this.globalData.labMind = option.referrerInfo.extraData.foo;
