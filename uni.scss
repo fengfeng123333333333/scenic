@@ -1,0 +1,52 @@
+/* uni.scss — 全局注入到每个页面 */
+@import 'uview-plus/theme.scss';
+
+/* ====== 全局重置（微信小程序不支持 * 通配符） ====== */
+page,
+view,
+text,
+image,
+button,
+input,
+textarea,
+scroll-view,
+swiper,
+swiper-item,
+navigator,
+icon {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* ====== 自然生态类景区设计 Token（390px 基准 → rpx，1px=2rpx） = */
+page {
+  --color-primary: #3AA76D;
+  --color-primary-dark: #2E8B57;
+  --color-secondary: #4EA6C8;
+  --color-bg: #F6FBF7;
+  --color-bg-card: #FFFFFF;
+  --color-text: #2F3A35;
+  --color-text-secondary: #6B766F;
+  --color-border-light: #E6EFE8;
+  --color-disabled: #C9D9D0;
+  --radius-card: 28rpx;
+  --radius-button: 24rpx;
+  --radius-sm: 16rpx;
+  --shadow-soft: 0 12rpx 32rpx rgba(46, 139, 87, 0.06);
+  --shadow-modal: 0 24rpx 60rpx rgba(0, 0, 0, 0.12);
+  --space-2: 16rpx;
+  --space-3: 24rpx;
+  --space-4: 32rpx;
+  --space-5: 40rpx;
+  --space-6: 48rpx;
+  --font-size-h1: 36rpx;
+  --font-size-h2: 30rpx;
+  --font-size-body: 28rpx;
+  --font-size-caption: 24rpx;
+  --font-size-small: 22rpx;
+  --line-height-h1: 44rpx;
+  --line-height-h2: 40rpx;
+  --line-height-body: 40rpx;
+  --line-height-caption: 36rpx;
+}
