@@ -4,6 +4,10 @@
   </view>
 </template>
 
+<script setup>
+defineProps({ active: Boolean });
+</script>
+
 <style scoped>
 .my-content {
   min-height: 100vh;

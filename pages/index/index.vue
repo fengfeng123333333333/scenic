@@ -1,10 +1,14 @@
 <template>
   <view class="page-index" :style="$themeStyle">
     <!-- 4 个 Tab 面板，v-show 保持挂载不销毁 -->
-    <HomeContent v-show="currentTab === 0" @ready="onHomeReady" />
-    <OrderContent v-show="currentTab === 1" />
-    <TicketContent v-show="currentTab === 2" />
-    <MyContent v-show="currentTab === 3" />
+    <HomeContent
+      v-show="currentTab === 0"
+      :active="currentTab === 0"
+      @ready="onHomeReady"
+    />
+    <OrderContent v-show="currentTab === 1" :active="currentTab === 1" />
+    <TicketContent v-show="currentTab === 2" :active="currentTab === 2" />
+    <MyContent v-show="currentTab === 3" :active="currentTab === 3" />
 
     <!-- 底部导航栏 -->
     <tab-bar :current="String(currentTab)" @change="onTabChange" />

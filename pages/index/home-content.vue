@@ -318,13 +318,16 @@
 </template>
 
 <script setup>
-import { ref, getCurrentInstance, onMounted } from "vue";
+import { ref, getCurrentInstance, watch } from "vue";
 import store from "../../store/index.js";
 import IndexSkeleton from "../../components/skeleton/index_skeleton.vue";
 import Kong from "../../components/kong/kong.vue";
 
 const proxy = getCurrentInstance().proxy || getCurrentInstance();
+const props = defineProps({ active: Boolean });
 const emit = defineEmits(["ready"]);
+
+const hasLoaded = ref(false);
 
 const indicatorDots = ref(true);
 const autoplay = ref(true);
@@ -351,9 +354,16 @@ const pageReady = ref(false);
 
 const myRequest = (options) => uni.$myRequest(options);
 
-onMounted(() => {
-  startPageFun();
-});
+watch(
+  () => props.active,
+  (val) => {
+    if (val && !hasLoaded.value) {
+      hasLoaded.value = true;
+      startPageFun();
+    }
+  },
+  { immediate: true },
+);
 
 function startPageFun() {
   pageReady.value = false;

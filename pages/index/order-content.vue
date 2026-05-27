@@ -60,7 +60,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, watch } from "vue";
+
+const props = defineProps({ active: Boolean });
+
+const hasLoaded = ref(false);
 
 const statusTabs = [
   { name: "全部" },
@@ -100,9 +104,16 @@ function goDetail(item) {
   uni.navigateTo({ url: `/pages/ticketCode/ticketCode` });
 }
 
-onMounted(() => {
-  queryOrders(0);
-});
+watch(
+  () => props.active,
+  (val) => {
+    if (val && !hasLoaded.value) {
+      hasLoaded.value = true;
+      queryOrders(0);
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <style lang="scss" scoped>
