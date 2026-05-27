@@ -27,7 +27,11 @@
       >
         <view class="order-card__header">
           <text class="order-card__date">下单日期：{{ item.CreateTime }}</text>
-          <text class="order-card__status">{{ item.StatusDesc }}</text>
+          <text
+            class="order-card__status"
+            :style="getStatusStyle(item.StatusDesc)"
+            >{{ item.StatusDesc }}</text
+          >
         </view>
         <view class="order-card__body">
           <image
@@ -92,6 +96,19 @@ async function queryOrders(status) {
     },
   });
   orderList.value = res.data.Data || [];
+}
+
+const statusColorMap = {
+  待使用: "var(--color-primary)",
+  未支付: "var(--color-warning)",
+  已完成: "var(--color-text-secondary)",
+  退款成功: "var(--color-accent)",
+  待自取: "var(--color-secondary)",
+};
+
+function getStatusStyle(status) {
+  const color = statusColorMap[status] || "var(--color-text-secondary)";
+  return { color };
 }
 
 function onStatusChange(index) {
