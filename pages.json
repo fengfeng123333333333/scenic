@@ -6,25 +6,8 @@
 				"navigationBarTitleText": "uni-app",
 				"navigationStyle": "custom"
 			}
-		},
-		{
-			"path": "pages/order/order",
-			"style": {
-				"navigationBarTitleText": "订单"
-			}
-		},
-		{
-			"path": "pages/ticket/ticket",
-			"style": {
-				"navigationBarTitleText": "购票"
-			}
-		},
-		{
-			"path": "pages/my/my",
-			"style": {
-				"navigationBarTitleText": "我的"
-			}
 		}
+
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -37,7 +20,7 @@
 		"autoscan": true,
 		"custom": {
 			"^u-(.*)": "uview-plus/components/u-$1/u-$1.vue",
-			"^tab-bar$": "@/components/tab-bar.vue",
+			"^tab-bar$": "@/components/tabbar/tabbar.vue",
 			"^v-tabs$": "@/components/v-tabs/v-tabs.vue",
 			"^uni-popup$": "@/components/uni-popup/uni-popup.vue"
 		}

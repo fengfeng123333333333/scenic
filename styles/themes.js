@@ -365,8 +365,8 @@ const themes = {
 // 常量
 // ============================================================================
 
-/** 默认主题 key */
-const DEFAULT_THEME = "water-relax";
+/** 默认主题key */
+const DEFAULT_THEME = "natural-ecology";
 
 /** localStorage 存储 key */
 const STORAGE_KEY = "app-theme";
