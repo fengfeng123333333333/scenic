@@ -1,5 +1,8 @@
 <template>
   <view class="order-content" :style="$themeStyle">
+    <!-- 请求加载遮罩 -->
+    <RequestLoading v-if="requestLoading" text="正在加载订单..." />
+
     <u-navbar
       title="订单列表"
       :placeholder="true"
@@ -55,8 +58,8 @@
       </view>
     </scroll-view>
 
-    <!-- 空状态 -->
-    <view class="order-empty" v-else>
+    <!-- 空状态（加载完成后才显示） -->
+    <view class="order-empty" v-else-if="!requestLoading">
       <u-icon name="file-text" color="var(--color-disabled)" size="64" />
       <text class="order-empty__text">暂无订单</text>
     </view>
@@ -65,10 +68,12 @@
 
 <script setup>
 import { ref, watch } from "vue";
+import RequestLoading from "../../components/loading/request-loading.vue";
 
 const props = defineProps({ active: Boolean });
 
 const hasLoaded = ref(false);
+const requestLoading = ref(false);
 
 const statusTabs = [
   { name: "全部" },
@@ -85,6 +90,7 @@ const orderList = ref([]);
 const myRequest = (options) => uni.$myRequest(options);
 
 async function queryOrders(status) {
+  requestLoading.value = true;
   const openid = uni.getStorageSync("userinfo");
   const res = await myRequest({
     url: "/api/Applets/AppletsGetTicketOrderList",
@@ -96,6 +102,7 @@ async function queryOrders(status) {
     },
   });
   orderList.value = res.data.Data || [];
+  requestLoading.value = false;
 }
 
 const statusColorMap = {

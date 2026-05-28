@@ -507,6 +507,7 @@ function calPhone() {
   uni.makePhoneCall({ phoneNumber: weather.value.Phone });
 }
 function dizhi() {
+  console.log(weather.value.LocalityY, weather.value.LocalityX);
   uni.openLocation({
     latitude: Number(weather.value.LocalityY),
     longitude: Number(weather.value.LocalityX),
