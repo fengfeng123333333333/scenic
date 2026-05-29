@@ -6,6 +6,42 @@
 				"navigationBarTitleText": "uni-app",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/details/details",
+			"style": {
+				"navigationBarTitleText": "门票详情"
+			}
+		},
+		{
+			"path": "pages/reserve/reserve",
+			"style": {
+				"navigationBarTitleText": "门票预定"
+			}
+		},
+		{
+			"path": "pages/reserve/resMenber",
+			"style": {
+				"navigationBarTitleText": "门票预订"
+			}
+		},
+		{
+			"path": "pages/tourist/tourist",
+			"style": {
+				"navigationBarTitleText": "常用人员"
+			}
+		},
+		{
+			"path": "pages/tourist/addTourist",
+			"style": {
+				"navigationBarTitleText": "添加常用人员"
+			}
+		},
+		{
+			"path": "pages/payment/payment",
+			"style": {
+				"navigationBarTitleText": "门票预订"
+			}
 		}
 
 	],
