@@ -1,95 +1,99 @@
 ﻿<!--
-  常用人员页（tourist.vue）
+  支付页（payment.vue）
   ==========================================
   重构标准：page-refactor-standard.md
   主题色：全部通过 CSS 变量驱动，跟随全局主题动态切换
+  功能：展示订单金额与支付方式，处理微信支付 / 会员支付
 -->
 
 <template>
-  <view class="tourist-page" :style="$themeStyle">
-    <!-- ==================== 骨架屏加载 ==================== -->
-    <view v-if="!pageReady" class="tourist-page__skeleton">
-      <view class="skeleton-card" v-for="i in 3" :key="i">
-        <view class="skeleton-line skeleton-line--title" />
-        <view class="skeleton-line skeleton-line--text" />
-        <view class="skeleton-line skeleton-line--text" />
-      </view>
-    </view>
+  <view class="payment-page" :style="$themeStyle">
+    <!-- ==================== 页面初始加载 ==================== -->
+    <PageLoading v-if="!pageReady" />
 
     <!-- ==================== 主内容 ==================== -->
     <template v-else>
-      <!-- 新增按钮 -->
-      <view class="tourist-page__header">
-        <button class="tourist-add-btn" @click="addContact()">
-          <u-icon name="plus" size="20" color="var(--color-primary)" />
-          <text>添加常用人员</text>
-        </button>
+      <!-- 金额区 -->
+      <view class="payment-page__amount">
+        <view class="payment-page__amount-sum">
+          <text class="payment-page__amount-symbol">￥</text>
+          <text class="payment-page__amount-value">{{
+            tickinfo.TotalMoney
+          }}</text>
+        </view>
+        <view class="payment-page__amount-desc">
+          {{ tickinfo.ProductInfo }}
+          <text v-if="tickinfo.time != undefined"> ({{ tickinfo.time }})</text>
+        </view>
       </view>
 
-      <!-- 人员列表 -->
-      <view class="tourist-list">
+      <!-- 支付方式列表 -->
+      <view class="payment-page__methods">
+        <!-- 微信支付 -->
         <view
-          class="tourist-card"
-          v-for="(item, index) in touristList"
-          :key="index"
+          class="payment-page__method"
+          :class="{ 'payment-page__method--active': payType === 0 }"
+          @click="payType = 0"
         >
-          <view class="tourist-card__body" @click="handleSelect(item)">
-            <view class="tourist-card__field">
-              <text class="tourist-card__label">姓名</text>
-              <text class="tourist-card__value">{{ item.TouristName }}</text>
-            </view>
-            <view class="tourist-card__field">
-              <text class="tourist-card__label">身份证</text>
-              <text class="tourist-card__value">{{ item.TouristIDCard }}</text>
-            </view>
-            <view class="tourist-card__field">
-              <text class="tourist-card__label">手机号</text>
-              <text class="tourist-card__value">{{ item.TouristPhone }}</text>
-            </view>
+          <view class="payment-page__method-left">
+            <u-icon name="weixin-fill" color="#07C160" size="22" />
+            <text class="payment-page__method-text">微信支付</text>
           </view>
-          <view class="tourist-card__actions">
-            <view class="tourist-card__btn" @click.stop="addContact(item)">
-              <u-icon
-                name="edit-pen"
-                color="var(--color-text-secondary)"
-                size="22"
-              />
-            </view>
-            <view
-              class="tourist-card__btn"
-              @click.stop="handleDelete(item, index)"
-            >
-              <u-icon
-                name="trash"
-                color="var(--color-text-secondary)"
-                size="22"
-              />
-            </view>
+          <view
+            class="payment-page__method-radio"
+            :class="{ 'payment-page__method-radio--checked': payType === 0 }"
+          >
+            <view v-if="payType === 0" class="payment-page__method-radio-dot" />
           </view>
         </view>
 
-        <!-- 空态 -->
-        <view class="tourist-list__empty" v-if="touristList.length === 0">
-          <text>暂无常用人员</text>
+        <!-- 会员支付 -->
+        <view
+          v-if="tickinfo.isMember == true"
+          class="payment-page__method"
+          :class="{ 'payment-page__method--active': payType === 1 }"
+          @click="payType = 1"
+        >
+          <view class="payment-page__method-left">
+            <u-icon
+              name="account-fill"
+              color="var(--color-secondary)"
+              size="22"
+            />
+            <text class="payment-page__method-text">会员支付</text>
+          </view>
+          <view
+            class="payment-page__method-radio"
+            :class="{ 'payment-page__method-radio--checked': payType === 1 }"
+          >
+            <view v-if="payType === 1" class="payment-page__method-radio-dot" />
+          </view>
         </view>
+      </view>
+
+      <!-- 支付按钮 -->
+      <view class="payment-page__footer">
+        <button
+          class="payment-page__btn"
+          :class="{ 'payment-page__btn--loading': payLoading }"
+          :disabled="payLoading"
+          @tap="handlePay"
+        >
+          <template v-if="payLoading">
+            <u-loading-icon
+              mode="circle"
+              size="18"
+              color="var(--color-text-on-primary)"
+            />
+            <text>支付中...</text>
+          </template>
+          <text v-else>立即支付</text>
+        </button>
       </view>
     </template>
 
-    <!-- ==================== 删除确认弹窗 ==================== -->
-    <u-modal
-      :show="showDeleteModal"
-      title="提示"
-      :showCancelButton="true"
-      :asyncClose="true"
-      :zoom="true"
-      :confirmColor="calendarColor"
-      confirmText="删除"
-      cancelText="取消"
-      @confirm="handleDeleteConfirm"
-      @cancel="showDeleteModal = false"
-    >
-      <view class="tourist-modal__content">确定要删除该人员信息吗？</view>
-    </u-modal>
+    <!-- ==================== 支付中遮罩 ==================== -->
+    <RequestLoading v-if="payLoading" text="正在支付..." />
 
     <!-- ==================== Toast ==================== -->
     <u-toast ref="uToastRef" />
@@ -97,257 +101,384 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from "vue";
-import { onLoad, onShow } from "@dcloudio/uni-app";
-import { useToast } from "@/util/toast.js";
-import { useStore } from "@/store/index.js";
+import { ref } from "vue";
+import { onLoad } from "@dcloudio/uni-app";
+import store from "../../store/index.js";
+import PageLoading from "../../components/loading/page-loading.vue";
+import RequestLoading from "../../components/loading/request-loading.vue";
 
 // ==================== 页面路由常量 ====================
 const PAGE_ROUTES = {
-  contactAdd: "/pages/common/contactaAdd",
+  /** 订单列表页 */
+  order: "/pages/order/order",
 };
 
-// ==================== Store ====================
-const { state: store } = useStore();
+/** 支付 API 路由表：根据 tickinfo.name 映射对应后端接口 */
+const PAY_API_MAP = {
+  orderProde: "/api/Applets/AppletsPayGoodsOrder",
+  cartime: "/api/Applets/AppletsPayTimeTicketOrder",
+};
 
-// ==================== 页面级 Toast ====================
-const { uToastRef, showToast } = useToast();
-
-// ==================== 页面状态 ====================
-const pageReady = ref(false);
-const isShow = ref(false);
-const showDeleteModal = ref(false);
+/** 默认支付 API */
+const DEFAULT_PAY_API = "/api/Applets/AppletsPayTicketOrder";
 
 // ==================== 数据 ====================
-const touristList = ref([]);
-const deleteTarget = ref(null);
+const tickinfo = ref({});
+const payType = ref(0); // 0=微信支付, 1=会员支付
+const pageReady = ref(false);
+const payLoading = ref(false);
 
-// ==================== 路由参数 ====================
-const routeKey = ref(0);
-
-// ==================== 计算属性 ====================
-const calendarColor = computed(() => {
-  return store.themeVars?.["--color-primary"] || "#3c9cff";
-});
+// ==================== Refs ====================
+const uToastRef = ref(null);
 
 // ==================== 生命周期 ====================
-onLoad((options) => {
-  routeKey.value = options?.key || 0;
+onLoad(() => {
+  initPageData();
 });
 
-onShow(() => {
-  if (isShow.value) {
-    fetchTouristList();
-  } else {
-    isShow.value = true;
-  }
-});
+// ==================== 数据初始化 ====================
+function initPageData() {
+  tickinfo.value = store.state.tickinfo || {};
+  pageReady.value = true;
+}
 
 // ==================== 数据请求 ====================
-async function fetchTouristList() {
-  try {
-    touristList.value = [];
-    const openid = uni.getStorageSync("userinfo");
-    const res = await uni.$myRequest({
-      url: "/api/Applets/AppletsGetTourists",
-      method: "POST",
-      data: { openId: openid?.openid || "" },
-    });
-    touristList.value = res?.data?.Data || [];
-  } catch (err) {
-    console.error("[tourist] 获取列表失败:", err);
-  } finally {
-    pageReady.value = true;
-  }
+
+/**
+ * 根据 tickinfo.name 构建支付 API 路径
+ * @returns {string}
+ */
+function buildPayUrl() {
+  return PAY_API_MAP[tickinfo.value.name] || DEFAULT_PAY_API;
+}
+
+/**
+ * 调用后端支付下单接口
+ * @returns {Promise<object>} API 响应
+ */
+async function requestPayOrder() {
+  return await uni.$myRequest({
+    url: buildPayUrl(),
+    method: "POST",
+    data: {
+      openId: tickinfo.value.openId,
+      orderID: tickinfo.value.OrderID,
+      payType: String(payType.value),
+    },
+  });
 }
 
 // ==================== 导航辅助 ====================
-function buildContactAddUrl(item) {
-  return `${PAGE_ROUTES.contactAdd}?ID=${item?.ID || 0}`;
+
+/** 构建订单页 URL */
+function buildOrderUrl() {
+  return `${PAGE_ROUTES.order}?active=0`;
 }
 
-function goToContactAdd(item) {
-  uni.navigateTo({ url: buildContactAddUrl(item) });
+/** 写入订单 ID 到 store */
+function setOrderStore() {
+  store.state.order = tickinfo.value.OrderID;
+}
+
+/** 跳转到订单列表页 */
+function goToOrder() {
+  setOrderStore();
+  uni.reLaunch({ url: buildOrderUrl() });
+}
+
+// ==================== 支付处理子流程 ====================
+
+/**
+ * 处理微信小程序支付（跳转支付小程序）
+ */
+function handleMiniProgramPay(payData) {
+  const { appId, path, envVersion } = payData;
+  wx.navigateToMiniProgram({
+    appId,
+    path,
+    envVersion,
+    success(res) {
+      console.log("[支付] 跳转支付小程序成功", res);
+      payLoading.value = false;
+    },
+    fail(err) {
+      console.error("[支付] 跳转支付小程序失败", err);
+      payLoading.value = false;
+      showToast("跳转支付失败，请重试");
+    },
+  });
+}
+
+/**
+ * 处理 JSAPI 微信支付（调起收银台）
+ */
+function handleJsapiPay(payData) {
+  const payInfo = payData || {};
+
+  const payParams = {
+    paySign: payInfo.paySign,
+    timeStamp: payInfo.timeStamp,
+    nonceStr: payInfo.nonceStr,
+    package: payInfo.package_str,
+    signType: payInfo.signType,
+    success() {
+      goToOrder();
+    },
+    fail(err) {
+      console.error("[支付] 调起支付失败", err);
+      payLoading.value = false;
+      showToast("支付取消或失败");
+    },
+  };
+
+  setOrderStore();
+  uni.requestPayment(payParams);
+}
+
+/**
+ * 处理支付成功后的分支导航
+ * @param {object} resData - API 返回的 Data 字段
+ */
+function handlePaySuccess(resData) {
+  const data = resData || {};
+
+  // 微信支付分支
+  if (payType.value === 0) {
+    // 0 元订单 → 直接跳转订单页
+    if (tickinfo.value.TotalMoney == 0) {
+      goToOrder();
+      return;
+    }
+
+    // 有金额 → 判断支付方式
+    if (data.pay_type === "030") {
+      // 跳转微信支付小程序
+      handleMiniProgramPay(data);
+    } else {
+      // JSAPI 微信支付（调起收银台）
+      handleJsapiPay(data);
+    }
+    return;
+  }
+
+  // 会员支付 → 直接跳转订单页
+  if (payType.value === 1 && tickinfo.value.isMember == true) {
+    goToOrder();
+    return;
+  }
 }
 
 // ==================== 业务方法 ====================
-function addContact(item) {
-  goToContactAdd(item);
-}
 
-function handleSelect(item) {
-  if (!item) return;
-  uni.$emit("login", { item, index: routeKey.value });
-  uni.navigateBack();
-}
+/** 点击"立即支付" */
+async function handlePay() {
+  // 防重复提交
+  if (payLoading.value) return;
 
-function handleDelete(item, index) {
-  if (!item) return;
-  deleteTarget.value = { item, index };
-  showDeleteModal.value = true;
-}
+  payLoading.value = true;
 
-async function handleDeleteConfirm() {
-  if (!deleteTarget.value) {
-    showDeleteModal.value = false;
-    return;
-  }
-  const { item, index } = deleteTarget.value;
   try {
-    const openid = uni.getStorageSync("userinfo");
-    await uni.$myRequest({
-      url: "/api/Applets/AppletsDelTourists",
-      method: "POST",
-      data: {
-        openId: openid?.openid || "",
-        touristsID: item.ID,
-      },
-    });
-    touristList.value.splice(index, 1);
-    showToast("删除成功", "success");
+    const res = await requestPayOrder();
+
+    if (res.data.Code == 200) {
+      handlePaySuccess(res.data.Data);
+    } else {
+      payLoading.value = false;
+      showToast(res.data.Message || "支付失败，请重试");
+    }
   } catch (err) {
-    console.error("[tourist] 删除失败:", err);
-    showToast("删除失败");
-  } finally {
-    showDeleteModal.value = false;
-    deleteTarget.value = null;
+    console.error("[支付] 请求异常", err);
+    payLoading.value = false;
+    showToast("网络异常，请重试");
+  }
+}
+
+// ==================== 工具方法 ====================
+
+function showToast(msg, type = "error") {
+  if (uToastRef.value) {
+    uToastRef.value.show({ type, icon: false, message: msg, duration: 2000 });
+  } else {
+    uni.showToast({ title: msg, icon: "none" });
   }
 }
 </script>
 
+<script>
+export default {
+  onShareAppMessage() {
+    return {
+      title: "景区支付",
+      path: "/pages/payment/payment",
+    };
+  },
+};
+</script>
+
+<style>
+page {
+  background-color: var(--color-bg);
+  min-height: 100vh;
+}
+</style>
+
 <style lang="scss" scoped>
 /* ============================================================
-   常用人员页 — 样式
-   所有颜色均通过 CSS 变量驱动，由 $themeStyle 注入主题值
+   支付页样式 — 遵循 page-refactor-standard.md
+   - 全量主题变量：var(--color-*)、var(--radius-*)、var(--shadow-*)
+   - BEM 命名规范
+   - 安全区适配 + 按压反馈
    ============================================================ */
 
-.tourist-page {
-  min-height: 100vh;
-  background-color: var(--color-bg);
-  padding: 24rpx;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-// ==================== 骨架屏 ====================
-.tourist-page__skeleton {
+.payment-page {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  padding-bottom: calc(40rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  font-family:
+    "PingFang SC",
+    Roboto,
+    system-ui,
+    -apple-system,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+}
+
+/* ==================== 金额区 ==================== */
+.payment-page__amount {
+  padding: 48rpx 32rpx 36rpx;
+  margin: 24rpx;
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+}
+
+.payment-page__amount-sum {
+  margin-bottom: 16rpx;
+}
+
+.payment-page__amount-symbol {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.payment-page__amount-value {
+  font-size: 56rpx;
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1.2;
+}
+
+.payment-page__amount-desc {
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+/* ==================== 支付方式列表 ==================== */
+.payment-page__methods {
+  margin: 0 24rpx;
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.payment-page__method {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 32rpx;
+  border-bottom: 1rpx solid var(--color-border-light);
+  transition: background-color 0.15s ease;
+  min-height: 100rpx;
+  box-sizing: border-box;
+}
+
+.payment-page__method:last-child {
+  border-bottom: none;
+}
+
+.payment-page__method:active {
+  background-color: var(--color-primary-bg-light);
+}
+
+.payment-page__method-left {
+  display: flex;
+  align-items: center;
   gap: 24rpx;
 }
 
-.skeleton-card {
-  background: var(--color-bg-card);
-  border-radius: var(--radius-card);
-  padding: 32rpx 24rpx;
-  box-shadow: var(--shadow-soft);
+.payment-page__method-text {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--color-text);
 }
 
-.skeleton-line {
-  height: 28rpx;
-  background: var(--color-skeleton-base);
-  border-radius: var(--skeleton-radius);
-  margin-bottom: 20rpx;
+/* ==================== 自定义 Radio ==================== */
+.payment-page__method-radio {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 2rpx solid var(--color-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s ease;
 }
 
-.skeleton-line--title {
-  width: 40%;
-  height: 34rpx;
+.payment-page__method-radio--checked {
+  border-color: var(--color-primary);
 }
 
-.skeleton-line--text {
+.payment-page__method-radio-dot {
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+}
+
+/* ==================== 底部支付按钮 ==================== */
+.payment-page__footer {
+  padding: 32rpx 48rpx 0;
+  margin-top: auto;
+}
+
+.payment-page__btn {
   width: 100%;
-}
-
-.skeleton-line:last-child {
-  width: 60%;
-  margin-bottom: 0;
-}
-
-// ==================== 新增按钮 ====================
-.tourist-page__header {
-  margin-bottom: 24rpx;
-}
-
-.tourist-add-btn {
+  height: 96rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12rpx;
-  width: 100%;
-  height: 88rpx;
-  background: var(--color-bg-card);
-  border: 2rpx dashed var(--color-border-light);
-  border-radius: var(--radius-card);
-  font-size: 28rpx;
-  color: var(--color-primary);
-}
-
-.tourist-add-btn:active {
-  opacity: 0.7;
-  background: var(--color-primary-bg-light);
-}
-
-// ==================== 人员列表 ====================
-.tourist-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20rpx;
-}
-
-.tourist-card {
-  display: flex;
-  align-items: center;
-  background: var(--color-bg-card);
-  border-radius: var(--radius-card);
-  padding: 24rpx 20rpx;
-  box-shadow: var(--shadow-soft);
-}
-
-.tourist-card__body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
-}
-
-.tourist-card__field {
-  display: flex;
-  align-items: center;
-}
-
-.tourist-card__label {
-  width: 100rpx;
-  font-size: 26rpx;
+  font-size: 32rpx;
   font-weight: 600;
-  color: var(--color-text);
-  flex-shrink: 0;
+  font-family: inherit;
+  color: var(--color-text-on-primary);
+  background: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-button);
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.06);
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease;
 }
 
-.tourist-card__value {
-  font-size: 26rpx;
-  color: var(--color-text-secondary);
+.payment-page__btn:active {
+  opacity: 0.88;
+  transform: scale(0.96);
 }
 
-.tourist-card__actions {
-  display: flex;
-  flex-direction: column;
-  gap: 20rpx;
-  padding-left: 16rpx;
-}
-
-.tourist-card__btn {
-  padding: 12rpx;
-}
-
-.tourist-card__btn:active {
-  opacity: 0.5;
-}
-
-// ==================== 空态 ====================
-.tourist-list__empty {
-  text-align: center;
-  padding: 120rpx 0;
-  font-size: 28rpx;
-  color: var(--color-text-secondary);
+.payment-page__btn[disabled],
+.payment-page__btn--loading {
+  opacity: 0.85;
+  transform: none;
 }
 </style>
