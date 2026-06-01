@@ -109,8 +109,8 @@ import RequestLoading from "../../components/loading/request-loading.vue";
 
 // ==================== 页面路由常量 ====================
 const PAGE_ROUTES = {
-  /** 订单列表页 */
-  order: "/pages/order/order",
+  /** 订单列表页（实际为首页订单 Tab） */
+  order: "/pages/index/index",
 };
 
 /** 支付 API 路由表：根据 tickinfo.name 映射对应后端接口 */
@@ -172,7 +172,7 @@ async function requestPayOrder() {
 
 /** 构建订单页 URL */
 function buildOrderUrl() {
-  return `${PAGE_ROUTES.order}?active=0`;
+  return `${PAGE_ROUTES.order}?tab=1`;
 }
 
 /** 写入订单 ID 到 store */

@@ -570,19 +570,19 @@ const availableEndDate = computed(() => {
 });
 
 const calendarColor = computed(() => {
-  return store.themeVars?.["--color-primary"] || "#3c9cff";
+  return store.themeVars?.["--color-primary"] ?? "";
 });
 
 onMounted(() => {
   uni.$on("login", (data) => {
-    formData.value[data.index] = {
-      identity: data.item.TouristIDCard || "",
-      name: data.item.TouristName || "",
-      phone: data.item.TouristPhone || "",
-      img: [],
-      induc: "",
-      indPhone: "",
-    };
+    const item = formData.value[data.index];
+    if (item) {
+      Object.assign(item, {
+        identity: data.item.TouristIDCard || "",
+        name: data.item.TouristName || "",
+        phone: data.item.TouristPhone || "",
+      });
+    }
   });
 });
 
@@ -597,15 +597,25 @@ onReady(() => {
 });
 
 onLoad(async (option) => {
+  parseRouteParams(option);
   try {
-    parseRouteParams(option);
-    console.log("[reserve] 页面显示，开始初始化数据");
     await fetchAllData();
   } catch (err) {
     console.error("[reserve] 页面初始化失败:", err);
     showToast("加载失败，请重试");
   } finally {
     pageReady.value = true;
+  }
+});
+
+onShow(() => {
+  // 仅刷新可变数据（时段、优惠券），不重置票型和人脸
+  if (selectedDate.value) {
+    fetchTimeSlots(selectedDate.value);
+  }
+  const openid = uni.getStorageSync("userinfo");
+  if (openid?.openid) {
+    fetchCoupons(openid);
   }
 });
 
@@ -650,14 +660,24 @@ function initTicketData() {
   const { TicketStockList, NeedFace, NeedFaceNumber, NeedCarNumber } =
     ticketInfo.value;
   const stockList = TicketStockList || [];
+  const faceCount = NeedFaceNumber || 0;
 
   if (NeedCarNumber == 2) showPlateAdd.value = false;
 
-  if (NeedFace == 1 && formData.value[0]) {
-    formData.value[0].img = [];
-    for (let i = 0; i < (NeedFaceNumber || 0); i++) {
-      formData.value[0].img.push({ imSrc: DEFAULT_FACE_URL });
-    }
+  // 仅当 img 为空或全为默认图时才初始化，避免覆盖已上传的人脸
+  if (NeedFace == 1) {
+    formData.value.forEach((item) => {
+      const allDefault =
+        !item.img ||
+        item.img.length === 0 ||
+        item.img.every((img) => img.imSrc === DEFAULT_FACE_URL);
+      if (allDefault) {
+        item.img = [];
+        for (let i = 0; i < faceCount; i++) {
+          item.img.push({ imSrc: DEFAULT_FACE_URL });
+        }
+      }
+    });
   }
 
   if (stockList.length > 0) {
@@ -1643,6 +1663,9 @@ async function createOrder() {
   flex: 1;
   font-size: 28rpx;
   color: var(--color-text);
+  height: 72rpx;
+  line-height: 72rpx;
+  padding: 0 24rpx;
 }
 
 .form-card__row-value--placeholder {

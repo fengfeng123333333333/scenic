@@ -17,12 +17,20 @@
 
 <script setup>
 import { ref } from "vue";
+import { onLoad } from "@dcloudio/uni-app";
 import HomeContent from "./home-content.vue";
 import OrderContent from "./order-content.vue";
 import TicketContent from "./ticket-content.vue";
 import MyContent from "./my-content.vue";
 
 const currentTab = ref(0);
+
+onLoad((option) => {
+  const tab = Number(option?.tab);
+  if (!isNaN(tab) && tab >= 0 && tab <= 3) {
+    currentTab.value = tab;
+  }
+});
 
 function onTabChange(index) {
   currentTab.value = index;
