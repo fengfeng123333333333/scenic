@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import HomeContent from "./home-content.vue";
 import OrderContent from "./order-content.vue";
@@ -30,6 +30,19 @@ onLoad((option) => {
   if (!isNaN(tab) && tab >= 0 && tab <= 3) {
     currentTab.value = tab;
   }
+});
+
+onMounted(() => {
+  uni.$on("switchTab", (index) => {
+    if (typeof index === "number" && index >= 0 && index <= 3) {
+      currentTab.value = index;
+      uni.pageScrollTo({ scrollTop: 0, duration: 0 });
+    }
+  });
+});
+
+onBeforeUnmount(() => {
+  uni.$off("switchTab");
 });
 
 function onTabChange(index) {

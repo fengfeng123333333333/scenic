@@ -42,6 +42,36 @@
 			"style": {
 				"navigationBarTitleText": "门票预订"
 			}
+		},
+		{
+			"path": "pages/voice/voice",
+			"style": {
+				"navigationBarTitleText": "语音导览"
+			}
+		},
+		{
+			"path": "pages/voice/guide",
+			"style": {
+				"navigationBarTitleText": "导览详情"
+			}
+		},
+		{
+			"path": "pages/productList/productList",
+			"style": {
+				"navigationBarTitleText": "商品列表"
+			}
+		},
+		{
+			"path": "pages/productList/productDetails",
+			"style": {
+				"navigationBarTitleText": "商品详情"
+			}
+		},
+		{
+			"path": "pages/productList/orderProd",
+			"style": {
+				"navigationBarTitleText": "确认下单"
+			}
 		}
 
 	],

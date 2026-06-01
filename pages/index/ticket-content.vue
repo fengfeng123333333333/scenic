@@ -95,6 +95,7 @@
       mode="bottom"
       @close="close"
       closeable
+      customStyle="width:100%"
     >
       <view class="ticket-popup">
         <view class="ticket-popup__header">
@@ -108,7 +109,7 @@
           </view>
         </view>
         <scroll-view class="ticket-popup__body" scroll-y>
-          <u-parse :content="tablist[inde]?.Tips || ''" />
+          <f-parse :content="tablist[inde]?.Tips || ''" />
         </scroll-view>
       </view>
     </u-popup>
@@ -234,6 +235,7 @@ function changeTab(index) {
 <style lang="scss" scoped>
 .ticket-content {
   min-height: 100vh;
+  width: 100%;
   background-color: var(--color-bg);
   padding-bottom: calc(128rpx + env(safe-area-inset-bottom));
 }
@@ -385,6 +387,7 @@ function changeTab(index) {
   display: flex;
   flex-direction: column;
   height: 70vh;
+  box-sizing: border-box;
 }
 
 .ticket-popup__header {
@@ -418,6 +421,6 @@ function changeTab(index) {
 .ticket-popup__body {
   flex: 1;
   padding: 24rpx 32rpx 48rpx;
-  overflow: hidden;
+  overflow: auto;
 }
 </style>

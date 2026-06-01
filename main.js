@@ -3,14 +3,8 @@ import { createSSRApp } from "vue";
 
 import { myRequest } from "./util/api.js";
 import "./util/toast.js"; // 注册全局 uni.$showToast
-import uviewPlus, { setConfig } from "uview-plus";
+import uviewPlus from "uview-plus";
 import store from "./store/index.js";
-
-// 提前禁止远程字体加载，避免 uni.loadFontFace 报错导致白屏
-setConfig({
-  iconUrl: "",
-  loadFontOnce: true,
-});
 
 uni.$myRequest = myRequest;
 

@@ -99,3 +99,34 @@ export default {
   },
 };
 </script>
+<style>
+.num-btn {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+  border-radius: var(--radius-sm);
+  font-size: 36rpx;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.num-btn:active {
+  opacity: 0.8;
+  transform: scale(0.92);
+}
+
+.num-input {
+  min-width: 80rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--color-text);
+}
+</style>

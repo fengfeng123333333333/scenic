@@ -260,7 +260,7 @@
         <view class="modal scalVie">
           <scroll-view class="warp modal__scroll" scroll-y="true">
             <view class="modal__title title">{{ notbcLit.Title }}</view>
-            <u-parse :content="notbcLit.Content" />
+            <f-parse :content="notbcLit.Content" />
           </scroll-view>
           <view class="botme modal__footer">
             <view class="modal__checkbox">
@@ -459,7 +459,7 @@ function inMag() {
       GoodsID: p.ParamID,
     });
     uni.navigateTo({
-      url: "/pages/subPack/productList/productDetails?currentSite=" + cs,
+      url: "/pages/productList/productDetails?currentSite=" + cs,
     });
   }
 }
@@ -546,7 +546,7 @@ function purchase(item) {
     GoodsID: item.GoodsID,
   });
   uni.navigateTo({
-    url: "/pages/subPack/productList/productDetails?currentSite=" + cs,
+    url: "/pages/productList/productDetails?currentSite=" + cs,
   });
 }
 
@@ -557,7 +557,7 @@ function changeTab(index) {
   if (pu == "/pages/ticket/ticket") {
     isActive.value = 0;
     tick();
-  } else if (pu == "/pages/subPack/productList/productList") {
+  } else if (pu == "/pages/productList/productList") {
     product();
     isActive.value = 1;
   } else if (pu == "/pages/subPack/menber/menber") {
@@ -613,26 +613,32 @@ function menPiao(val, str, item) {
             str,
         });
       else uni.navigateTo({ url: "/pages/subPack/mindTike/mindTike" });
-    } else if (val == "/pages/ticket/ticket")
-      uni.switchTab({ url: "/pages/ticket/ticket" });
-    else if (val == "/pages/contactus/contactus")
+    } else if (val == "/pages/ticket/ticket") {
+      uni.$emit("switchTab", 2);
+    } else if (val == "/pages/subPack/productList/productList") {
+      uni.navigateTo({
+        url: `/pages/productList/productList`,
+      });
+    } else if (val == "/pages/contactus/contactus") {
       uni.makePhoneCall({ phoneNumber: weather.value.Phone });
-    else if (val == "/pages/busline/busline")
+    } else if (val == "/pages/busline/busline") {
       uni.openLocation({
         latitude: Number(weather.value.LocalityY),
         longitude: Number(weather.value.LocalityX),
         name: weather.value.ScenicName,
         address: weather.value.Address,
       });
-    else if (val == "/pages/subPack/activitydetail/activitydetail")
+    } else if (val == "/pages/subPack/activitydetail/activitydetail") {
       uni.navigateTo({
         url: `/pages/subPack/activitydetail/activitydetail?title=${item.Title}`,
       });
-    else if (val.indexOf("https://") === 0)
+    } else if (val.indexOf("https://") === 0) {
       uni.navigateTo({ url: `/pages/ar/ar?mind=` + val });
-    else if (val == "/pages/Stop/Stop")
+    } else if (val == "/pages/Stop/Stop") {
       uni.navigateTo({ url: "/pages/stop/stop" });
-    else uni.navigateTo({ url: `${val}?str=` + str });
+    } else {
+      uni.navigateTo({ url: `${val}?str=` + str });
+    }
   } else {
     if (item.PageUrl.indexOf("http") != -1)
       uni.navigateTo({
@@ -673,8 +679,8 @@ async function titleImg() {
   classification.value = [];
   list.data.Data.forEach((item) => {
     if (
-      item.PageUrl != "/pages/subPack/ballmenber/ballmenber" &&
-      item.PageUrl != "/pages/subPack/venue/venue"
+      item.PageUrl != "/pages/ballmenber/ballmenber" &&
+      item.PageUrl != "/pages/venue/venue"
     )
       title.value.push(item);
   });
@@ -682,9 +688,9 @@ async function titleImg() {
     if (
       [
         "/pages/ticket/ticket",
-        "/pages/subPack/productList/productList",
-        "/pages/subPack/menber/menber",
-        "/pages/subPack/rollcenter/rollcenter",
+        "/pages/productList/productList",
+        "/pages/menber/menber",
+        "/pages/rollcenter/rollcenter",
       ].includes(item.PageUrl)
     ) {
       classification.value.push({

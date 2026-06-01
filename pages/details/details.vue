@@ -92,7 +92,7 @@
       <view class="popup-notice">
         <scroll-view class="popup-notice__scroll" scroll-y="true">
           <view class="popup-notice__title">订票须知</view>
-          <u-parse :content="notcLit" />
+          <f-parse :content="notcLit" />
         </scroll-view>
         <view class="popup-notice__footer">
           <button class="popup-notice__confirm" @click="clome">
