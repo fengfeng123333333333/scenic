@@ -359,7 +359,9 @@
             : couponDiscountAmount
         }}
       </text>
-      <text class="coupon-bar__arrow">></text>
+      <view class="coupon-bar__arrow">
+        <u-icon name="arrow-right" color="var(--color-primary)" size="14" />
+      </view>
     </view>
 
     <!-- ==================== 底部操作栏 ==================== -->
@@ -571,11 +573,6 @@ const calendarColor = computed(() => {
   return store.themeVars?.["--color-primary"] || "#3c9cff";
 });
 
-// ==================== 生命周期 ====================
-onLoad((option) => {
-  parseRouteParams(option);
-});
-
 onMounted(() => {
   uni.$on("login", (data) => {
     formData.value[data.index] = {
@@ -599,8 +596,10 @@ onReady(() => {
   });
 });
 
-onShow(async () => {
+onLoad(async (option) => {
   try {
+    parseRouteParams(option);
+    console.log("[reserve] 页面显示，开始初始化数据");
     await fetchAllData();
   } catch (err) {
     console.error("[reserve] 页面初始化失败:", err);
@@ -856,7 +855,7 @@ function handleDateSelect(index, item) {
 function openCalendar() {
   const stockList = ticketInfo.value.TicketStockList || [];
   if (stockList.length === 0) {
-    showToast("暂无可用日期", "default");
+    showToast("暂无可用日期");
     return;
   }
   showCalendar.value = true;
@@ -1094,7 +1093,7 @@ function removePlate(index) {
   if (plateList.value.length > 1) {
     plateList.value.splice(index, 1);
   } else {
-    showToast("最少要一个车牌", "default");
+    showToast("最少要一个车牌");
   }
 }
 
@@ -1199,7 +1198,6 @@ async function createOrder() {
     PlateNo: item.induc || "",
     TicketID: store.tickId,
   }));
-
   const res = await uni.$myRequest({
     url: "/api/Applets/AppletsCreateTicketOrder",
     method: "POST",
@@ -1221,7 +1219,9 @@ async function createOrder() {
       shoppingCartList: [
         {
           ticketID: store.tickId,
-          ticketStockTimeID: selectedTimeSlot.value.TicketStockTimeID,
+          ...(selectedTimeSlot.value
+            ? { ticketStockTimeID: selectedTimeSlot.value.TicketStockTimeID }
+            : ""),
           ticketName: ticketInfo.value.TicketName || "",
           number: sumNumber.value,
           unitPrice: Number(selectedPrice.value) || 0,
@@ -1253,7 +1253,7 @@ async function createOrder() {
     goToPayment(res.data.Data || {}, openid);
   } else {
     console.log("[reserve] 创建订单失败:", res.data);
-    showToast(res.data.message || "订单创建失败");
+    // showToast(res.data.message || "订单创建失败");
     loading.value = false;
     requestLocked.value = false;
   }
@@ -1652,8 +1652,7 @@ async function createOrder() {
 .form-card__delete {
   position: absolute;
   right: 20rpx;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 0;
   padding: 8rpx;
 }
 
@@ -1669,7 +1668,7 @@ async function createOrder() {
 // ==================== 优惠券快捷栏 ====================
 .coupon-bar {
   position: fixed;
-  bottom: 140rpx;
+  bottom: 187rpx;
   left: 0;
   right: 0;
   z-index: 99;
