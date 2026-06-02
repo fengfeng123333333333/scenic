@@ -70,6 +70,13 @@
           <view class="address-card__detail">
             {{ addressForm.Area }}{{ addressForm.Address }}
           </view>
+          <view class="address-card__btn" @click.stop="goToAddress()">
+            <u-icon
+              name="edit-pen"
+              color="var(--color-text-secondary)"
+              size="22"
+            />
+          </view>
         </view>
       </view>
 
@@ -127,7 +134,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeUnmount } from "vue";
+import { ref, computed, onBeforeUnmount, onMounted } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import { useStore } from "@/store/index.js";
 
@@ -162,23 +169,40 @@ const radioActiveColor = computed(() => {
 onLoad(() => {
   product.value = store.prderProd || {};
   pageReady.value = true;
+  fetchAddressList();
 });
-
 // 监听地址选择回调
-const onLogin = (data) => {
+const onSelectAddress = (data) => {
   addressForm.value = data?.item || {};
 };
-uni.$on("login", onLogin);
+uni.$on("selectAddress", onSelectAddress);
 
 onBeforeUnmount(() => {
-  uni.$off("login", onLogin);
+  uni.$off("selectAddress", onSelectAddress);
 });
 
 // ==================== 业务方法 ====================
 function handleShippingChange() {
   addressForm.value = {};
 }
-
+async function fetchAddressList() {
+  try {
+    const openid = uni.getStorageSync("userinfo");
+    const res = await uni.$myRequest({
+      url: "/api/Applets/AppletsGetAddress",
+      method: "POST",
+      data: { openId: openid?.openid || "", invoiceID: 1 },
+    });
+    const addressList = res?.data?.Data || [];
+    // 优先取默认地址（Status == 1），否则取第一个
+    const defaultAddr = addressList.find((item) => item.Status == 1);
+    addressForm.value = defaultAddr || addressList[0] || {};
+  } catch (err) {
+    console.error("[address] 获取地址列表失败:", err);
+  } finally {
+    pageReady.value = true;
+  }
+}
 function handleQuantityChange(e) {
   const val = e?.value ?? e;
   quantity.value = val;
@@ -339,6 +363,7 @@ async function submitOrder() {
 
 .address-card {
   padding: 28rpx;
+  position: relative;
 }
 
 .address-card__header {
@@ -367,7 +392,7 @@ async function submitOrder() {
 
 // ==================== 商品信息 ====================
 .order-prod-page__product {
-  margin: 0 32rpx;
+  margin: 20rpx 32rpx;
   background-color: var(--color-bg-card);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-soft);
@@ -481,5 +506,21 @@ async function submitOrder() {
     opacity: 0.88;
     transform: scale(0.96);
   }
+}
+.address-card__btn {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--color-primary-bg-light);
+  position: absolute;
+  top: 28rpx;
+  right: 28rpx;
+}
+
+.address-card__btn:active {
+  opacity: 0.7;
 }
 </style>

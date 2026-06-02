@@ -94,7 +94,7 @@
         />
 
         <view class="tab-nav tabLis" v-if="classification.length > 0">
-          <v-tabs
+          <f-tabs
             v-model="activeTab"
             :tabs="classification"
             field="name"
@@ -557,7 +557,7 @@ function changeTab(index) {
   if (pu == "/pages/ticket/ticket") {
     isActive.value = 0;
     tick();
-  } else if (pu == "/pages/productList/productList") {
+  } else if (pu == "/pages/subPack/productList/productList") {
     product();
     isActive.value = 1;
   } else if (pu == "/pages/subPack/menber/menber") {
@@ -688,9 +688,9 @@ async function titleImg() {
     if (
       [
         "/pages/ticket/ticket",
-        "/pages/productList/productList",
-        "/pages/menber/menber",
-        "/pages/rollcenter/rollcenter",
+        "/pages/subPack/productList/productList",
+        "/pages/subPack/menber/menber",
+        "/pages/subPack/rollcenter/rollcenter",
       ].includes(item.PageUrl)
     ) {
       classification.value.push({

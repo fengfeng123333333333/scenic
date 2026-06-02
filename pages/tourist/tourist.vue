@@ -174,7 +174,7 @@ function addContact(item) {
 
 function handleSelect(item) {
   if (!item) return;
-  uni.$emit("login", { item, index: routeKey.value });
+  uni.$emit("selectTourist", { item, index: routeKey.value });
   uni.navigateBack();
 }
 

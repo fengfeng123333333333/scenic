@@ -574,7 +574,7 @@ const calendarColor = computed(() => {
 });
 
 onMounted(() => {
-  uni.$on("login", (data) => {
+  uni.$on("selectTourist", (data) => {
     const item = formData.value[data.index];
     if (item) {
       Object.assign(item, {
@@ -587,7 +587,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  uni.$off("login");
+  uni.$off("selectTourist");
 });
 
 onReady(() => {

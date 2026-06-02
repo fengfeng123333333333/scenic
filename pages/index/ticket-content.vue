@@ -25,7 +25,7 @@
 
     <!-- 票型分类 + 列表 -->
     <view class="ticket-section" v-if="isShow">
-      <v-tabs
+      <f-tabs
         v-model="activeTab"
         :tabs="tabs"
         field="name"

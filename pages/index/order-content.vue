@@ -11,7 +11,7 @@
     />
 
     <!-- 订单状态筛选 Tab -->
-    <v-tabs
+    <f-tabs
       v-model="activeTab"
       :tabs="statusTabs"
       field="name"

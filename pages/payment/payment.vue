@@ -304,17 +304,6 @@ function showToast(msg, type = "error") {
 }
 </script>
 
-<script>
-export default {
-  onShareAppMessage() {
-    return {
-      title: "景区支付",
-      path: "/pages/payment/payment",
-    };
-  },
-};
-</script>
-
 <style>
 page {
   background-color: var(--color-bg);

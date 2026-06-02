@@ -51,7 +51,7 @@
 
       <!-- 内容 Tab 切换 -->
       <view class="content-section" v-if="navs.length > 0">
-        <v-tabs
+        <f-tabs
           v-model="activeTab"
           :tabs="navs"
           field="name"

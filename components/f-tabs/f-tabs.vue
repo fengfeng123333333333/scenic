@@ -1,18 +1,18 @@
 <template>
-  <view class="v-tabs">
+  <view class="f-tabs">
     <scroll-view
-      class="v-tabs__scroll"
+      class="f-tabs__scroll"
       scroll-x
       :scroll-with-animation="true"
       :show-scrollbar="false"
       :scroll-into-view="scrollIntoView"
     >
-      <view class="v-tabs__container">
+      <view class="f-tabs__container">
         <view
           v-for="(tab, index) in tabs"
           :id="'v-tab-' + index"
           :key="tab.id != null ? tab.id : index"
-          class="v-tabs__container-item"
+          class="f-tabs__container-item"
           :class="{ active: current === index }"
           @click="onTabClick(index)"
         >
@@ -20,7 +20,7 @@
         </view>
         <view
           v-if="showLine"
-          class="v-tabs__container-line"
+          class="f-tabs__container-line"
           :style="lineStyle"
         ></view>
       </view>
@@ -106,18 +106,18 @@ export default {
 </script>
 
 <style scoped>
-.v-tabs {
+.f-tabs {
   width: 100%;
   height: 96rpx;
 }
 
-.v-tabs__scroll {
+.f-tabs__scroll {
   width: 100%;
   height: 100%;
   white-space: nowrap;
 }
 
-.v-tabs__container {
+.f-tabs__container {
   display: inline-flex;
   align-items: center;
   position: relative;
@@ -125,7 +125,7 @@ export default {
   height: 100%;
 }
 
-.v-tabs__container-item {
+.f-tabs__container-item {
   flex-shrink: 0;
   padding: 0 24rpx;
   margin: 0 8rpx;
@@ -137,14 +137,14 @@ export default {
   transition: all 200ms ease-in-out;
 }
 
-.v-tabs__container-item.active {
+.f-tabs__container-item.active {
   font-weight: 600;
   color: var(--color-bg-card);
   background-color: var(--color-primary);
   box-shadow: var(--shadow-soft);
 }
 
-.v-tabs__container-line {
+.f-tabs__container-line {
   /* line style is applied via :style binding */
 }
 </style>

@@ -40,7 +40,7 @@
 		{
 			"path": "pages/payment/payment",
 			"style": {
-				"navigationBarTitleText": "门票预订"
+				"navigationBarTitleText": "支付"
 			}
 		},
 		{
@@ -70,8 +70,16 @@
 		{
 			"path": "pages/productList/orderProd",
 			"style": {
-				"navigationBarTitleText": "确认下单"
+				"navigationBarTitleText": "订单填写"
 			}
+		},
+		{
+			"path": "pages/address/address",
+			"style": { "navigationBarTitleText": "收货地址" }
+		},
+		{
+			"path": "pages/address/myaddress",
+			"style": { "navigationBarTitleText": "编辑地址" }
 		}
 
 	],
@@ -87,7 +95,7 @@
 		"custom": {
 			"^u-(.*)": "uview-plus/components/u-$1/u-$1.vue",
 			"^tab-bar$": "@/components/tabbar/tabbar.vue",
-			"^v-tabs$": "@/components/v-tabs/v-tabs.vue",
+			"^f-tabs$": "@/components/f-tabs/f-tabs.vue",
 			"^uni-popup$": "@/components/uni-popup/uni-popup.vue"
 		}
 	}
