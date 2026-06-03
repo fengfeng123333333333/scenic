@@ -437,7 +437,7 @@ function inMag() {
     uni.navigateTo({ url: `/pages/details/details?tId=${p.ParamID}` });
   else if (p.LinkType == 1)
     uni.navigateTo({
-      url: "/pages/subPack/notice/noticList?notic=" + p.ParamID,
+      url: "/pages/notice/noticList?notic=" + p.ParamID,
     });
   else if (p.LinkType == 2) {
     const mi = uni.getStorageSync("menberInfo");
@@ -483,7 +483,7 @@ function swiperClick(val) {
   const nl = weather.value.NoticeList || [];
   if (!nl[val]) return;
   uni.navigateTo({
-    url: "/pages/subPack/notice/noticList?notic=" + nl[val].NoticeID,
+    url: "/pages/notice/noticList?notic=" + nl[val].NoticeID,
   });
 }
 
@@ -523,7 +523,7 @@ function infoClose() {
 }
 function linqu(item) {
   uni.navigateTo({
-    url: `/pages/subPack/rolldetails/rolldetails?id=${item.ID}`,
+    url: `/pages/rollcenter/rolldetails?id=${item.ID}`,
   });
 }
 
@@ -532,10 +532,10 @@ function menberCard(item) {
   if (numberPhone.value || weather.value.EnableAppletNeedGetPhone == 0) {
     if (mi) {
       uni.navigateTo({
-        url: "/pages/subPack/menber/recharge?menber=" + mi.MemberID,
+        url: "/pages/menber/recharge?menber=" + mi.MemberID,
       });
       store.state.tickId = item.TicketID;
-    } else uni.navigateTo({ url: "/pages/subPack/menber/menber?menber=" + 0 });
+    } else uni.navigateTo({ url: "/pages/menber/menber?menber=" + 0 });
   } else uni.redirectTo({ url: "/pages/information/information" });
 }
 
@@ -603,21 +603,46 @@ function tickDetails(index) {
 function menPiao(val, str, item) {
   if (item.IsJump === 0) {
     if (val == "/pages/subPack/menber/menber") {
+      console.log("会员中心");
       const mi = uni.getStorageSync("menberInfo");
-      if (mi)
+      if (mi) {
         uni.navigateTo({
-          url:
-            "/pages/subPack/menber/menber?menber=" +
-            mi.MemberID +
-            "&str=" +
-            str,
+          url: "/pages/menber/menber?menber=" + mi.MemberID + "&str=" + str,
         });
-      else uni.navigateTo({ url: "/pages/subPack/mindTike/mindTike" });
+      } else {
+        uni.navigateTo({ url: "/pages/mindTike/mindTike" });
+      }
     } else if (val == "/pages/ticket/ticket") {
       uni.$emit("switchTab", 2);
     } else if (val == "/pages/subPack/productList/productList") {
       uni.navigateTo({
         url: `/pages/productList/productList`,
+      });
+    } else if (val == "/pages/subPack/notice/notice") {
+      uni.navigateTo({
+        url: `/pages/notice/notice`,
+      });
+    } else if (val == "/pages/subPack/noticList/noticList") {
+      uni.navigateTo({
+        url: `/pages/noticList/noticList`,
+      });
+    } else if (val == "/pages/Stop/Stop") {
+      uni.navigateTo({ url: "/pages/stop/stop" });
+    } else if (val == "/pages/subPack/route/route") {
+      uni.navigateTo({
+        url: `/pages/route/route?str=` + str,
+      });
+    } else if (val == "/pages/subPack/rollcenter/rollcenter") {
+      uni.navigateTo({
+        url: `/pages/rollcenter/rollcenter`,
+      });
+    } else if (val == "/pages/subPack/seat/detailsSeat") {
+      uni.navigateTo({
+        url: `/pages/seat/detailsSeat?str=` + str,
+      });
+    } else if (val == "/pages/subPack/map1/map1") {
+      uni.navigateTo({
+        url: `/pages/map1/map1`,
       });
     } else if (val == "/pages/contactus/contactus") {
       uni.makePhoneCall({ phoneNumber: weather.value.Phone });
@@ -634,8 +659,6 @@ function menPiao(val, str, item) {
       });
     } else if (val.indexOf("https://") === 0) {
       uni.navigateTo({ url: `/pages/ar/ar?mind=` + val });
-    } else if (val == "/pages/Stop/Stop") {
-      uni.navigateTo({ url: "/pages/stop/stop" });
     } else {
       uni.navigateTo({ url: `${val}?str=` + str });
     }
@@ -679,8 +702,8 @@ async function titleImg() {
   classification.value = [];
   list.data.Data.forEach((item) => {
     if (
-      item.PageUrl != "/pages/ballmenber/ballmenber" &&
-      item.PageUrl != "/pages/venue/venue"
+      item.PageUrl != "/pages/subPack/ballmenber/ballmenber" &&
+      item.PageUrl != "/pages/subPack/venue/venue"
     )
       title.value.push(item);
   });

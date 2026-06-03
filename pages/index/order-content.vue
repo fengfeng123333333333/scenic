@@ -70,7 +70,10 @@
 import { ref, watch } from "vue";
 import RequestLoading from "../../components/loading/request-loading.vue";
 
-const props = defineProps({ active: Boolean });
+const props = defineProps({
+  active: Boolean,
+  initialStatus: { type: Number, default: 0 },
+});
 
 const hasLoaded = ref(false);
 const requestLoading = ref(false);
@@ -133,7 +136,8 @@ watch(
   (val) => {
     if (val && !hasLoaded.value) {
       hasLoaded.value = true;
-      queryOrders(0);
+      activeTab.value = props.initialStatus;
+      queryOrders(props.initialStatus);
     }
   },
   { immediate: true },

@@ -29,23 +29,215 @@
 
 旧项目中常见的 uni-app 原生调用，改造后统一替换为 uview-plus 组件：
 
-| 改造前（uni 原生）                        | 改造后（uview-plus）                                               |
-| ----------------------------------------- | ------------------------------------------------------------------ |
-| `uni.showToast({ title: 'xxx' })`         | `<u-toast ref="uToastRef" />` + `useToast()` 封装                  |
-| `uni.showModal({ ... })`                  | `<u-modal :show="..." />`                                          |
-| `<uni-popup>` 或内联弹窗                  | `<u-popup :show="..." mode="bottom/center">`                       |
-| `uni.showLoading / uni.hideLoading`       | `<zero-loading>` 或 `<u-loading-icon>`                             |
-| `uni.showActionSheet`                     | `<u-action-sheet>`                                                 |
-| `uni.navigateTo / redirectTo / switchTab` | 保持不变（路由 API 不受影响），但路径必须提取为 `PAGE_ROUTES` 常量 |
-| `uni.getStorageSync / setStorageSync`     | 保持不变                                                           |
+| 改造前（uni 原生）                        | 改造后（uview-plus）                                                  |
+| ----------------------------------------- | --------------------------------------------------------------------- |
+| `uni.showToast({ title: 'xxx' })`         | `<u-toast ref="uToastRef" />` + `useToast()` 封装                     |
+| `uni.showModal({ ... })`                  | `<u-modal :show="..." />`                                             |
+| `<uni-popup>` 或内联弹窗                  | `<u-popup :show="..." mode="bottom/center">`                          |
+| `uni.showLoading / uni.hideLoading`       | `<RequestLoading>` 组件（`@/components/loading/request-loading.vue`） |
+| `uni.showActionSheet`                     | `<u-action-sheet>`                                                    |
+| `uni.navigateTo / redirectTo / switchTab` | 保持不变（路由 API 不受影响），但路径必须提取为 `PAGE_ROUTES` 常量    |
+| `uni.getStorageSync / setStorageSync`     | 保持不变                                                              |
 
 **强制要求**：
 
 - 禁止在改造后的代码中使用 `uni.showToast` / `uni.showModal` / `uni.showLoading` 等交互 API
 - 弹窗类 UI 必须使用 uview-plus 的声明式组件（`<u-popup>` / `<u-modal>` / `<u-toast>`）
-- Toast 封装统一使用 `@/util/toast.js` 中的 `useToast()`
+- 禁止以下过时路径：
+  - ❌ `/pages/common/common` → 不存在，应使用 `/pages/tourist/tourist`
+  - ❌ `/pages/order/order` → 不存在，应使用 `/pages/index/index?tab=1`
+  - ❌ `/pages/subPack/*` → 子包路径已废弃，应使用 `/pages/xxx/xxx`
+  - Toast 封装统一使用 `@/util/toast.js` 中的 `useToast()`
 
-## 0.3 函数逻辑完整继承 + 梳理
+### 0.2.1 本地静态图片 → u-icon 替换
+
+> ⚠️ 项目中不存在本地 `.png` 静态资源文件。所有图标类图片必须使用 `u-icon` 组件替代。
+
+| 本地图片引用                                                   | u-icon 替换                                    |
+| -------------------------------------------------------------- | ---------------------------------------------- |
+| `src="../../static/xxx.png"` / `src="../../../static/xxx.png"` | `<u-icon name="..." color="..." size="..." />` |
+
+**常用替换映射**：
+
+| 场景              | 旧写法（无效）                     | 新写法                                                               |
+| ----------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| 常用旅客/用户头像 | `<image src=".../常用旅客.png" />` | `<u-icon name="account" color="var(--color-primary)" size="22" />`   |
+| 资料/文档         | `<image src=".../资料.png" />`     | `<u-icon name="file-text" color="var(--color-primary)" size="22" />` |
+| Logo              | `<image src=".../logo.png" />`     | `<u-icon name="star" color="var(--color-primary)" size="22" />`      |
+| 通用图标          | `<image src=".../xxx.png" />`      | 根据语义选择 `u-icon` 的 `name` 属性                                 |
+
+**u-icon 样式容器**：图标需要点击交互时，包裹在 `<view>` 中并设置圆形背景 + 居中 flex 布局：
+
+```html
+<view class="xxx__icon" @click="handler">
+  <u-icon name="account" color="var(--color-primary)" size="22" />
+</view>
+```
+
+```scss
+.xxx__icon {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary-bg-light);
+  border-radius: 50%;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+```
+
+**强制要求**：
+
+- 禁止引入本地 `.png` / `.jpg` 图标（项目中不存在这些文件）
+- 所有图标统一使用 `<u-icon>` 组件
+- u-icon 的 `color` 必须使用 `var(--color-*)` 变量
+
+### 0.2.2 接口请求 Loading → RequestLoading 组件
+
+> ⚠️ 所有接口请求的 Loading 效果，**统一使用** `@/components/loading/request-loading.vue` 组件，不得自行实现。
+
+**组件说明**：
+
+| 属性   | 类型   | 默认值        | 说明             |
+| ------ | ------ | ------------- | ---------------- |
+| `text` | String | `"加载中..."` | Loading 提示文字 |
+
+**用法模板**：
+
+```html
+<!-- 页面模板 -->
+<RequestLoading v-if="requestLoading" text="正在加载订单..." />
+```
+
+```js
+// 脚本中控制显隐
+const requestLoading = ref(false);
+
+async function fetchData() {
+  requestLoading.value = true;
+  try {
+    const res = await uni.$myRequest({
+      /* ... */
+    });
+    // 处理数据...
+  } finally {
+    requestLoading.value = false; // 无论成败都必须关闭
+  }
+}
+```
+
+**组件特性**：
+
+- 全屏半透明遮罩（`rgba(0, 0, 0, 0.3)`）+ 居中白色卡片
+- 卡片内含 `u-loading-icon`（circle 动画）+ 文字提示
+- `@touchmove.stop.prevent` 阻止遮罩下内容滚动
+- Loading 图标颜色跟随 `var(--color-primary)`，与主题联动
+
+**强制要求**：
+
+- 禁止使用 `uni.showLoading / uni.hideLoading`
+- 禁止使用 `<u-loading-icon>` 裸写遮罩
+- 页面中需声明 `const requestLoading = ref(false)`，接口请求包裹在 `try { ... } finally { requestLoading.value = false }` 中
+- 若页面本身有骨架屏（`pageReady`），则骨架屏负责首次加载，`requestLoading` 负责后续接口请求（如 Tab 切换、搜索、分页加载等）
+
+## 0.3 支付流程统一规范
+
+> ⚠️ 所有涉及支付的页面，**必须**对齐 `pages/payment/payment.vue` 的支付流程，不得自行设计。
+
+### 0.3.1 按钮文案与交互
+
+| 要素         | 规范                                                                      |
+| ------------ | ------------------------------------------------------------------------- |
+| 按钮文案     | 支付前："立即支付"；支付中："支付中..."                                   |
+| Loading 图标 | `<u-loading-icon mode="circle" size="18" />` 放在按钮文字前               |
+| 按钮布局     | `display: flex; align-items: center; justify-content: center; gap: 12rpx` |
+| 按钮禁用态   | `opacity: 0.85; transform: none`（通过 `--disabled` BEM 修饰符控制）      |
+
+### 0.3.2 支付中遮罩
+
+支付进行中必须展示全局遮罩，防止用户重复操作：
+
+```html
+<RequestLoading v-if="payLoading" text="正在支付..." />
+```
+
+### 0.3.3 支付成功跳转
+
+支付成功后统一使用 `uni.reLaunch` 跳转（清除页面栈，防止用户返回支付页）：
+
+```js
+function goToHome() {
+  uni.reLaunch({ url: PAGE_ROUTES.home });
+}
+```
+
+> ⚠️ **订单页路由约定**：项目中不存在 `pages/order/order` 路径。所有跳转"订单列表/订单页"的场景，统一使用 `pages/index/index?tab=1`（首页的订单 Tab）。`PAGE_ROUTES` 中应定义 `order: "/pages/index/index"`，跳转时拼接 `?tab=1`。
+
+```js
+// 正确写法
+const PAGE_ROUTES = {
+  order: "/pages/index/index",
+};
+
+function goToOrder() {
+  uni.reLaunch({ url: `${PAGE_ROUTES.order}?tab=1` });
+}
+
+// ❌ 错误写法
+uni.switchTab({ url: "/pages/order/order" }); // 路径不存在
+uni.navigateTo({ url: "/pages/order/order" }); // 路径不存在
+```
+
+### 0.3.4 支付失败 / 异常处理
+
+| 场景               | 处理                                                  |
+| ------------------ | ----------------------------------------------------- |
+| 下单接口返回失败   | `showToast(res.data.Message \|\| "下单失败，请重试")` |
+| 网络异常           | `showToast("网络异常，请重试")`                       |
+| 支付取消/失败      | `showToast("支付取消或失败")`                         |
+| 跳转支付小程序失败 | `showToast("跳转支付失败，请重试")`                   |
+
+`showToast` 必须通过 `<u-toast ref="uToastRef" />` 声明式组件实现，降级方案为 `uni.showToast`。
+
+### 0.3.5 防重复提交
+
+```js
+const payLoading = ref(false);
+
+async function handlePay() {
+  if (payLoading.value) return; // 防止重复点击
+  payLoading.value = true;
+  // ... 支付逻辑
+}
+```
+
+### 0.3.6 支付分支结构（参照 payment.vue）
+
+```
+handlePay()                          ← 防重复 + try/catch 包裹
+  ├── requestPayOrder()              ← 调用下单接口
+  ├── res.data.Code !== 200 → 提示错误
+  ├── pay_type === "030" → handleMiniProgramPay()
+  │     ├── success → payLoading = false
+  │     └── fail → showToast("跳转支付失败")
+  └── 其他 → handleJsapiPay()
+        ├── success → goToHome()
+        └── fail → showToast("支付取消或失败")
+```
+
+**强制要求**：
+
+- 支付按钮文案固定为"立即支付" → "支付中..."
+- 支付 loading 必须包含 `<RequestLoading>` 遮罩 + 按钮内 `<u-loading-icon>`
+- 支付成功必须 `uni.reLaunch`（不保留支付页在页面栈）
+- 所有失败分支必须有 `showToast` 用户提示
+- 命名统一：`payLoading` / `handlePay` / `goToHome` / `showToast`
+
+## 0.4 函数逻辑完整继承 + 梳理
 
 **原则**：旧代码的所有业务逻辑必须完整保留，不得遗漏任何分支、条件判断、接口调用、数据处理。
 
@@ -62,7 +254,7 @@
 - 改造完成后，在文件头部注释中列出"旧函数 → 新函数"映射表
 - 如需合并/拆分函数，必须说明理由
 
-## 0.4 项目结构（改造前必读）
+## 0.5 项目结构（改造前必读）
 
 ```
 项目根目录
@@ -94,7 +286,7 @@
 - 新增组件放在 `components/` 下对应子目录
 - 新增工具函数放在 `util/` 下
 
-## 0.5 改造工作流
+## 0.6 改造工作流
 
 ```
 ① 用户将旧代码文件复制到项目目录
@@ -116,7 +308,7 @@
 - 改造过程中如遇不确定的业务逻辑，必须向用户确认而非自行猜测
 - 当前项目中 **全部是已改造完成的代码**，旧代码由用户从外部复制进来后再改造
 
-## 0.6 改造后校验清单
+## 0.7 改造后校验清单
 
 改造任一页面完成后，必须逐项确认：
 

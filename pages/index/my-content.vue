@@ -1,11 +1,8 @@
 <template>
   <view class="my-page" :style="$themeStyle">
-    <u-navbar
-      title="个人中心"
-      :placeholder="true"
-      :autoBack="true"
-      :fixed="false"
-    />
+    <!-- 请求加载遮罩 -->
+    <RequestLoading v-if="requestLoading" text="加载中..." />
+
     <!-- 头部 -->
     <view class="my-header">
       <view class="my-header__glow" />
@@ -62,7 +59,7 @@
             :key="idx"
             @click="dingdan(idx)"
           >
-            <u-icon :name="it.icon" color="var(--color-primary)" size="36" />
+            <u-icon :name="it.icon" color="var(--color-primary)" size="28" />
             <text>{{ it.label }}</text>
           </view>
         </view>
@@ -180,6 +177,14 @@
             />
             <text>激活票码</text>
           </view>
+          <view
+            class="my-section__item"
+            @click="realNameFun"
+            v-if="ButtonPermission.IDCardAuthButton == 1"
+          >
+            <u-icon name="account" color="var(--color-primary)" size="36" />
+            <text>实名认证</text>
+          </view>
         </view>
       </view>
 
@@ -206,13 +211,12 @@
       <view class="popup-qrcode">
         <view class="popup-qrcode__title">会员码</view>
         <view class="popup-qrcode__img">
-          <uqrcode
+          <u-qrcode
             ref="uqrcodeRef"
             v-if="show"
-            canvas-id="qrcode"
-            :value="infoList.CardID"
-            size="120"
-            :options="{ margin: 10 }"
+            cid="qrcode"
+            :val="infoList.CardID"
+            :size="120"
           />
         </view>
         <view class="popup-qrcode__code">{{ infoList.CardID }}</view>
@@ -254,12 +258,17 @@
 <script setup>
 import { ref, reactive, watch, onBeforeUnmount } from "vue";
 import store from "../../store/index.js";
+import RequestLoading from "../../components/loading/request-loading.vue";
+import { useToast } from "../../util/toast.js";
+
+const { showToast } = useToast();
 
 const props = defineProps({
   active: Boolean,
 });
 
 const hasLoaded = ref(false);
+const requestLoading = ref(false);
 const myRequest = (options) => uni.$myRequest(options);
 
 // 数据
@@ -305,7 +314,11 @@ const uqrcodeRef = ref(null);
 let countdownTimer = null;
 onBeforeUnmount(() => {
   if (countdownTimer) clearInterval(countdownTimer);
+  uni.$off("profileUpdated", tabData);
 });
+
+// 监听资料编辑页保存事件，自动刷新
+uni.$on("profileUpdated", tabData);
 
 // 订单入口图标
 const orderItems = [
@@ -322,7 +335,6 @@ watch(
   () => props.active,
   (val) => {
     if (val) {
-      uni.hideTabBar();
       tabData();
       hasLoaded.value = true;
     }
@@ -335,7 +347,7 @@ watch(
 // ====== 方法 ======
 function jihuo() {
   uni.navigateTo({
-    url: "/pages/voucherCode/voucherCode",
+    url: "/pages/subPack/voucherCode/voucherCode",
   });
 }
 
@@ -344,10 +356,14 @@ function jiuyuan() {
     url: "/pages/subPack/rescue/rescue",
   });
 }
-
+function realNameFun() {
+  uni.navigateTo({
+    url: "/pages/subPack/realName/realName",
+  });
+}
 function jianyi() {
   uni.navigateTo({
-    url: "/pages/subPack/complaint/complaint",
+    url: "/pages/complaint/complaint",
   });
 }
 
@@ -365,7 +381,7 @@ function undMenber() {
 
 function quan() {
   uni.navigateTo({
-    url: "/pages/subPack/coinDiscon/coinDiscon",
+    url: "/pages/coinDiscon/coinDiscon",
   });
 }
 
@@ -384,22 +400,13 @@ async function tijiao() {
     });
     if (res.data.Code == 200) {
       show1.value = false;
-      uni.showToast({
-        icon: "none",
-        title: res.data.Message,
-      });
+      showToast(res.data.Message);
       tabData();
     } else {
-      uni.showToast({
-        icon: "none",
-        title: res.data.Message,
-      });
+      showToast(res.data.Message);
     }
   } else {
-    uni.showToast({
-      icon: "none",
-      title: "请输入验证码",
-    });
+    showToast("请输入验证码");
   }
 }
 
@@ -427,16 +434,10 @@ async function huoqu() {
         contxt.value = --n + "秒后重新获取";
       }, 1000);
       info.value = res1.data.Data;
-      uni.showToast({
-        icon: "none",
-        title: "验证码已发送",
-      });
+      showToast("验证码已发送");
       disabled.value = false;
     } else {
-      uni.showToast({
-        icon: "none",
-        title: res1.data.Message,
-      });
+      showToast(res1.data.Message);
     }
   }
 }
@@ -479,7 +480,7 @@ function shenqin() {
 
 function dingdan(index) {
   uni.reLaunch({
-    url: "/pages/order/order?active=" + index,
+    url: `/pages/index/index?tab=1&status=${index}`,
   });
 }
 
@@ -510,58 +511,63 @@ function close() {
 }
 
 async function tabData() {
-  const openid = uni.getStorageSync("userinfo");
-  const res1 = await myRequest({
-    url: "/api/Applets/AppletsMineIndex",
-    data: {
-      openId: openid.openid,
-    },
-    method: "POST",
-  });
-  Object.assign(infoList, res1.data.Data);
-  Object.assign(ButtonPermission, res1.data.Data.ButtonPermission || {});
-  uni.setStorage({
-    key: "menberInfo",
-    data: res1.data.Data,
-  });
-
-  const car = uni.getStorageSync("phone");
-  if (car || infoList.EnableAppletNeedGetPhone == 0) {
-    if (infoList.EnableAppletNeedGetPhone == 0) {
-      phone.value = "";
-    } else {
-      phone.value = car.phoneNumber;
-    }
-  } else {
-    uni.redirectTo({
-      url: "/pages/information/information",
+  requestLoading.value = true;
+  try {
+    const openid = uni.getStorageSync("userinfo");
+    const res1 = await myRequest({
+      url: "/api/Applets/AppletsMineIndex",
+      data: {
+        openId: openid.openid,
+      },
+      method: "POST",
     });
+    Object.assign(infoList, res1.data.Data);
+    Object.assign(ButtonPermission, res1.data.Data.ButtonPermission || {});
+    uni.setStorage({
+      key: "menberInfo",
+      data: res1.data.Data,
+    });
+
+    const car = uni.getStorageSync("phone");
+    if (car || infoList.EnableAppletNeedGetPhone == 0) {
+      if (infoList.EnableAppletNeedGetPhone == 0) {
+        phone.value = "";
+      } else {
+        phone.value = car.phoneNumber;
+      }
+    } else {
+      uni.redirectTo({
+        url: "/pages/information/information",
+      });
+    }
+  } finally {
+    requestLoading.value = false;
   }
 }
 
 function car() {
   const menberInfo = uni.getStorageSync("menberInfo");
   uni.navigateTo({
-    url: "/pages/subPack/menber/car?number=" + menberInfo.MemberID,
+    url: "/pages/menber/car?number=" + menberInfo.MemberID,
   });
 }
 
 function balance() {
   const menberInfo = uni.getStorageSync("menberInfo");
   uni.navigateTo({
-    url: "/pages/subPack/menber/balance?menber=" + menberInfo.MemberID,
+    url: "/pages/menber/balance?menber=" + menberInfo.MemberID,
   });
 }
 
 function manber() {
   const menberInfo = uni.getStorageSync("menberInfo");
   if (menberInfo) {
-    uni.redirectTo({
-      url: "/pages/subPack/menber/menber?menber=" + menberInfo.MemberID,
+    uni.navigateTo({
+      url: "/pages/menber/menber?menber=" + menberInfo.MemberID,
     });
   } else {
-    uni.redirectTo({
-      url: "/pages/subPack/menber/menber?menber=" + 0,
+    uni.navigateTo({
+      url: "/pages/menber/menber?menber=" + 0,
     });
   }
 }

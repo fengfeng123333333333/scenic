@@ -6,7 +6,11 @@
       :active="currentTab === 0"
       @ready="onHomeReady"
     />
-    <OrderContent v-show="currentTab === 1" :active="currentTab === 1" />
+    <OrderContent
+      v-show="currentTab === 1"
+      :active="currentTab === 1"
+      :initialStatus="orderStatus"
+    />
     <TicketContent v-show="currentTab === 2" :active="currentTab === 2" />
     <MyContent v-show="currentTab === 3" :active="currentTab === 3" />
 
@@ -24,12 +28,14 @@ import TicketContent from "./ticket-content.vue";
 import MyContent from "./my-content.vue";
 
 const currentTab = ref(0);
+const orderStatus = ref(0);
 
 onLoad((option) => {
   const tab = Number(option?.tab);
   if (!isNaN(tab) && tab >= 0 && tab <= 3) {
     currentTab.value = tab;
   }
+  orderStatus.value = Number(option?.status) || 0;
 });
 
 onMounted(() => {

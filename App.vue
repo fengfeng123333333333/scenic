@@ -74,15 +74,19 @@ export default {
     }
 
     if (options?.referrerInfo) {
-      console.log("referrerInfo:", options.referrerInfo);
       const skipAutoJump = uni.getStorageSync("skipAutoJump");
       if (skipAutoJump == "1") {
-        console.log("跳过跳转订单");
         return;
       }
       if (options.referrerInfo.appId) {
-        if (options.path == "pages/subPack/payment/payment") {
-          uni.reLaunch({ url: "/pages/order/order" });
+        // 支付页面返回 → 跳转订单页（首页订单 Tab）
+        const paymentPaths = [
+          "pages/payment/payment",
+          "pages/menber/recharge",
+          "pages/reserve/resMenber",
+        ];
+        if (paymentPaths.includes(options.path)) {
+          uni.reLaunch({ url: "/pages/index/index?tab=1" });
         } else {
           uni.reLaunch({ url: "/pages/index/index" });
         }

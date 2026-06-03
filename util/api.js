@@ -1,5 +1,5 @@
-// const BASE_URL = 'https://saasapptest.huibaitech.com'
-const BASE_URL = "https://saasappreport.huibaitech.com";
+const BASE_URL = "https://saasapptest.huibaitech.com";
+// const BASE_URL = "https://saasappreport.huibaitech.com";
 // const BASE_URL = 'http://8.129.62.243:5566'
 // 以后不用了 const BASE_URL = 'https://saasapp.huibaitech.com'
 // 通过export向外暴露一个方法，方法名叫myRequest,调用myRequest方法时会向方法中传递一个对象options
