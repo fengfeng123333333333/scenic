@@ -51,8 +51,13 @@
 	/* 小程序特有相关 */
 	"mp-weixin": {
 		"appid": "wx9ba0af180d6da300",
+		"lazyCodeLoading": "requiredComponents",
+		"mergeVirtualHostAttributes": true,
 		"setting": {
-			"urlCheck": false
+			"urlCheck": false,
+			"postcss": true,
+			"minified": true,
+			"es6": true
 		},
 		"usingComponents": true
 	},

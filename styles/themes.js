@@ -30,15 +30,15 @@ const themes = {
       "--color-primary-border-light": "rgba(45, 168, 246, 0.12)",
       "--color-text-on-primary": "#FFFFFF",
 
-      // 辅色与点缀（Accent / Highlights）
-      // Accent Primary: 促销角标、安全/提示色、辅助 CTA
+      // 辅色与点缀
       "--color-secondary": "#FF944A",
-      // Accent Secondary: 成功状态、轻微强调、icon 背景色
       "--color-accent": "#7ECF9A",
       "--color-warning": "#FF944A",
       "--color-danger": "#E5534B",
+      // 会员金（卡金/尊贵标识）
+      "--color-member-gold": "#D9A63A",
 
-      // 中性色（Neutral Palette）
+      // 中性色
       "--color-bg": "#FBFEFB",
       "--color-bg-card": "#FFFFFF",
       "--color-text": "#24392F",
@@ -46,7 +46,7 @@ const themes = {
       "--color-border-light": "#98A79E",
       "--color-disabled": "#C9D9D0",
 
-      // 骨架屏（Skeleton）
+      // 骨架屏
       "--color-skeleton-base": "#E8F3EC",
       "--color-skeleton-highlight": "rgba(255, 255, 255, 0.7)",
 
@@ -56,46 +56,46 @@ const themes = {
       "--radius-sm": "16rpx",
       "--skeleton-radius": "16rpx",
 
-      // 阴影（轻柔、以主色为基调的浅影）
+      // 阴影
       "--shadow-soft": "0 12rpx 32rpx rgba(45, 168, 246, 0.06)",
       "--shadow-modal": "0 24rpx 60rpx rgba(0, 0, 0, 0.12)",
     },
   },
 
   // ---------------------------------------
-  // 亲水休闲
+  // 亲水休闲（湖水蓝绿主色 + 暖黄点缀）
   // ---------------------------------------
   "water-relax": {
     name: "亲水休闲（water）",
     description:
-      "海蓝主色 + 暖黄点缀，清凉舒适，适合水世界、海滨景区、湖泊乐园等场景。",
+      "湖水蓝绿主色 + 暖黄点缀，清凉沉浸，适合水世界、海滨景区、湖泊乐园等场景。",
     vars: {
-      // 主色系（海蓝主色）
-      "--color-primary": "#1EA7F2",
-      "--color-primary-dark": "#178FD6",
-      "--color-primary-hover": "#178FD6",
-      "--color-primary-bg-light": "rgba(30, 167, 242, 0.06)",
-      "--color-primary-border-light": "rgba(30, 167, 242, 0.12)",
+      // 主色系：湖水蓝绿
+      "--color-primary": "#009DA5",
+      "--color-primary-dark": "#007A80",
+      "--color-primary-hover": "#007A80",
+      "--color-primary-bg-light": "rgba(0, 157, 165, 0.06)",
+      "--color-primary-border-light": "rgba(0, 157, 165, 0.12)",
       "--color-text-on-primary": "#FFFFFF",
 
-      // 辅色与点缀（Accent / Highlights）
-      // Accent Primary: 安全提示、促销角标、活动点缀
+      // 辅色与点缀
       "--color-secondary": "#FFC85C",
-      // Accent Secondary: 次级强调、icon 背景
       "--color-accent": "#74D0E8",
       "--color-warning": "#FFC85C",
       "--color-danger": "#E94B3C",
+      // 会员金（水岸金沙质感）
+      "--color-member-gold": "#E5C687",
 
-      // 中性色（Neutral Palette）
-      "--color-bg": "#FBFEFF",
+      // 中性色
+      "--color-bg": "#F5FCFE",
       "--color-bg-card": "#FFFFFF",
-      "--color-text": "#1F3640",
-      "--color-text-secondary": "#55686D",
-      "--color-border-light": "#9FB4B8",
+      "--color-text": "#1C3A3D",
+      "--color-text-secondary": "#4A6B6E",
+      "--color-border-light": "#BFE3E8",
       "--color-disabled": "#C9D9D0",
 
-      // 骨架屏（Skeleton）
-      "--color-skeleton-base": "#EAF7FA",
+      // 骨架屏
+      "--color-skeleton-base": "#E2F4F6",
       "--color-skeleton-highlight": "rgba(255, 255, 255, 0.75)",
 
       // 圆角
@@ -104,14 +104,66 @@ const themes = {
       "--radius-sm": "16rpx",
       "--skeleton-radius": "16rpx",
 
-      // 阴影（轻柔、以主色为基调的浅影）
-      "--shadow-soft": "0 12rpx 32rpx rgba(30, 167, 242, 0.06)",
+      // 阴影
+      "--shadow-soft": "0 12rpx 32rpx rgba(0, 157, 165, 0.06)",
       "--shadow-modal": "0 24rpx 60rpx rgba(0, 0, 0, 0.12)",
     },
   },
 
   // ---------------------------------------
-  // 文化古韵
+  // 活力乐园（乐园粉红主色 + 亮黄/电光紫点缀）
+  // ---------------------------------------
+  "fun-play": {
+    name: "活力乐园（fun）",
+    description:
+      "乐园粉红主色 + 亮黄/电光紫点缀，梦幻童趣，适用于游乐园、亲子乐园、嘉年华等场景。",
+    vars: {
+      // 主色系：乐园粉红
+      "--color-primary": "#FF3D6F",
+      "--color-primary-dark": "#E0325E",
+      "--color-primary-hover": "#E0325E",
+      "--color-primary-bg-light": "rgba(255, 61, 111, 0.06)",
+      "--color-primary-border-light": "rgba(255, 61, 111, 0.12)",
+      "--color-text-on-primary": "#FFFFFF",
+
+      // 辅色与点缀
+      "--color-secondary": "#FFD24A",
+      "--color-accent": "#B56FF5",
+      "--color-warning": "#FFD24A",
+      "--color-danger": "#FF4B4B",
+      "--color-accent-pink": "#FF6BC1",
+      "--color-accent-green": "#6CE67A",
+      "--color-accent-purple": "#B56FF5",
+      // 会员金（乐园梦幻金，比亮黄厚重）
+      "--color-member-gold": "#F5D76A",
+
+      // 中性色
+      "--color-bg": "#FFFAFB",
+      "--color-bg-card": "#FFFFFF",
+      "--color-text": "#2E1F24",
+      "--color-text-secondary": "#7A6269",
+      "--color-border-light": "#FFE5EB",
+      "--color-disabled": "#E8D9DF",
+
+      // 骨架屏
+      "--color-skeleton-base": "#FFF0F3",
+      "--color-skeleton-highlight": "rgba(255, 255, 255, 0.7)",
+
+      // 圆角
+      "--radius-card": "28rpx",
+      "--radius-button": "24rpx",
+      "--radius-sm": "16rpx",
+      "--skeleton-radius": "16rpx",
+
+      // 阴影
+      "--shadow-soft": "0 12rpx 32rpx rgba(255, 61, 111, 0.08)",
+      "--shadow-modal": "0 24rpx 60rpx rgba(0, 0, 0, 0.12)",
+      "--shadow-accent": "0 8rpx 24rpx rgba(181, 111, 245, 0.08)",
+    },
+  },
+
+  // ---------------------------------------
+  // 文化古韵（原版保留，直接复用原有金色）
   // ---------------------------------------
   "culture-classic": {
     name: "文化古韵（culture）",
@@ -126,16 +178,17 @@ const themes = {
       "--color-primary-border-light": "rgba(156, 107, 58, 0.12)",
       "--color-text-on-primary": "#FFFFFF",
 
-      // 辅色与点缀（朱砂 / 墨色 / 金色）
+      // 辅色与点缀
       "--color-secondary": "#C24B3D",
       "--color-accent": "#D9B46A",
       "--color-warning": "#C24B3D",
       "--color-danger": "#E5534B",
-      // 扩展变量（文化古韵专属）
       "--color-ink": "#2B2B2B",
       "--color-gold": "#D9B46A",
+      // 会员金（直接复用文化古韵原有的金色）
+      "--color-member-gold": "#D9B46A",
 
-      // 中性色（米白 / 纸色 / 墨色系）
+      // 中性色
       "--color-bg": "#FBF8F2",
       "--color-bg-card": "#FFFFFF",
       "--color-text": "#33302B",
@@ -143,26 +196,25 @@ const themes = {
       "--color-border-light": "#EEE6DB",
       "--color-disabled": "#CFC6BC",
 
-      // 骨架屏（Skeleton）
+      // 骨架屏
       "--color-skeleton-base": "#EFE8DD",
       "--color-skeleton-highlight": "rgba(255, 255, 255, 0.6)",
 
-      // 圆角（较温和，保留古典端庄感）
+      // 圆角
       "--radius-card": "24rpx",
       "--radius-button": "20rpx",
       "--radius-sm": "12rpx",
       "--skeleton-radius": "12rpx",
 
-      // 阴影（中性低对比）
+      // 阴影
       "--shadow-soft": "0 12rpx 28rpx rgba(0, 0, 0, 0.06)",
       "--shadow-modal": "0 24rpx 56rpx rgba(0, 0, 0, 0.12)",
-      // 扩展：暖色调微影
       "--shadow-soft-warm": "0 10rpx 26rpx rgba(156, 107, 58, 0.04)",
     },
   },
 
   // ---------------------------------------
-  // 山地禅意
+  // 山地禅意（原版保留，以温润暗金匹配禅意）
   // ---------------------------------------
   "mountain-zen": {
     name: "山地禅意（mountain）",
@@ -177,16 +229,17 @@ const themes = {
       "--color-primary-border-light": "rgba(47, 107, 87, 0.12)",
       "--color-text-on-primary": "#FFFFFF",
 
-      // 辅色与点缀（土褐 / 岩石色 / 木色）
+      // 辅色与点缀
       "--color-secondary": "#A57C4A",
       "--color-accent": "#C9B89A",
       "--color-warning": "#A57C4A",
       "--color-danger": "#B35A3A",
-      // 扩展变量（山地禅意专属）
       "--color-ink": "#2B2B28",
       "--color-terracotta": "#B35A3A",
+      // 会员金（低调禅金，大地温润）
+      "--color-member-gold": "#B6954A",
 
-      // 中性色（岩石灰 / 泥土 / 纸色）
+      // 中性色
       "--color-bg": "#FBFBF8",
       "--color-bg-card": "#FFFFFF",
       "--color-text": "#2E2C28",
@@ -194,59 +247,8 @@ const themes = {
       "--color-border-light": "#ECE6DF",
       "--color-disabled": "#CFC6BC",
 
-      // 骨架屏（Skeleton）
+      // 骨架屏
       "--color-skeleton-base": "#ECE6DF",
-      "--color-skeleton-highlight": "rgba(255, 255, 255, 0.6)",
-
-      // 圆角（偏稳重的温和圆角）
-      "--radius-card": "24rpx",
-      "--radius-button": "20rpx",
-      "--radius-sm": "12rpx",
-      "--skeleton-radius": "12rpx",
-
-      // 阴影（中性低不透明度）
-      "--shadow-soft": "0 10rpx 28rpx rgba(0, 0, 0, 0.06)",
-      "--shadow-modal": "0 22rpx 52rpx rgba(0, 0, 0, 0.12)",
-      // 扩展：暖土调微影
-      "--shadow-soft-earth": "0 10rpx 26rpx rgba(165, 124, 74, 0.04)",
-    },
-  },
-
-  // ---------------------------------------
-  // 活力游乐
-  // ---------------------------------------
-  "fun-play": {
-    name: "活力游乐（fun）",
-    description:
-      "欢乐动感主题，明快亲切，适用于游乐园、亲子乐园、嘉年华等场景。活力天蓝 + 明亮暖黄点缀，辅以活泼粉/绿作次级强调。",
-    vars: {
-      // 主色系（活力天蓝）
-      "--color-primary": "#00AEEF",
-      "--color-primary-dark": "#008FD1",
-      "--color-primary-hover": "#008FD1",
-      "--color-primary-bg-light": "rgba(0, 174, 239, 0.08)",
-      "--color-primary-border-light": "rgba(0, 174, 239, 0.14)",
-      "--color-text-on-primary": "#FFFFFF",
-
-      // 辅色与点缀（暖黄 / 活泼粉 / 草绿）
-      "--color-secondary": "#FFD24A",
-      "--color-accent": "#FF6BC1",
-      "--color-warning": "#FFD24A",
-      "--color-danger": "#FF4B4B",
-      // 扩展变量（活力游乐专属）
-      "--color-accent-pink": "#FF6BC1",
-      "--color-accent-green": "#6CE67A",
-
-      // 中性色（明亮亲和的灰系）
-      "--color-bg": "#FFFDFC",
-      "--color-bg-card": "#FFFFFF",
-      "--color-text": "#2A2E33",
-      "--color-text-secondary": "#6D7378",
-      "--color-border-light": "#F0F3F5",
-      "--color-disabled": "#D9DFE2",
-
-      // 骨架屏（Skeleton）
-      "--color-skeleton-base": "#F2F6F8",
       "--color-skeleton-highlight": "rgba(255, 255, 255, 0.6)",
 
       // 圆角
@@ -255,16 +257,15 @@ const themes = {
       "--radius-sm": "12rpx",
       "--skeleton-radius": "12rpx",
 
-      // 阴影（轻盈浅影）
-      "--shadow-soft": "0 12rpx 32rpx rgba(0, 174, 239, 0.06)",
-      "--shadow-modal": "0 24rpx 56rpx rgba(0, 0, 0, 0.12)",
-      // 扩展：点缀色暖影（节日/促销卡片）
-      "--shadow-accent": "0 8rpx 24rpx rgba(255, 210, 74, 0.06)",
+      // 阴影
+      "--shadow-soft": "0 10rpx 28rpx rgba(0, 0, 0, 0.06)",
+      "--shadow-modal": "0 22rpx 52rpx rgba(0, 0, 0, 0.12)",
+      "--shadow-soft-earth": "0 10rpx 26rpx rgba(165, 124, 74, 0.04)",
     },
   },
 
   // ---------------------------------------
-  // 精致花展
+  // 精致花展（原版保留，新增花瓣暖金）
   // ---------------------------------------
   "flower-bloom": {
     name: "精致花展（flower）",
@@ -279,17 +280,18 @@ const themes = {
       "--color-primary-border-light": "rgba(243, 154, 185, 0.12)",
       "--color-text-on-primary": "#FFFFFF",
 
-      // 辅色与点缀（薄荷 / 淡紫 / 花蕊黄）
+      // 辅色与点缀
       "--color-secondary": "#FFD16B",
       "--color-accent": "#7FE3C7",
       "--color-warning": "#FFD16B",
       "--color-danger": "#E94B3C",
-      // 扩展变量（精致花展专属）
       "--color-accent-mint": "#7FE3C7",
       "--color-accent-lilac": "#C7A8F0",
       "--color-accent-stamen": "#FFD16B",
+      // 会员金（花蕊暖金，柔和尊贵）
+      "--color-member-gold": "#E0B354",
 
-      // 中性色（纸白 / 花园土灰）
+      // 中性色
       "--color-bg": "#FFFDFB",
       "--color-bg-card": "#FFFFFF",
       "--color-text": "#2F2D2B",
@@ -297,7 +299,7 @@ const themes = {
       "--color-border-light": "#F3ECEB",
       "--color-disabled": "#DCD3CF",
 
-      // 骨架屏（Skeleton）
+      // 骨架屏
       "--color-skeleton-base": "#F5EEF0",
       "--color-skeleton-highlight": "rgba(255, 255, 255, 0.6)",
 
@@ -307,16 +309,15 @@ const themes = {
       "--radius-sm": "12rpx",
       "--skeleton-radius": "12rpx",
 
-      // 阴影（轻柔浅影）
+      // 阴影
       "--shadow-soft": "0 12rpx 32rpx rgba(243, 154, 185, 0.06)",
       "--shadow-modal": "0 24rpx 56rpx rgba(0, 0, 0, 0.12)",
-      // 扩展：薄荷色调影
       "--shadow-mint": "0 10rpx 28rpx rgba(127, 227, 199, 0.05)",
     },
   },
 
   // ---------------------------------------
-  // 自然生态类
+  // 自然生态类（原版保留，新增自然亚金）
   // ---------------------------------------
   "natural-ecology": {
     name: "自然生态类",
@@ -335,6 +336,8 @@ const themes = {
       "--color-accent": "#D8B48A",
       "--color-warning": "#F6A623",
       "--color-danger": "#E5534B",
+      // 会员金（自然亚金，温润不刺眼）
+      "--color-member-gold": "#D4A843",
 
       // 中性色
       "--color-bg": "#F6FBF7",
@@ -354,19 +357,18 @@ const themes = {
       "--radius-sm": "16rpx",
       "--skeleton-radius": "16rpx",
 
-      // 阴影（以主色为基调）
+      // 阴影
       "--shadow-soft": "0 12rpx 32rpx rgba(46, 139, 87, 0.06)",
       "--shadow-modal": "0 24rpx 60rpx rgba(0, 0, 0, 0.12)",
     },
   },
 };
-
 // ============================================================================
 // 常量
 // ============================================================================
 
 /** 默认主题key */
-const DEFAULT_THEME = "culture-classic";
+const DEFAULT_THEME = "flower-bloom";
 
 /** localStorage 存储 key */
 const STORAGE_KEY = "app-theme";

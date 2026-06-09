@@ -118,7 +118,13 @@
           :key="'tourist' + index"
         >
           <view class="form-card__row">
-            <text class="form-card__row-label">姓名</text>
+            <text class="form-card__row-label">
+              <text
+                class="form-card__required"
+                v-if="touristRules.name.rules[0].required"
+                >*</text
+              >姓名
+            </text>
             <input
               class="form-card__input"
               type="text"
@@ -127,7 +133,13 @@
             />
           </view>
           <view class="form-card__row">
-            <text class="form-card__row-label">电话</text>
+            <text class="form-card__row-label">
+              <text
+                class="form-card__required"
+                v-if="touristRules.phone.rules[0].required"
+                >*</text
+              >电话
+            </text>
             <input
               class="form-card__input"
               type="number"
@@ -137,7 +149,13 @@
             />
           </view>
           <view class="form-card__row">
-            <text class="form-card__row-label">身份证</text>
+            <text class="form-card__row-label">
+              <text
+                class="form-card__required"
+                v-if="touristRules.identity.rules[0].required"
+                >*</text
+              >身份证
+            </text>
             <view class="form-card__id-wrap">
               <input
                 class="form-card__input form-card__input--id"
@@ -162,7 +180,13 @@
         </view>
         <view class="form-card">
           <view class="form-card__row">
-            <text class="form-card__row-label">姓名</text>
+            <text class="form-card__row-label">
+              <text
+                class="form-card__required"
+                v-if="contactRules.name.rules[0].required"
+                >*</text
+              >姓名
+            </text>
             <input
               class="form-card__input"
               type="text"
@@ -171,7 +195,13 @@
             />
           </view>
           <view class="form-card__row">
-            <text class="form-card__row-label">电话</text>
+            <text class="form-card__row-label">
+              <text
+                class="form-card__required"
+                v-if="contactRules.phone.rules[0].required"
+                >*</text
+              >电话
+            </text>
             <input
               class="form-card__input"
               type="number"
@@ -215,16 +245,25 @@
         <text v-else>立即预定</text>
       </view>
     </view>
-
+    <!-- ==================== Loading 遮罩 ==================== -->
+    <RequestLoading v-if="submitting" text="正在跳转支付页面..." />
     <u-toast ref="uToastRef" />
   </view>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from "vue";
+import {
+  ref,
+  reactive,
+  computed,
+  onMounted,
+  onBeforeUnmount,
+  nextTick,
+} from "vue";
 import { onLoad, onReady } from "@dcloudio/uni-app";
 import store from "@/store/index.js";
 import PageLoading from "@/components/loading/page-loading.vue";
+import RequestLoading from "@/components/loading/request-loading.vue";
 
 // ==================== 页面路由常量 ====================
 const PAGE_ROUTES = {
@@ -249,6 +288,39 @@ const showCalendar = ref(false);
 
 const formData = ref([{ identity: "", name: "", phone: "" }]);
 const formData1 = ref({ name: "", phone: "" });
+
+// ==================== 游客校验规则 ====================
+const touristRules = reactive({
+  name: { rules: [{ required: false, errorMessage: "请输入游客姓名" }] },
+  phone: {
+    rules: [
+      { required: false, format: "phone", errorMessage: "请输入游客电话号码" },
+    ],
+  },
+  identity: {
+    rules: [
+      {
+        required: false,
+        format: "identity",
+        errorMessage: "请输入游客身份证号码",
+      },
+    ],
+  },
+});
+
+// ==================== 联系人校验规则 ====================
+const contactRules = reactive({
+  name: { rules: [{ required: false, errorMessage: "请输入联系人姓名" }] },
+  phone: {
+    rules: [
+      {
+        required: false,
+        format: "phone",
+        errorMessage: "请输入联系人的电话号码",
+      },
+    ],
+  },
+});
 
 const pageReady = ref(false);
 const submitting = ref(false);
@@ -331,6 +403,9 @@ async function fetchTicketAndInit() {
       selectedPrice.value = arr[0].price;
       fetchTimeSlots(selectedDate.value);
     }
+
+    // 根据票型配置动态设置校验规则 required
+    applyDynamicRules();
   } finally {
     pageReady.value = true;
   }
@@ -442,10 +517,87 @@ function goToPayment(payData) {
   uni.reLaunch({ url: PAGE_ROUTES.payment });
 }
 
+// ==================== 表单验证 ====================
+
+function applyDynamicRules() {
+  const t = Ticket.value;
+  if (touristRules.identity?.rules?.[0]) {
+    touristRules.identity.rules[0].required = t.NeedTouristIDCard === 1;
+  }
+  if (touristRules.phone?.rules?.[0]) {
+    touristRules.phone.rules[0].required = t.NeedTouristPhone === 1;
+  }
+  if (contactRules.phone?.rules?.[0]) {
+    contactRules.phone.rules[0].required = t.NeedContactsPhone === 1;
+  }
+  if (contactRules.name?.rules?.[0]) {
+    contactRules.name.rules[0].required = t.NeedContactsName === 1;
+  }
+}
+
+function validateTouristForms() {
+  const errs = [];
+  formData.value.forEach((item) => {
+    if (touristRules.identity.rules[0].required) {
+      if (!item.identity || !item.identity.trim()) {
+        errs.push({
+          field: "identity",
+          msg: touristRules.identity.rules[0].errorMessage,
+        });
+      }
+    }
+    if (touristRules.phone.rules[0].required) {
+      if (!item.phone || !item.phone.trim()) {
+        errs.push({
+          field: "phone",
+          msg: touristRules.phone.rules[0].errorMessage,
+        });
+      }
+    }
+  });
+  return errs;
+}
+
+function validateContactForm() {
+  const errs = [];
+  if (contactRules.name.rules[0].required) {
+    if (!formData1.value.name || !formData1.value.name.trim()) {
+      errs.push({
+        field: "name",
+        msg: contactRules.name.rules[0].errorMessage,
+      });
+    }
+  }
+  if (contactRules.phone.rules[0].required) {
+    if (!formData1.value.phone || !formData1.value.phone.trim()) {
+      errs.push({
+        field: "phone",
+        msg: contactRules.phone.rules[0].errorMessage,
+      });
+    }
+  }
+  return errs;
+}
+
 // ==================== 业务方法 ====================
 
 async function handleSubmit() {
   if (submitting.value) return;
+
+  // 游客信息校验
+  const touristErrs = validateTouristForms();
+  if (touristErrs.length > 0) {
+    showToast(touristErrs[0].msg || "请完善游客信息");
+    return;
+  }
+
+  // 联系人信息校验
+  const contactErrs = validateContactForm();
+  if (contactErrs.length > 0) {
+    showToast(contactErrs[0].msg || "请完善联系人信息");
+    return;
+  }
+
   submitting.value = true;
 
   try {
@@ -742,10 +894,17 @@ function showToast(msg, type = "error") {
 }
 
 .form-card__row-label {
-  width: 110rpx;
+  width: 125rpx;
   font-size: var(--font-size-body, 28rpx);
   color: var(--color-text-secondary);
   flex-shrink: 0;
+  text-align: right;
+  padding-right: 20rpx;
+}
+
+.form-card__required {
+  color: var(--color-danger);
+  margin-right: 2rpx;
 }
 
 .form-card__input {

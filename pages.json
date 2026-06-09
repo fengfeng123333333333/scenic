@@ -1,10 +1,15 @@
 {
-	"pages": [
-		{
+	"pages": [{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "uni-app",
 				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/information/information",
+			"style": {
+				"navigationBarTitleText": "授权登录"
 			}
 		},
 		{
@@ -75,11 +80,15 @@
 		},
 		{
 			"path": "pages/address/address",
-			"style": { "navigationBarTitleText": "收货地址" }
+			"style": {
+				"navigationBarTitleText": "收货地址"
+			}
 		},
 		{
 			"path": "pages/address/myaddress",
-			"style": { "navigationBarTitleText": "编辑地址" }
+			"style": {
+				"navigationBarTitleText": "编辑地址"
+			}
 		},
 		{
 			"path": "pages/introduce/introduce",
@@ -118,7 +127,7 @@
 			}
 		},
 		{
-			"path": "pages/mindTike/mindTike",
+			"path": "pages/subPack/mindTike/mindTike",
 			"style": {
 				"navigationBarTitleText": "推荐票型"
 			}
@@ -215,47 +224,147 @@
 		},
 		{
 			"path": "pages/seat/seat",
-			"style": { "navigationBarTitleText": "选座购票" }
+			"style": {
+				"navigationBarTitleText": "选座购票"
+			}
 		},
 		{
 			"path": "pages/seat/seatWeb",
-			"style": { "navigationBarTitleText": "在线选座" }
+			"style": {
+				"navigationBarTitleText": "在线选座"
+			}
+		},
+		{
+			"path": "pages/ticketCode/Invoice",
+			"style": {
+				"navigationBarTitleText": "发票"
+			}
+		},
+		{
+			"path": "pages/ticketCode/redBokd",
+			"style": {
+				"navigationBarTitleText": "补录人脸"
+			}
+		},
+		{
+			"path": "pages/ticketCode/returnticket",
+			"style": {
+				"navigationBarTitleText": "申请退票"
+			}
+		},
+		{
+			"path": "pages/ticketCode/ticketCode",
+			"style": {
+				"navigationBarTitleText": "票码凭证"
+			}
 		},
 		{
 			"path": "pages/complaint/complaint",
-			"style": { "navigationBarTitleText": "我的留言" }
+			"style": {
+				"navigationBarTitleText": "我的留言"
+			}
 		},
 		{
 			"path": "pages/complaint/complaintdel",
-			"style": { "navigationBarTitleText": "提交留言" }
+			"style": {
+				"navigationBarTitleText": "提交留言"
+			}
 		},
 		{
 			"path": "pages/complaint/reply",
-			"style": { "navigationBarTitleText": "留言详情" }
+			"style": {
+				"navigationBarTitleText": "留言详情"
+			}
 		},
 		{
 			"path": "pages/subPack/rescue/rescue",
-			"style": { "navigationBarTitleText": "紧急救援" }
+			"style": {
+				"navigationBarTitleText": "紧急救援"
+			}
 		},
 		{
 			"path": "pages/subPack/my/headPortrait",
-			"style": { "navigationBarTitleText": "编辑资料" }
+			"style": {
+				"navigationBarTitleText": "编辑资料"
+			}
 		},
 		{
 			"path": "pages/subPack/realName/realName",
-			"style": { "navigationBarTitleText": "实名认证" }
+			"style": {
+				"navigationBarTitleText": "实名认证"
+			}
 		},
 		{
 			"path": "pages/subPack/seat/seatpay",
-			"style": { "navigationBarTitleText": "确认支付" }
+			"style": {
+				"navigationBarTitleText": "确认支付"
+			}
+		},
+		{
+			"path": "pages/subPack/distribution/myDist",
+			"style": {
+				"navigationBarTitleText": "我的资料"
+			}
+		},
+		{
+			"path": "pages/subPack/distribution/finUind",
+			"style": {
+				"navigationBarTitleText": "结账记录"
+			}
+		},
+		{
+			"path": "pages/subPack/distribution/disorde",
+			"style": {
+				"navigationBarTitleText": "流水明细"
+			}
+		},
+		{
+			"path": "pages/subPack/distribution/findshor",
+			"style": {
+				"navigationBarTitleText": "分销商品"
+			}
+		},
+		{
+			"path": "pages/subPack/distribution/finenoti",
+			"style": {
+				"navigationBarTitleText": "提现说明"
+			}
+		},
+		{
+			"path": "pages/subPack/distribution/finticer",
+			"style": {
+				"navigationBarTitleText": "申请提现"
+			}
+		},
+		{
+			"path": "pages/subPack/distribution/disbindMy",
+			"style": {
+				"navigationBarTitleText": "分销中心"
+			}
+		},
+		{
+			"path": "pages/subPack/distribution/distribution",
+			"style": {
+				"navigationBarTitleText": "分销申请"
+			}
 		},
 		{
 			"path": "pages/subPack/voucherCode/voucherCode",
-			"style": { "navigationBarTitleText": "激活票码" }
+			"style": {
+				"navigationBarTitleText": "激活票码"
+			}
 		},
-			{
+		{
+			"path": "pages/subPack/coinsup/coinsup",
+			"style": {
+				"navigationBarTitleText": "协议详情"
+			}
+		},
+		{
 			"path": "pages/map1/map1",
-			"style": { "navigationBarTitleText": "地图导览" }
+			"style": {
+				"navigationBarTitleText": "地图导览"
+			}
 		}
 
 	],
@@ -269,7 +378,9 @@
 	"easycom": {
 		"autoscan": true,
 		"custom": {
-			"^u-(.*)": "uview-plus/components/u-$1/u-$1.vue",
+			"^u--(.*)": "uview-plus/components/u-$1/u-$1.vue",
+			"^up-(.*)": "uview-plus/components/u-$1/u-$1.vue",
+			"^u-([^-].*)": "uview-plus/components/u-$1/u-$1.vue",
 			"^tab-bar$": "@/components/tabbar/tabbar.vue",
 			"^f-tabs$": "@/components/f-tabs/f-tabs.vue",
 			"^uni-popup$": "@/components/uni-popup/uni-popup.vue"

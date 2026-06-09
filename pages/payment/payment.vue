@@ -101,7 +101,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onBeforeUnmount } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import store from "../../store/index.js";
 import PageLoading from "../../components/loading/page-loading.vue";
@@ -130,8 +130,11 @@ const payLoading = ref(false);
 
 // ==================== Refs ====================
 const uToastRef = ref(null);
-
+let backTimer = null;
 // ==================== 生命周期 ====================
+onBeforeUnmount(() => {
+  if (backTimer) clearTimeout(backTimer);
+});
 onLoad(() => {
   initPageData();
 });
@@ -263,8 +266,10 @@ function handlePaySuccess(resData) {
 
   // 会员支付 → 直接跳转订单页
   if (payType.value === 1 && tickinfo.value.isMember == true) {
-    goToOrder();
-    return;
+    showToast("支付成功", "success");
+    backTimer = setTimeout(() => {
+      goToOrder();
+    }, 1200);
   }
 }
 

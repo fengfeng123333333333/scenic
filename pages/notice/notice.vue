@@ -92,6 +92,7 @@ function goToDetail(noticeId) {
 .notice-page {
   min-height: 100vh;
   background-color: var(--color-bg);
+  padding-top: 20rpx;
 }
 
 .notice-page__item {
@@ -100,7 +101,7 @@ function goToDetail(noticeId) {
   background-color: var(--color-bg-card);
   min-height: 100rpx;
   padding: 30rpx;
-  margin-top: 20rpx;
+  margin-bottom: 20rpx;
   gap: 16rpx;
 }
 

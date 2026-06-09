@@ -106,8 +106,15 @@
     <!-- ==================== 支付按钮 ==================== -->
     <view class="seat-pay-page__footer">
       <view class="pay-btn" @click="submitPay">
-        <text v-if="!payLoading">立即支付</text>
-        <u-loading-icon v-else mode="circle" size="18" color="#fff" />
+        <template v-if="payLoading">
+          <u-loading-icon
+            mode="circle"
+            size="18"
+            color="var(--color-text-on-primary)"
+          />
+          <text>支付中...</text>
+        </template>
+        <text v-else>立即支付</text>
       </view>
     </view>
 
@@ -121,23 +128,26 @@
         <scroll-view class="coupon-popup__scroll" scroll-y>
           <cc-defineCoupon
             :colors="couponBtnColor"
-            :vdcm="3"
             :couponList="couponList"
-            @onRece="handleCouponSelect"
+            @onReceive="handleCouponSelect"
           />
         </scroll-view>
       </view>
     </view>
 
     <!-- ==================== Loading ==================== -->
-    <zero-loading v-if="payLoading" :mask="true" type="circle" />
+    <RequestLoading v-if="payLoading" text="正在支付..." />
+    <!-- ==================== Toast 提示 ==================== -->
+    <u-toast ref="uToastRef" />
   </view>
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
+import { useToast } from "@/util/toast.js";
 import { useStore } from "@/store/index.js";
+import RequestLoading from "@/components/loading/request-loading.vue";
 
 // ==================== 页面路由常量 ====================
 const PAGE_ROUTES = {
@@ -158,7 +168,7 @@ const showCoupon = ref(false);
 const payLoading = ref(false);
 const submitting = ref(false);
 const basePrice = ref(0);
-
+const { uToastRef, showToast } = useToast();
 // ==================== 计算属性 ====================
 const totalDiscount = computed(() => {
   if (selectedCoupons.value.length === 0) return 0;
@@ -267,6 +277,7 @@ async function submitPay() {
     if (res?.data?.Code !== 200) {
       payLoading.value = false;
       submitting.value = false;
+
       return;
     }
 
@@ -297,6 +308,7 @@ async function submitPay() {
         uni.reLaunch({ url: `${PAGE_ROUTES.order}?tab=1` });
       },
       fail() {
+        showToast("支付取消或失败");
         payLoading.value = false;
         submitting.value = false;
       },

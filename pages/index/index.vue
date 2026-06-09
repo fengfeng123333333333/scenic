@@ -31,6 +31,7 @@ const currentTab = ref(0);
 const orderStatus = ref(0);
 
 onLoad((option) => {
+  console.log("66666666666666666666");
   const tab = Number(option?.tab);
   if (!isNaN(tab) && tab >= 0 && tab <= 3) {
     currentTab.value = tab;

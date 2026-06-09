@@ -12,6 +12,7 @@
 </template>
 
 <script setup>
+console.log("对方对方的");
 defineProps({
   text: {
     type: String,

@@ -63,7 +63,6 @@
           :val="currentQrcode"
           :size="240"
         />
-        <text class="popup-qrcode__tip">点击遮罩关闭</text>
       </view>
     </u-popup>
   </view>

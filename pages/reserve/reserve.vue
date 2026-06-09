@@ -53,7 +53,7 @@
             <text>更多日期</text>
           </view>
         </view>
-        <u-calendar
+        <up-calendar
           ref="calendar"
           :show="showCalendar"
           mode="single"
@@ -421,7 +421,7 @@
     </u-popup>
 
     <!-- ==================== Loading 遮罩 ==================== -->
-    <zero-loading v-if="loading" :mask="true" type="circle" />
+    <RequestLoading v-if="loading" text="正在跳转支付页面..." />
 
     <!-- ==================== Toast 提示 ==================== -->
     <u-toast ref="uToastRef" />
@@ -440,6 +440,7 @@ import {
 import { onLoad, onShow, onReady } from "@dcloudio/uni-app";
 import { useToast } from "@/util/toast.js";
 import { useStore } from "@/store/index.js";
+import RequestLoading from "@/components/loading/request-loading.vue";
 
 // ==================== 页面路由常量 ====================
 const PAGE_ROUTES = {
@@ -491,11 +492,25 @@ const couponDiscountAmount = ref(0);
 
 // ==================== 游客表单 ====================
 const formData = ref([
-  { name: "", phone: "", identity: "", img: [], induc: "", indPhone: "" },
+  {
+    name: "",
+    phone: "",
+    identity: "",
+    img: [],
+    induc: "",
+    indPhone: "",
+  },
 ]);
 const touristFormRefs = []; // 普通数组，避免 ref 解包歧义
 const touristRules = reactive({
-  name: { rules: [{ required: false, errorMessage: "请输入游客姓名" }] },
+  name: {
+    rules: [
+      {
+        required: false,
+        errorMessage: "请输入游客姓名",
+      },
+    ],
+  },
   phone: {
     rules: [
       {
@@ -517,9 +532,19 @@ const touristRules = reactive({
 });
 
 // ==================== 联系人表单 ====================
-const contactForm = reactive({ name: "", phone: "" });
+const contactForm = reactive({
+  name: "",
+  phone: "",
+});
 const contactRules = reactive({
-  name: { rules: [{ required: false, errorMessage: "请输入联系人姓名" }] },
+  name: {
+    rules: [
+      {
+        required: false,
+        errorMessage: "请输入联系人姓名",
+      },
+    ],
+  },
   phone: {
     rules: [
       {
@@ -532,7 +557,12 @@ const contactRules = reactive({
 });
 
 // ==================== 车牌 ====================
-const plateList = ref([{ induc: "", indPhone: "" }]);
+const plateList = ref([
+  {
+    induc: "",
+    indPhone: "",
+  },
+]);
 const showPlateAdd = ref(true);
 const showPlateInput = ref(false);
 const showCalendar = ref(false);
@@ -591,9 +621,11 @@ onBeforeUnmount(() => {
 });
 
 onReady(() => {
-  nextTick(() => {
-    calendar.value?.setFormatter(calendarFormatter);
-  });
+  // $refs.calendar?.setFormatter(calendarFormatter);
+  //   calendar.value?.setFormatter(calendarFormatter);
+  // nextTick(() => {
+  // 	calendar.value?.setFormatter(calendarFormatter);
+  // });
 });
 
 onLoad(async (option) => {
@@ -605,6 +637,10 @@ onLoad(async (option) => {
     showToast("加载失败，请重试");
   } finally {
     pageReady.value = true;
+    nextTick(() => {
+      console.log("setting calendar formatter...");
+      calendar.value?.setFormatter(calendarFormatter);
+    });
   }
 });
 
@@ -674,7 +710,9 @@ function initTicketData() {
       if (allDefault) {
         item.img = [];
         for (let i = 0; i < faceCount; i++) {
-          item.img.push({ imSrc: DEFAULT_FACE_URL });
+          item.img.push({
+            imSrc: DEFAULT_FACE_URL,
+          });
         }
       }
     });
@@ -736,7 +774,10 @@ async function fetchTimeSlots(date) {
   const res = await uni.$myRequest({
     url: "/api/Applets/AppletsGetTicketTimeSlot",
     method: "POST",
-    data: { ticketID: store.tickId, travelTime: date },
+    data: {
+      ticketID: store.tickId,
+      travelTime: date,
+    },
   });
   timeList.value = res?.data?.Data || [];
   if (timeList.value.length >= 1 && !timeList.value[0].IsSelect) {
@@ -788,8 +829,8 @@ function recalcWithCoupon() {
 // ==================== 表单校验 ====================
 /** 直接 JS 校验（不依赖 u-form ref 捕获，100% 可控） */
 function validateTouristForms() {
-  const results = formData.value.map((item, idx) => {
-    const errs = [];
+  const errs = [];
+  formData.value.map((item, idx) => {
     // 身份证：required 或 有值时校验格式
     if (touristRules.identity.rules[0].required) {
       if (!item.identity || !item.identity.trim()) {
@@ -809,10 +850,9 @@ function validateTouristForms() {
         });
       }
     }
-    console.log("reeeeeeeeeeeeee", errs);
-    return errs.length === 0 ? null : errs;
   });
-  return results;
+  console.log("reeeeeeeeeeeeee", errs);
+  return errs.length === 0 ? [] : errs;
 }
 
 /** 直接 JS 校验联系人信息（与游客信息一致的校验模式） */
@@ -854,11 +894,15 @@ function setPaymentStore(orderData, openid) {
 
 function goToPayment(orderData, openid) {
   setPaymentStore(orderData, openid);
-  uni.reLaunch({ url: PAGE_ROUTES.payment });
+  uni.reLaunch({
+    url: PAGE_ROUTES.payment,
+  });
 }
 
 function goToCommonTourist(index) {
-  uni.navigateTo({ url: `${PAGE_ROUTES.commonTourist}?key=${index}` });
+  uni.navigateTo({
+    url: `${PAGE_ROUTES.commonTourist}?key=${index}`,
+  });
 }
 
 // ==================== 日期相关 ====================
@@ -880,6 +924,10 @@ function openCalendar() {
   }
   showCalendar.value = true;
   selectPoint.value = 4;
+  // 每次打开时重新设置 formatter（确保生效）
+  nextTick(() => {
+    calendar.value?.setFormatter(calendarFormatter);
+  });
 }
 
 function handleCalendarConfirm(dates) {
@@ -914,9 +962,13 @@ function handleCalendarClose() {
 
 function calendarFormatter(day) {
   if (!day) return day;
-  const m = String(day.month).padStart(2, "0");
-  const d = String(day.day).padStart(2, "0");
-  const dateStr = `${day.year}-${m}-${d}`;
+  // uview-plus 某些版本 day 对象无 year 字段，优先用 day.date 兜底
+  const dateStr =
+    day.date ||
+    (day.year
+      ? `${day.year}-${String(day.month).padStart(2, "0")}-${String(day.day).padStart(2, "0")}`
+      : "");
+  if (!dateStr) return day;
   const stockList = ticketInfo.value.TicketStockList || [];
   const found = stockList.find((item) => item.date === dateStr);
   if (found) {
@@ -953,7 +1005,9 @@ function handleQuantityChange(e) {
       });
       const faceCount = ticketInfo.value.NeedFaceNumber || 0;
       for (let j = 0; j < faceCount; j++) {
-        formData.value[i].img.push({ imSrc: DEFAULT_FACE_URL });
+        formData.value[i].img.push({
+          imSrc: DEFAULT_FACE_URL,
+        });
       }
     }
   } else if (newVal < oldVal) {
@@ -1002,13 +1056,19 @@ function compressSelectedImage(tempPath) {
         resolve(tempPath);
         return;
       }
-      let imageInfo = { width: 800, height: 600 };
+      let imageInfo = {
+        width: 800,
+        height: 600,
+      };
       try {
         imageInfo = await getImageInfo(tempPath);
       } catch (e) {
         /* 使用默认 */
       }
-      const params = { src: tempPath, quality: isAndroid ? 0.6 : 0.4 };
+      const params = {
+        src: tempPath,
+        quality: isAndroid ? 0.6 : 0.4,
+      };
       if (isAndroid) {
         const maxWidth = 800;
         params.width = Math.floor(
@@ -1034,9 +1094,13 @@ function uploadCompressedImage(compressedPath, index, index1) {
     uni.uploadFile({
       url: "https://saasapp.huibaitech.com/api/Applets/UploadTicketFaceImg",
       filePath: compressedPath,
-      header: { AppID: uni.getAccountInfoSync().miniProgram.appId },
+      header: {
+        AppID: uni.getAccountInfoSync().miniProgram.appId,
+      },
       name: "file",
-      formData: { user: "test" },
+      formData: {
+        user: "test",
+      },
       success: (res) => {
         if (res.statusCode === 200) {
           try {
@@ -1106,7 +1170,10 @@ function closePlateInput() {
 function addPlate() {
   const max = ticketInfo.value.NeedMaxCarNumber || 1;
   if (plateList.value.length < max)
-    plateList.value.push({ indPhone: "", induc: "" });
+    plateList.value.push({
+      indPhone: "",
+      induc: "",
+    });
 }
 
 function removePlate(index) {
@@ -1121,6 +1188,7 @@ function removePlate(index) {
 function openCoupon() {
   couponshow.value = true;
 }
+
 function closeCoupon() {
   couponshow.value = false;
 }
@@ -1143,9 +1211,10 @@ async function handleSubmit() {
 
   try {
     const validateResults = validateTouristForms();
+    console.log("validateResults", validateResults);
     const allPassed = validateResults.every((item) => item === null);
     if (!allPassed) {
-      showToast(validateResults[0][0].msg || "请完善游客信息");
+      showToast(validateResults[0].msg || "请完善游客信息");
       submitting.value = false;
       return;
     }
@@ -1240,7 +1309,9 @@ async function createOrder() {
         {
           ticketID: store.tickId,
           ...(selectedTimeSlot.value
-            ? { ticketStockTimeID: selectedTimeSlot.value.TicketStockTimeID }
+            ? {
+                ticketStockTimeID: selectedTimeSlot.value.TicketStockTimeID,
+              }
             : ""),
           ticketName: ticketInfo.value.TicketName || "",
           number: sumNumber.value,
@@ -1273,7 +1344,7 @@ async function createOrder() {
     goToPayment(res.data.Data || {}, openid);
   } else {
     console.log("[reserve] 创建订单失败:", res.data);
-    // showToast(res.data.message || "订单创建失败");
+    showToast(res.data.Message || "订单创建失败");
     loading.value = false;
     requestLocked.value = false;
   }
@@ -1290,6 +1361,7 @@ async function createOrder() {
   min-height: 100vh;
   background-color: var(--color-bg);
   padding-bottom: calc(220rpx + env(safe-area-inset-bottom));
+  padding-top: 20rpx;
 }
 
 // ==================== 骨架屏 ====================
@@ -1331,7 +1403,7 @@ async function createOrder() {
 // ==================== 票型信息头 ====================
 .reserve-header {
   background: var(--color-bg-card);
-  margin: 20rpx;
+  margin: 0 20rpx 20rpx 20rpx;
   padding: 24rpx;
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-soft);
@@ -1343,6 +1415,7 @@ async function createOrder() {
   color: var(--color-text);
   line-height: 1.4;
 }
+
 .reserve-header__desc {
   display: block;
   font-size: 28rpx;
@@ -1365,16 +1438,19 @@ async function createOrder() {
   gap: 16rpx;
   margin-bottom: 20rpx;
 }
+
 .date-section__label {
   font-size: 30rpx;
   font-weight: 600;
   color: var(--color-text);
 }
+
 .date-section__value {
   font-size: 28rpx;
   color: var(--color-primary);
   font-weight: 600;
 }
+
 .date-section__quick {
   display: flex;
   gap: 16rpx;
@@ -1414,6 +1490,7 @@ async function createOrder() {
   font-weight: 600;
   margin-bottom: 6rpx;
 }
+
 .date-card__price {
   font-size: 24rpx;
 }
@@ -1433,6 +1510,7 @@ async function createOrder() {
   color: var(--color-text);
   margin-bottom: 20rpx;
 }
+
 .time-section__grid {
   display: flex;
   flex-wrap: wrap;
@@ -1500,6 +1578,7 @@ async function createOrder() {
   align-items: center;
   padding: 8rpx 8rpx 16rpx;
 }
+
 .section-header__bar {
   width: 6rpx;
   height: 32rpx;
@@ -1507,12 +1586,14 @@ async function createOrder() {
   border-radius: 3rpx;
   margin-right: 12rpx;
 }
+
 .section-header__title {
   font-size: 30rpx;
   font-weight: 600;
   color: var(--color-text);
   flex: 1;
 }
+
 .section-header__action {
   font-size: 26rpx;
   color: var(--color-primary);
@@ -1529,6 +1610,7 @@ async function createOrder() {
 .face-section {
   margin: 0 20rpx 20rpx;
 }
+
 .face-section__grid {
   display: flex;
   flex-wrap: wrap;
@@ -1681,12 +1763,14 @@ async function createOrder() {
   font-size: 28rpx;
   color: var(--color-text);
 }
+
 .coupon-bar__discount {
   font-size: 28rpx;
   color: var(--color-primary);
   font-weight: 600;
   margin-left: 16rpx;
 }
+
 .coupon-bar__arrow {
   position: absolute;
   right: 28rpx;
@@ -1715,19 +1799,23 @@ async function createOrder() {
   align-items: baseline;
   gap: 8rpx;
 }
+
 .bottom-bar__label {
   font-size: 26rpx;
   color: var(--color-text-secondary);
 }
+
 .bottom-bar__price {
   display: flex;
   align-items: baseline;
 }
+
 .bottom-bar__symbol {
   font-size: 26rpx;
   font-weight: 600;
   color: var(--color-primary);
 }
+
 .bottom-bar__value {
   font-size: 44rpx;
   font-weight: 700;
@@ -1786,6 +1874,7 @@ async function createOrder() {
   background: var(--color-bg-card);
   border-radius: var(--radius-card) var(--radius-card) 0 0;
   transition: bottom 0.3s ease;
+
   &--show {
     bottom: 0;
   }
@@ -1803,12 +1892,14 @@ async function createOrder() {
   min-height: 700rpx;
   padding-bottom: env(safe-area-inset-bottom);
 }
+
 .plate-popup__title {
   font-size: 32rpx;
   font-weight: 600;
   color: var(--color-text);
   margin: 30rpx 0 0 30rpx;
 }
+
 .plate-popup__input {
   margin-top: 30rpx;
 }
