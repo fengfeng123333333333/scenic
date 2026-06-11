@@ -1514,7 +1514,7 @@
 		margin-top: -32rpx;
 		margin-bottom: 52rpx;
 		padding: 32rpx 24rpx;
-		background: linear-gradient(135deg, #D4302F 0%, #E6B422 100%);
+		background: url("/static/images/中国传统节日横幅背景设计.png") center/cover no-repeat;
 		border-radius: var(--radius-card) var(--radius-card) 0 0;
 		box-shadow: 0 0 20rpx rgba(230, 180, 34, 0.3), var(--shadow-soft);
 		display: flex;
