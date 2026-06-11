@@ -362,6 +362,54 @@ const themes = {
       "--shadow-modal": "0 24rpx 60rpx rgba(0, 0, 0, 0.12)",
     },
   },
+
+  // ---------------------------------------
+  // 国庆华诞（红金配色）
+  // ---------------------------------------
+  "national-day": {
+    name: "国庆华诞（红金）",
+    description:
+      "中国红主色 + 金色点缀，国庆节日氛围。庄重热烈，适用于国庆黄金周。",
+    vars: {
+      // 主色系（中国红）
+      "--color-primary": "#D4302F",
+      "--color-primary-dark": "#B71C1C",
+      "--color-primary-hover": "#B71C1C",
+      "--color-primary-bg-light": "rgba(212, 48, 47, 0.06)",
+      "--color-primary-border-light": "rgba(212, 48, 47, 0.12)",
+      "--color-text-on-primary": "#FFFFFF",
+
+      // 辅色与点缀（金色系）
+      "--color-secondary": "#E6B422",
+      "--color-accent": "#C9A84C",
+      "--color-warning": "#E6B422",
+      "--color-danger": "#D4302F",
+      // 会员金
+      "--color-member-gold": "#E6B422",
+
+      // 中性色
+      "--color-bg": "#FEFAF6",
+      "--color-bg-card": "#FFFFFF",
+      "--color-text": "#3C1E1E",
+      "--color-text-secondary": "#8C6E6E",
+      "--color-border-light": "#F5E6D3",
+      "--color-disabled": "#E8D5C4",
+
+      // 骨架屏
+      "--color-skeleton-base": "#FEF0E8",
+      "--color-skeleton-highlight": "rgba(255, 255, 255, 0.75)",
+
+      // 圆角
+      "--radius-card": "28rpx",
+      "--radius-button": "24rpx",
+      "--radius-sm": "16rpx",
+      "--skeleton-radius": "16rpx",
+
+      // 阴影（暖红调）
+      "--shadow-soft": "0 12rpx 32rpx rgba(212, 48, 47, 0.06)",
+      "--shadow-modal": "0 24rpx 60rpx rgba(0, 0, 0, 0.12)",
+    },
+  },
 };
 // ============================================================================
 // 常量
