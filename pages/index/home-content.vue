@@ -175,16 +175,6 @@
 				<view class="bink">{{ weather.AppletVersion }}</view>
 			</view>
 
-			<!-- 国庆快捷入口 -->
-			<template v-if="currentThemeKey === 'national-day'">
-				<view class="national-quick national-quick--left" @click="goIntroduce">
-					<u-icon name="info-circle-fill" color="#FFFFFF" size="22" />
-				</view>
-				<view class="national-quick national-quick--right" @click="goMap">
-					<u-icon name="map-fill" color="#FFFFFF" size="22" />
-				</view>
-			</template>
-
 			<!-- 国庆浮动装饰元素 -->
 			<template v-if="currentThemeKey === 'national-day'">
 				<view class="festival-float festival-float--1">🏮</view>
@@ -444,14 +434,6 @@
 	onBeforeUnmount(() => {
 		stopFirework();
 	});
-
-	// ==================== 国庆快捷入口 ====================
-	function goIntroduce() {
-		uni.navigateTo({ url: "/pages/introduce/introduce" });
-	}
-	function goMap() {
-		uni.navigateTo({ url: "/pages/map1/map1" });
-	}
 
 	const myRequest = (options) => uni.$myRequest(options);
 	console.log("777777777777777777777");
@@ -1509,36 +1491,6 @@
 		font-size: var(--font-size-caption);
 		color: rgba(255, 255, 255, 0.85);
 		letter-spacing: 2rpx;
-	}
-
-	/* ====== 国庆快捷入口按钮 ====== */
-	.national-quick {
-		position: fixed;
-		z-index: 900;
-		width: 80rpx;
-		height: 80rpx;
-		border-radius: 50%;
-		background: var(--color-primary);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		box-shadow: 0 8rpx 24rpx rgba(212, 48, 47, 0.35);
-		transition: opacity 160ms ease, transform 160ms ease;
-	}
-
-	.national-quick:active {
-		opacity: 0.85;
-		transform: scale(0.92);
-	}
-
-	.national-quick--left {
-		left: 32rpx;
-		bottom: 320rpx;
-	}
-
-	.national-quick--right {
-		right: 32rpx;
-		bottom: 320rpx;
 	}
 
 	/* ====== 浮动装饰元素 ====== */
