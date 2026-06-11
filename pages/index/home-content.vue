@@ -17,6 +17,7 @@
 
 			<!-- 国庆节日横幅装饰 -->
 			<view class="hero__festival" v-if="currentThemeKey === 'national-day'">
+				<image class="hero__festival-bg" src="/static/images/中国传统节日横幅背景设计.png" mode="aspectFill" />
 				<view class="hero__festival-inner">
 					<text class="hero__festival-star">★</text>
 					<text class="hero__festival-title">欢度国庆 · 盛世华诞</text>
@@ -1510,18 +1511,31 @@
 	.hero__festival {
 		position: relative;
 		overflow: hidden;
-		width: 100%;
-		margin-top: -32rpx;
-		margin-bottom: 52rpx;
+		margin: 0 32rpx;
 		padding: 32rpx 24rpx;
-		background: url("/static/images/中国传统节日横幅背景设计.png") center/cover no-repeat;
-		border-radius: var(--radius-card) var(--radius-card) 0 0;
+		background: linear-gradient(135deg, #D4302F 0%, #E6B422 100%);
+		border-radius: var(--radius-card);
 		box-shadow: 0 0 20rpx rgba(230, 180, 34, 0.3), var(--shadow-soft);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		gap: 12rpx;
 		animation: festivalGlow 2s ease-in-out infinite;
+	}
+
+	.hero__festival-bg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+		border-radius: inherit;
+	}
+
+	.hero__festival-inner,
+	.hero__festival-sub {
+		position: relative;
+		z-index: 1;
 	}
 
 	/* 横幅扫光 */
