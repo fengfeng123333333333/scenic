@@ -3,22 +3,12 @@
 		<IndexSkeleton v-if="!pageReady" />
 
 		<template v-else>
-			<!-- 国庆红绸带 -->
-			<view class="national-ribbon" v-if="currentThemeKey === 'national-day'">
-				<text class="national-ribbon__year">1949 - 2025</text>
-				<text class="national-ribbon__text">祝祖国繁荣昌盛</text>
-			</view>
-
 			<!-- <u-navbar :title="weather.ScenicName" leftIcon="home" :placeholder="true" :autoBack="true" :fixed="false" /> -->
-		<view class="hero" :class="{ 'hero--national': currentThemeKey === 'national-day' }">
+			<view class="hero" :class="{ 'hero--national': currentThemeKey === 'national-day' }">
 				<ScaleSwiper :banList="banList" :autoplay="true" :zoomDuration="2500" />
 				<!-- 国庆烟花 Canvas -->
-				<canvas
-					v-if="currentThemeKey === 'national-day'"
-					type="2d"
-					id="fireworkCanvas"
-					class="hero__firework"
-				/>
+				<canvas v-if="currentThemeKey === 'national-day'" type="2d" id="fireworkCanvas"
+					class="hero__firework" />
 				<view class="hero__weather" v-if="weather.Weather">
 					<text class="hero__weather-text">{{ weather.Weather }}</text>
 				</view>
@@ -190,11 +180,17 @@
 
 			<!-- 国庆浮动装饰元素 -->
 			<template v-if="currentThemeKey === 'national-day'">
-				<view class="festival-float festival-float--1">🏮</view>
+				<view class="festival-float festival-float--1">
+					<image src="/static/images/灯笼.png" mode="aspectFit" class="festival-float__img" />
+				</view>
 				<view class="festival-float festival-float--2">★</view>
-				<view class="festival-float festival-float--3">🏮</view>
+				<view class="festival-float festival-float--3">
+					<image src="/static/images/灯笼.png" mode="aspectFit" class="festival-float__img" />
+				</view>
 				<view class="festival-float festival-float--4">★</view>
-				<view class="festival-float festival-float--5">🏮</view>
+				<view class="festival-float festival-float--5">
+					<image src="/static/images/灯笼.png" mode="aspectFit" class="festival-float__img" />
+				</view>
 				<view class="festival-float festival-float--6">★</view>
 			</template>
 
@@ -391,7 +387,10 @@
 
 	function startFirework() {
 		const query = uni.createSelectorQuery().in(proxy);
-		query.select("#fireworkCanvas").fields({ node: true, size: true }).exec((res) => {
+		query.select("#fireworkCanvas").fields({
+			node: true,
+			size: true
+		}).exec((res) => {
 			if (!res || !res[0] || !res[0].node) return;
 			const canvas = res[0].node;
 			const width = res[0].width;
@@ -411,7 +410,8 @@
 				}
 				// 拖尾粒子（慢速衰减，更小）
 				for (let i = 0; i < 20; i++) {
-					const p = new Particle(cx + (Math.random() - 0.5) * 10, cy + (Math.random() - 0.5) * 10, color);
+					const p = new Particle(cx + (Math.random() - 0.5) * 10, cy + (Math.random() - 0.5) * 10,
+						color);
 					p.decay = 0.004;
 					p.radius = 1.2;
 					p.vx *= 0.3;
@@ -1494,18 +1494,28 @@
 	}
 
 	@keyframes ribbonShine {
-		0%, 100% { opacity: 0.85; }
-		50% { opacity: 1; text-shadow: 0 0 12rpx rgba(255, 224, 130, 0.6); }
+
+		0%,
+		100% {
+			opacity: 0.85;
+		}
+
+		50% {
+			opacity: 1;
+			text-shadow: 0 0 12rpx rgba(255, 224, 130, 0.6);
+		}
 	}
 
 	/* ====== 国庆节日装饰 ====== */
 	.hero__festival {
 		position: relative;
 		overflow: hidden;
-		margin: 0 32rpx;
+		width: 100%;
+		margin-top: -32rpx;
+		margin-bottom: 52rpx;
 		padding: 32rpx 24rpx;
 		background: linear-gradient(135deg, #D4302F 0%, #E6B422 100%);
-		border-radius: var(--radius-card);
+		border-radius: var(--radius-card) var(--radius-card) 0 0;
 		box-shadow: 0 0 20rpx rgba(230, 180, 34, 0.3), var(--shadow-soft);
 		display: flex;
 		flex-direction: column;
@@ -1529,14 +1539,22 @@
 	}
 
 	@keyframes shimmerSweep {
-		0% { left: -50%; }
-		100% { left: 150%; }
+		0% {
+			left: -50%;
+		}
+
+		100% {
+			left: 150%;
+		}
 	}
 
 	@keyframes festivalGlow {
-		0%, 100% {
+
+		0%,
+		100% {
 			box-shadow: 0 0 20rpx rgba(230, 180, 34, 0.3), var(--shadow-soft);
 		}
+
 		50% {
 			box-shadow: 0 0 40rpx rgba(230, 180, 34, 0.55), 0 0 80rpx rgba(212, 48, 47, 0.25), var(--shadow-soft);
 		}
@@ -1578,16 +1596,73 @@
 		animation: festivalFloat 3s ease-in-out infinite;
 	}
 
-	.festival-float--1 { top: 15%; left: 16rpx; animation-delay: 0s; }
-	.festival-float--2 { top: 45%; right: 20rpx; animation-delay: 0.6s; font-size: 48rpx; color: #E6B422; }
-	.festival-float--3 { top: 65%; left: 24rpx; animation-delay: 1.2s; }
-	.festival-float--4 { top: 30%; right: 8rpx; animation-delay: 1.8s; font-size: 44rpx; color: #E6B422; }
-	.festival-float--5 { top: 78%; left: 40rpx; animation-delay: 0.3s; }
-	.festival-float--6 { top: 55%; right: 36rpx; animation-delay: 0.9s; font-size: 40rpx; color: #E6B422; }
+	.festival-float--1 {
+		top: 15%;
+		left: 16rpx;
+		animation-delay: 0s;
+		font-size: inherit;
+		width: 72rpx;
+		height: 92rpx;
+	}
+
+	.festival-float--2 {
+		top: 45%;
+		right: 20rpx;
+		animation-delay: 0.6s;
+		font-size: 48rpx;
+		color: #E6B422;
+	}
+
+	.festival-float--3 {
+		top: 65%;
+		left: 24rpx;
+		animation-delay: 1.2s;
+		font-size: inherit;
+		width: 64rpx;
+		height: 82rpx;
+	}
+
+	.festival-float--4 {
+		top: 30%;
+		right: 8rpx;
+		animation-delay: 1.8s;
+		font-size: 44rpx;
+		color: #E6B422;
+	}
+
+	.festival-float--5 {
+		top: 78%;
+		left: 40rpx;
+		animation-delay: 0.3s;
+		font-size: inherit;
+		width: 56rpx;
+		height: 72rpx;
+	}
+
+	.festival-float--6 {
+		top: 55%;
+		right: 36rpx;
+		animation-delay: 0.9s;
+		font-size: 40rpx;
+		color: #E6B422;
+	}
+
+	.festival-float__img {
+		width: 100%;
+		height: 100%;
+		display: block;
+	}
 
 	@keyframes festivalFloat {
-		0%, 100% { transform: translateY(0) scale(1); }
-		50% { transform: translateY(-24rpx) scale(1.05); }
+
+		0%,
+		100% {
+			transform: translateY(0) scale(1);
+		}
+
+		50% {
+			transform: translateY(-24rpx) scale(1.05);
+		}
 	}
 
 	/* ====== 飘落粒子 ====== */
@@ -1601,14 +1676,53 @@
 		animation: confettiFall 4s linear infinite;
 	}
 
-	.confetti--1 { left: 5%; animation-delay: 0s; animation-duration: 3.5s; }
-	.confetti--2 { left: 15%; animation-delay: 0.8s; animation-duration: 4.2s; }
-	.confetti--3 { left: 28%; animation-delay: 1.6s; animation-duration: 3.8s; }
-	.confetti--4 { left: 40%; animation-delay: 0.4s; animation-duration: 4.5s; }
-	.confetti--5 { left: 55%; animation-delay: 2.0s; animation-duration: 3.2s; }
-	.confetti--6 { left: 68%; animation-delay: 1.2s; animation-duration: 4.0s; }
-	.confetti--7 { left: 80%; animation-delay: 2.4s; animation-duration: 3.6s; }
-	.confetti--8 { left: 92%; animation-delay: 0.6s; animation-duration: 4.8s; }
+	.confetti--1 {
+		left: 5%;
+		animation-delay: 0s;
+		animation-duration: 3.5s;
+	}
+
+	.confetti--2 {
+		left: 15%;
+		animation-delay: 0.8s;
+		animation-duration: 4.2s;
+	}
+
+	.confetti--3 {
+		left: 28%;
+		animation-delay: 1.6s;
+		animation-duration: 3.8s;
+	}
+
+	.confetti--4 {
+		left: 40%;
+		animation-delay: 0.4s;
+		animation-duration: 4.5s;
+	}
+
+	.confetti--5 {
+		left: 55%;
+		animation-delay: 2.0s;
+		animation-duration: 3.2s;
+	}
+
+	.confetti--6 {
+		left: 68%;
+		animation-delay: 1.2s;
+		animation-duration: 4.0s;
+	}
+
+	.confetti--7 {
+		left: 80%;
+		animation-delay: 2.4s;
+		animation-duration: 3.6s;
+	}
+
+	.confetti--8 {
+		left: 92%;
+		animation-delay: 0.6s;
+		animation-duration: 4.8s;
+	}
 
 	@keyframes confettiFall {
 		0% {
@@ -1616,8 +1730,15 @@
 			opacity: 0;
 			transform: translateX(0) rotate(0deg);
 		}
-		10% { opacity: 0.8; }
-		90% { opacity: 0.6; }
+
+		10% {
+			opacity: 0.8;
+		}
+
+		90% {
+			opacity: 0.6;
+		}
+
 		100% {
 			top: 110%;
 			opacity: 0;
