@@ -7,8 +7,7 @@
 			<view class="hero" :class="heroFestivalClass">
 				<ScaleSwiper :banList="banList" :autoplay="true" :zoomDuration="2500" />
 				<!-- 国庆烟花 Canvas -->
-				<canvas v-if="isFestival" type="2d" id="fireworkCanvas"
-					class="hero__firework" />
+				<canvas v-if="isFestival" type="2d" id="fireworkCanvas" class="hero__firework" />
 				<view class="hero__weather" v-if="weather.Weather">
 					<text class="hero__weather-text">{{ weather.Weather }}</text>
 				</view>
@@ -338,9 +337,7 @@
 	// ==================== 主题切换（本地演示） ====================
 	const showThemePanel = ref(false);
 	const currentThemeKey = ref(getStoredThemeKey());
-	const isFestival = computed(() =>
-		["national-day", "dragon-boat"].includes(currentThemeKey.value),
-	);
+	const isFestival = computed(() => ["national-day", "dragon-boat"].includes(currentThemeKey.value), );
 	const festivalText = computed(() => {
 		if (currentThemeKey.value === "dragon-boat") {
 			return {
@@ -360,19 +357,19 @@
 		};
 	});
 	const festivalBannerImg = computed(() =>
-		currentThemeKey.value === "dragon-boat"
-			? "/static/images/端午节.jpg"
-			: "/static/images/中国传统节日横幅背景设计.png",
+		currentThemeKey.value === "dragon-boat" ?
+		"/static/images/端午节.jpg" :
+		"/static/images/国庆.jpg",
 	);
 	const festivalLanternImg = computed(() =>
-		currentThemeKey.value === "dragon-boat"
-			? "/static/images/粽子.jpg"
-			: "/static/images/灯笼.png",
+		currentThemeKey.value === "dragon-boat" ?
+		"/static/images/粽子.jpg" :
+		"/static/images/灯笼.png",
 	);
 	const festivalStarImg = computed(() =>
-		currentThemeKey.value === "dragon-boat"
-			? "/static/images/结.jpg"
-			: "",
+		currentThemeKey.value === "dragon-boat" ?
+		"/static/images/结.jpg" :
+		"",
 	);
 	const heroFestivalClass = computed(() => {
 		if (currentThemeKey.value === "national-day") return "hero--national";
@@ -1731,7 +1728,6 @@
 		color: #E6B422;
 		width: 44rpx;
 		height: 44rpx;
-	}
 	}
 
 	.festival-float__img {
