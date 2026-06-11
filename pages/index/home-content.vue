@@ -17,13 +17,13 @@
 
 			<!-- 国庆节日横幅装饰 -->
 			<view class="hero__festival" v-if="currentThemeKey === 'national-day'">
-				<image class="hero__festival-bg" src="/static/images/中国传统节日横幅背景设计.png" mode="aspectFill" />
+				<image class="hero__festival-bg" src="/static/images/中国传统节日横幅背景设计.jpg" mode="aspectFill" />
 				<view class="hero__festival-inner">
 					<text class="hero__festival-star">★</text>
 					<text class="hero__festival-title">欢度国庆 · 盛世华诞</text>
 					<text class="hero__festival-star">★</text>
 				</view>
-				<text class="hero__festival-sub">壮丽山河 · 共赏美景</text>
+				<text class="hero__festival-sub">壮丽山河 · 共度佳节</text>
 			</view>
 
 			<view class="info-card">
@@ -1511,16 +1511,19 @@
 	.hero__festival {
 		position: relative;
 		overflow: hidden;
-		margin: 0 32rpx;
+		width: 100%;
+		margin-bottom: 52rpx;
+		margin-top: -32rpx;
 		padding: 32rpx 24rpx;
 		background: linear-gradient(135deg, #D4302F 0%, #E6B422 100%);
-		border-radius: var(--radius-card);
+		border-radius: var(--radius-card) var(--radius-card) 0 0;
 		box-shadow: 0 0 20rpx rgba(230, 180, 34, 0.3), var(--shadow-soft);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		gap: 12rpx;
 		animation: festivalGlow 2s ease-in-out infinite;
+		position: relative;
 	}
 
 	.hero__festival-bg {
@@ -1606,7 +1609,6 @@
 		z-index: 800;
 		pointer-events: none;
 		font-size: 56rpx;
-		opacity: 0.5;
 		animation: festivalFloat 3s ease-in-out infinite;
 	}
 
