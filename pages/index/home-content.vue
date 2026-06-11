@@ -3,6 +3,12 @@
 		<IndexSkeleton v-if="!pageReady" />
 
 		<template v-else>
+			<!-- 国庆红绸带 -->
+			<view class="national-ribbon" v-if="currentThemeKey === 'national-day'">
+				<text class="national-ribbon__year">1949 - 2025</text>
+				<text class="national-ribbon__text">祝祖国繁荣昌盛</text>
+			</view>
+
 			<!-- <u-navbar :title="weather.ScenicName" leftIcon="home" :placeholder="true" :autoBack="true" :fixed="false" /> -->
 		<view class="hero" :class="{ 'hero--national': currentThemeKey === 'national-day' }">
 				<ScaleSwiper :banList="banList" :autoplay="true" :zoomDuration="2500" />
@@ -173,6 +179,13 @@
 				<view class="bink">{{ weather.CompanyName }}</view>
 				<view class="bink">{{ weather.SupportContent }}</view>
 				<view class="bink">{{ weather.AppletVersion }}</view>
+			</view>
+
+			<!-- 国庆页脚装饰 -->
+			<view class="national-footer" v-if="currentThemeKey === 'national-day'">
+				<text class="national-footer__star">★</text>
+				<text class="national-footer__text">盛世华诞 · 共赏山河</text>
+				<text class="national-footer__star">★</text>
 			</view>
 
 			<!-- 国庆浮动装饰元素 -->
@@ -389,12 +402,21 @@
 			let particles = [];
 
 			function launch() {
-				const colors = ["#FF3D3D", "#FFD700", "#FF6B35", "#FF4444", "#FFAA00"];
+				const colors = ["#FF3D3D", "#FFD700", "#FF6B35", "#FF4444", "#FFAA00", "#FF6666", "#FFCC00"];
 				const cx = Math.random() * width * 0.7 + width * 0.15;
 				const cy = Math.random() * height * 0.5 + height * 0.15;
 				const color = colors[Math.floor(Math.random() * colors.length)];
-				for (let i = 0; i < 60; i++) {
+				for (let i = 0; i < 80; i++) {
 					particles.push(new Particle(cx, cy, color));
+				}
+				// 拖尾粒子（慢速衰减，更小）
+				for (let i = 0; i < 20; i++) {
+					const p = new Particle(cx + (Math.random() - 0.5) * 10, cy + (Math.random() - 0.5) * 10, color);
+					p.decay = 0.004;
+					p.radius = 1.2;
+					p.vx *= 0.3;
+					p.vy *= 0.3;
+					particles.push(p);
 				}
 			}
 
@@ -410,7 +432,7 @@
 
 			animate();
 			launch();
-			fireworkTimer.value = setInterval(launch, 1800);
+			fireworkTimer.value = setInterval(launch, 1500);
 		});
 	}
 
@@ -1444,8 +1466,42 @@
 		box-shadow: var(--shadow-soft);
 	}
 
+	/* ====== 国庆红绸带 ====== */
+	.national-ribbon {
+		width: 100%;
+		padding: 16rpx 32rpx;
+		background: linear-gradient(90deg, #D4302F 0%, #E63946 50%, #D4302F 100%);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 24rpx;
+		box-shadow: 0 4rpx 12rpx rgba(212, 48, 47, 0.3);
+	}
+
+	.national-ribbon__year {
+		font-size: 24rpx;
+		font-weight: 700;
+		color: #FFE082;
+		letter-spacing: 2rpx;
+	}
+
+	.national-ribbon__text {
+		font-size: 24rpx;
+		font-weight: 600;
+		color: #FFFFFF;
+		letter-spacing: 4rpx;
+		animation: ribbonShine 3s ease-in-out infinite;
+	}
+
+	@keyframes ribbonShine {
+		0%, 100% { opacity: 0.85; }
+		50% { opacity: 1; text-shadow: 0 0 12rpx rgba(255, 224, 130, 0.6); }
+	}
+
 	/* ====== 国庆节日装饰 ====== */
 	.hero__festival {
+		position: relative;
+		overflow: hidden;
 		margin: 0 32rpx;
 		padding: 32rpx 24rpx;
 		background: linear-gradient(135deg, #D4302F 0%, #E6B422 100%);
@@ -1456,6 +1512,25 @@
 		align-items: center;
 		gap: 12rpx;
 		animation: festivalGlow 2s ease-in-out infinite;
+	}
+
+	/* 横幅扫光 */
+	.hero__festival::after {
+		content: "";
+		position: absolute;
+		top: -50%;
+		left: -50%;
+		width: 30%;
+		height: 200%;
+		background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.15) 50%, transparent 100%);
+		transform: skewX(-25deg);
+		animation: shimmerSweep 3s ease-in-out infinite;
+		pointer-events: none;
+	}
+
+	@keyframes shimmerSweep {
+		0% { left: -50%; }
+		100% { left: 150%; }
 	}
 
 	@keyframes festivalGlow {
@@ -1548,5 +1623,26 @@
 			opacity: 0;
 			transform: translateX(40rpx) rotate(720deg);
 		}
+	}
+
+	/* ====== 国庆页脚装饰 ====== */
+	.national-footer {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 16rpx;
+		padding: 40rpx 0;
+		opacity: 0.6;
+	}
+
+	.national-footer__star {
+		font-size: 24rpx;
+		color: #E6B422;
+	}
+
+	.national-footer__text {
+		font-size: var(--font-size-caption);
+		color: var(--color-text-secondary);
+		letter-spacing: 4rpx;
 	}
 </style>
