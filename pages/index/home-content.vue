@@ -175,13 +175,15 @@
 				<view class="bink">{{ weather.AppletVersion }}</view>
 			</view>
 
-			<!-- 国庆底部装饰角标 -->
-			<view class="hero__corner-left" v-if="currentThemeKey === 'national-day'">
-				<text class="hero__corner-emoji">🏮</text>
-			</view>
-			<view class="hero__corner-right" v-if="currentThemeKey === 'national-day'">
-				<text class="hero__corner-emoji">🎆</text>
-			</view>
+			<!-- 国庆快捷入口 -->
+			<template v-if="currentThemeKey === 'national-day'">
+				<view class="national-quick national-quick--left" @click="goIntroduce">
+					<u-icon name="info-circle-fill" color="#FFFFFF" size="22" />
+				</view>
+				<view class="national-quick national-quick--right" @click="goMap">
+					<u-icon name="map-fill" color="#FFFFFF" size="22" />
+				</view>
+			</template>
 
 			<!-- 国庆浮动装饰元素 -->
 			<template v-if="currentThemeKey === 'national-day'">
@@ -442,6 +444,14 @@
 	onBeforeUnmount(() => {
 		stopFirework();
 	});
+
+	// ==================== 国庆快捷入口 ====================
+	function goIntroduce() {
+		uni.navigateTo({ url: "/pages/introduce/introduce" });
+	}
+	function goMap() {
+		uni.navigateTo({ url: "/pages/map1/map1" });
+	}
 
 	const myRequest = (options) => uni.$myRequest(options);
 	console.log("777777777777777777777");
@@ -1501,35 +1511,34 @@
 		letter-spacing: 2rpx;
 	}
 
-	.hero__corner-left {
+	/* ====== 国庆快捷入口按钮 ====== */
+	.national-quick {
 		position: fixed;
-		left: 20rpx;
-		bottom: 300rpx;
-		z-index: 800;
-		pointer-events: none;
+		z-index: 900;
+		width: 80rpx;
+		height: 80rpx;
+		border-radius: 50%;
+		background: var(--color-primary);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: 0 8rpx 24rpx rgba(212, 48, 47, 0.35);
+		transition: opacity 160ms ease, transform 160ms ease;
 	}
 
-	.hero__corner-right {
-		position: fixed;
-		right: 20rpx;
+	.national-quick:active {
+		opacity: 0.85;
+		transform: scale(0.92);
+	}
+
+	.national-quick--left {
+		left: 32rpx;
 		bottom: 320rpx;
-		z-index: 800;
-		pointer-events: none;
 	}
 
-	.hero__corner-emoji {
-		font-size: 72rpx;
-		opacity: 0.35;
-	}
-
-	/* ====== Canvas 烟花 ====== */
-	.hero__firework {
-		position: absolute;
-		inset: 0;
-		z-index: 3;
-		pointer-events: none;
-		width: 100%;
-		height: 100%;
+	.national-quick--right {
+		right: 32rpx;
+		bottom: 320rpx;
 	}
 
 	/* ====== 浮动装饰元素 ====== */
