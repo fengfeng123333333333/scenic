@@ -410,6 +410,54 @@ const themes = {
       "--shadow-modal": "0 24rpx 60rpx rgba(0, 0, 0, 0.12)",
     },
   },
+
+  // ---------------------------------------
+  // 端午佳节（竹叶绿 + 龙舟金）
+  // ---------------------------------------
+  "dragon-boat": {
+    name: "端午佳节（翠绿）",
+    description:
+      "竹叶绿主色 + 龙舟金点缀，端午节日氛围。清新雅致，适用于端午小长假。",
+    vars: {
+      // 主色系（竹叶绿）
+      "--color-primary": "#5B8C3E",
+      "--color-primary-dark": "#3D6B24",
+      "--color-primary-hover": "#3D6B24",
+      "--color-primary-bg-light": "rgba(91, 140, 62, 0.06)",
+      "--color-primary-border-light": "rgba(91, 140, 62, 0.12)",
+      "--color-text-on-primary": "#FFFFFF",
+
+      // 辅色与点缀（龙舟金）
+      "--color-secondary": "#D4A843",
+      "--color-accent": "#B8D98A",
+      "--color-warning": "#D4A843",
+      "--color-danger": "#D4302F",
+      // 会员金
+      "--color-member-gold": "#D4A843",
+
+      // 中性色
+      "--color-bg": "#F6FAF2",
+      "--color-bg-card": "#FFFFFF",
+      "--color-text": "#2D3A1F",
+      "--color-text-secondary": "#6B7D5E",
+      "--color-border-light": "#E6EFD8",
+      "--color-disabled": "#D5E3C4",
+
+      // 骨架屏
+      "--color-skeleton-base": "#EDF5E2",
+      "--color-skeleton-highlight": "rgba(255, 255, 255, 0.75)",
+
+      // 圆角
+      "--radius-card": "28rpx",
+      "--radius-button": "24rpx",
+      "--radius-sm": "16rpx",
+      "--skeleton-radius": "16rpx",
+
+      // 阴影（竹绿调）
+      "--shadow-soft": "0 12rpx 32rpx rgba(91, 140, 62, 0.06)",
+      "--shadow-modal": "0 24rpx 60rpx rgba(0, 0, 0, 0.12)",
+    },
+  },
 };
 // ============================================================================
 // 常量

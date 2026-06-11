@@ -4,10 +4,10 @@
 
 		<template v-else>
 			<!-- <u-navbar :title="weather.ScenicName" leftIcon="home" :placeholder="true" :autoBack="true" :fixed="false" /> -->
-			<view class="hero" :class="{ 'hero--national': currentThemeKey === 'national-day' }">
+			<view class="hero" :class="heroFestivalClass">
 				<ScaleSwiper :banList="banList" :autoplay="true" :zoomDuration="2500" />
 				<!-- 国庆烟花 Canvas -->
-				<canvas v-if="currentThemeKey === 'national-day'" type="2d" id="fireworkCanvas"
+				<canvas v-if="isFestival" type="2d" id="fireworkCanvas"
 					class="hero__firework" />
 				<view class="hero__weather" v-if="weather.Weather">
 					<text class="hero__weather-text">{{ weather.Weather }}</text>
@@ -15,15 +15,15 @@
 
 			</view>
 
-			<!-- 国庆节日横幅装饰 -->
-			<view class="hero__festival" v-if="currentThemeKey === 'national-day'">
-				<image class="hero__festival-bg" src="/static/images/中国传统节日横幅背景设计.jpg" mode="aspectFill" />
+			<!-- 节日横幅装饰 -->
+			<view class="hero__festival" v-if="isFestival">
+				<image class="hero__festival-bg" :src="festivalBannerImg" mode="aspectFill" />
 				<view class="hero__festival-inner">
 					<text class="hero__festival-star">★</text>
-					<text class="hero__festival-title">欢度国庆 · 盛世华诞</text>
+					<text class="hero__festival-title">{{ festivalText.bannerTitle }}</text>
 					<text class="hero__festival-star">★</text>
 				</view>
-				<text class="hero__festival-sub">壮丽山河 · 共度佳节</text>
+				<text class="hero__festival-sub">{{ festivalText.bannerSub }}</text>
 			</view>
 
 			<view class="info-card">
@@ -172,31 +172,40 @@
 				<view class="bink">{{ weather.AppletVersion }}</view>
 			</view>
 
-			<!-- 国庆页脚装饰 -->
-			<view class="national-footer" v-if="currentThemeKey === 'national-day'">
+			<!-- 节日页脚装饰 -->
+			<view class="national-footer" v-if="isFestival">
 				<text class="national-footer__star">★</text>
-				<text class="national-footer__text">盛世华诞 · 共赏山河</text>
+				<text class="national-footer__text">{{ festivalText.footerText }}</text>
 				<text class="national-footer__star">★</text>
 			</view>
 
-			<!-- 国庆浮动装饰元素 -->
-			<template v-if="currentThemeKey === 'national-day'">
+			<!-- 节日浮动装饰 -->
+			<template v-if="isFestival">
 				<view class="festival-float festival-float--1">
-					<image src="/static/images/灯笼.png" mode="aspectFit" class="festival-float__img" />
+					<image :src="festivalLanternImg" mode="aspectFit" class="festival-float__img" />
 				</view>
-				<view class="festival-float festival-float--2">★</view>
+				<view class="festival-float festival-float--2">
+					<image v-if="festivalStarImg" :src="festivalStarImg" mode="aspectFit" class="festival-float__img" />
+					<text v-else class="festival-float__star">★</text>
+				</view>
 				<view class="festival-float festival-float--3">
-					<image src="/static/images/灯笼.png" mode="aspectFit" class="festival-float__img" />
+					<image :src="festivalLanternImg" mode="aspectFit" class="festival-float__img" />
 				</view>
-				<view class="festival-float festival-float--4">★</view>
+				<view class="festival-float festival-float--4">
+					<image v-if="festivalStarImg" :src="festivalStarImg" mode="aspectFit" class="festival-float__img" />
+					<text v-else class="festival-float__star">★</text>
+				</view>
 				<view class="festival-float festival-float--5">
-					<image src="/static/images/灯笼.png" mode="aspectFit" class="festival-float__img" />
+					<image :src="festivalLanternImg" mode="aspectFit" class="festival-float__img" />
 				</view>
-				<view class="festival-float festival-float--6">★</view>
+				<view class="festival-float festival-float--6">
+					<image v-if="festivalStarImg" :src="festivalStarImg" mode="aspectFit" class="festival-float__img" />
+					<text v-else class="festival-float__star">★</text>
+				</view>
 			</template>
 
 			<!-- 国庆飘落粒子 -->
-			<template v-if="currentThemeKey === 'national-day'">
+			<template v-if="isFestival">
 				<view class="confetti confetti--1">✦</view>
 				<view class="confetti confetti--2">✧</view>
 				<view class="confetti confetti--3">✦</view>
@@ -329,6 +338,47 @@
 	// ==================== 主题切换（本地演示） ====================
 	const showThemePanel = ref(false);
 	const currentThemeKey = ref(getStoredThemeKey());
+	const isFestival = computed(() =>
+		["national-day", "dragon-boat"].includes(currentThemeKey.value),
+	);
+	const festivalText = computed(() => {
+		if (currentThemeKey.value === "dragon-boat") {
+			return {
+				ribbonYear: "五月初五",
+				ribbonText: "端午安康",
+				bannerTitle: "端午安康 · 粽叶飘香",
+				bannerSub: "龙舟竞渡 · 共庆端阳",
+				footerText: "粽叶飘香 · 龙舟竞渡",
+			};
+		}
+		return {
+			ribbonYear: "1949 - 2025",
+			ribbonText: "祝祖国繁荣昌盛",
+			bannerTitle: "欢度国庆 · 盛世华诞",
+			bannerSub: "壮丽山河 · 共赏美景",
+			footerText: "盛世华诞 · 共赏山河",
+		};
+	});
+	const festivalBannerImg = computed(() =>
+		currentThemeKey.value === "dragon-boat"
+			? "/static/images/端午节.jpg"
+			: "/static/images/中国传统节日横幅背景设计.png",
+	);
+	const festivalLanternImg = computed(() =>
+		currentThemeKey.value === "dragon-boat"
+			? "/static/images/粽子.jpg"
+			: "/static/images/灯笼.png",
+	);
+	const festivalStarImg = computed(() =>
+		currentThemeKey.value === "dragon-boat"
+			? "/static/images/结.jpg"
+			: "",
+	);
+	const heroFestivalClass = computed(() => {
+		if (currentThemeKey.value === "national-day") return "hero--national";
+		if (currentThemeKey.value === "dragon-boat") return "hero--dragon";
+		return "";
+	});
 	const themeList = computed(() =>
 		getThemeMetaList().map((t) => {
 			const vars = getThemeVars(t.key);
@@ -449,7 +499,7 @@
 	}
 
 	onMounted(() => {
-		if (currentThemeKey.value === "national-day") {
+		if (isFestival.value) {
 			startFirework();
 		}
 	});
@@ -931,6 +981,20 @@
 		width: 100%;
 		height: 100%;
 		background: linear-gradient(180deg, rgba(212, 48, 47, 0.35) 0%, rgba(212, 48, 47, 0.05) 100%);
+		z-index: 10;
+		pointer-events: none;
+		border-radius: inherit;
+	}
+
+	/* 端午绿色遮罩 */
+	.hero--dragon::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(180deg, rgba(91, 140, 62, 0.3) 0%, rgba(91, 140, 62, 0.04) 100%);
 		z-index: 10;
 		pointer-events: none;
 		border-radius: inherit;
@@ -1627,6 +1691,8 @@
 		animation-delay: 0.6s;
 		font-size: 48rpx;
 		color: #E6B422;
+		width: 56rpx;
+		height: 56rpx;
 	}
 
 	.festival-float--3 {
@@ -1644,6 +1710,8 @@
 		animation-delay: 1.8s;
 		font-size: 44rpx;
 		color: #E6B422;
+		width: 50rpx;
+		height: 50rpx;
 	}
 
 	.festival-float--5 {
@@ -1661,12 +1729,20 @@
 		animation-delay: 0.9s;
 		font-size: 40rpx;
 		color: #E6B422;
+		width: 44rpx;
+		height: 44rpx;
+	}
 	}
 
 	.festival-float__img {
 		width: 100%;
 		height: 100%;
 		display: block;
+	}
+
+	.festival-float__star {
+		font-size: inherit;
+		color: inherit;
 	}
 
 	@keyframes festivalFloat {
