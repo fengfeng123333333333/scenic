@@ -257,7 +257,7 @@
 		<u-popup :show="showThemePanel" mode="bottom" :round="20" :closeOnClickOverlay="true"
 			@close="showThemePanel = false" :safeAreaInsetBottom="true">
 			<view class="theme-panel">
-				<view class="theme-panel__title">切换主题（本地演示）</view>
+				<view class="theme-panel__title">切换主题（本地演示，后续需后端配置）</view>
 				<view class="theme-panel__grid">
 					<view class="theme-panel__item" v-for="theme in themeList" :key="theme.key" :class="{
               'theme-panel__item--active': currentThemeKey === theme.key,
@@ -363,12 +363,12 @@
 	);
 	const festivalLanternImg = computed(() =>
 		currentThemeKey.value === "dragon-boat" ?
-		"/static/images/粽子.jpg" :
+		"/static/images/粽子.png" :
 		"/static/images/灯笼.png",
 	);
 	const festivalStarImg = computed(() =>
 		currentThemeKey.value === "dragon-boat" ?
-		"/static/images/结.jpg" :
+		"/static/images/结.png" :
 		"",
 	);
 	const heroFestivalClass = computed(() => {
@@ -1662,6 +1662,16 @@
 		font-size: var(--font-size-caption);
 		color: rgba(255, 255, 255, 0.85);
 		letter-spacing: 2rpx;
+	}
+
+	.hero--dragon .hero__festival-title {
+		color: #D4A843;
+		text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.25);
+	}
+
+	.hero--dragon .hero__festival-sub {
+		color: #F5D878;
+		text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.2);
 	}
 
 	/* ====== 浮动装饰元素 ====== */
