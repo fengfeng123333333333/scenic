@@ -116,6 +116,7 @@ function tabbarChange(index) {
 .tabbar-item__icon-img {
   width: 80rpx;
   height: 80rpx;
+  border-radius: 50%;
   opacity: 0.45;
   filter: grayscale(0.6);
   transition: all 200ms ease-in-out;

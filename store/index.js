@@ -8,6 +8,12 @@ const state = reactive({
   // 主题状态
   currentTheme: getStoredThemeKey(),
   themeVars: getThemeVars(),
+  // 餐厅订单相关
+  paymen: null,
+  payDay: [],
+  number_people: '',
+  order: null,
+  orderRemark: '',
 });
 
 // 修改方法
@@ -27,9 +33,30 @@ function setTheme(key) {
   state.themeVars = getThemeVars(key);
 }
 
+// 餐厅订单状态写入
+function setPaymen(data) {
+  state.paymen = data;
+}
+function setPayDay(data) {
+  state.payDay = data;
+}
+function setNumberPeople(num) {
+  state.number_people = num;
+}
+function setOrder(id) {
+  state.order = id;
+}
+function setOrderRemark(remark) {
+  state.orderRemark = remark;
+}
+
 // useStore() 供组件调用
 export function useStore() {
-  return { state, setTickId, setIsSow, setTheme };
+  return {
+    state,
+    setTickId, setIsSow, setTheme,
+    setPaymen, setPayDay, setNumberPeople, setOrder, setOrderRemark,
+  };
 }
 
 // 兼容旧的 this.$store.state.xxx 访问

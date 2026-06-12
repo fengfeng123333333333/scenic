@@ -13,7 +13,6 @@
 				</view>
 
 			</view>
-
 			<!-- 节日横幅装饰 -->
 			<view class="hero__festival" v-if="isFestival">
 				<image class="hero__festival-bg" :src="festivalBannerImg" mode="aspectFill" />
@@ -28,7 +27,7 @@
 			<view class="info-card">
 				<view class="row">
 					<view class="row__icon row__icon--secondary">
-						<u-icon name="clock" color="var(--color-primary)" size="28" />
+						<u-icon name="clock" color="var(--color-primary)" size="20" />
 					</view>
 					<view class="row__content">
 						<text class="label">{{ weather.OpeningHoursTitle }}</text>
@@ -37,7 +36,7 @@
 				</view>
 				<view class="row row--clickable" @click="dizhi">
 					<view class="row__icon row__icon--secondary">
-						<u-icon name="map" color="var(--color-primary)" size="28" />
+						<u-icon name="map" color="var(--color-primary)" size="20" />
 					</view>
 					<view class="row__content">
 						<text class="label">景区地址</text>
@@ -46,7 +45,7 @@
 				</view>
 				<view class="row row--clickable" @click="calPhone">
 					<view class="row__icon row__icon--secondary">
-						<u-icon name="phone" color="var(--color-primary)" size="28" />
+						<u-icon name="phone" color="var(--color-primary)" size="20" />
 					</view>
 					<view class="row__content">
 						<text class="label">{{ weather.PhoneTitle }}</text>
@@ -352,14 +351,14 @@
 			ribbonYear: "1949 - 2025",
 			ribbonText: "祝祖国繁荣昌盛",
 			bannerTitle: "欢度国庆 · 盛世华诞",
-			bannerSub: "壮丽山河 · 共赏美景",
+			bannerSub: "壮丽山河 · 共度佳节",
 			footerText: "盛世华诞 · 共赏山河",
 		};
 	});
 	const festivalBannerImg = computed(() =>
 		currentThemeKey.value === "dragon-boat" ?
-		"/static/images/端午节.jpg" :
-		"/static/images/国庆.jpg",
+		"https://cdn.huibaitech.com/qrcode/public/holiday/logoGreen.jpg" :
+		"https://cdn.huibaitech.com/qrcode/public/holiday/loloRed.jpg",
 	);
 	const festivalLanternImg = computed(() =>
 		currentThemeKey.value === "dragon-boat" ?

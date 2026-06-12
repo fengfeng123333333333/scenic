@@ -1,373 +1,571 @@
 {
-	"pages": [{
+	"pages": [
+		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app",
+				"navigationBarTitleText": "",
 				"navigationStyle": "custom"
 			}
-		},
-		{
-			"path": "pages/information/information",
-			"style": {
-				"navigationBarTitleText": "授权登录"
-			}
-		},
-		{
-			"path": "pages/details/details",
-			"style": {
-				"navigationBarTitleText": "门票详情"
-			}
-		},
-		{
-			"path": "pages/reserve/reserve",
-			"style": {
-				"navigationBarTitleText": "门票预定"
-			}
-		},
-		{
-			"path": "pages/reserve/resMenber",
-			"style": {
-				"navigationBarTitleText": "门票预订"
-			}
-		},
-		{
-			"path": "pages/tourist/tourist",
-			"style": {
-				"navigationBarTitleText": "常用人员"
-			}
-		},
-		{
-			"path": "pages/tourist/addTourist",
-			"style": {
-				"navigationBarTitleText": "添加常用人员"
-			}
-		},
-		{
-			"path": "pages/payment/payment",
-			"style": {
-				"navigationBarTitleText": "支付"
-			}
-		},
-		{
-			"path": "pages/voice/voice",
-			"style": {
-				"navigationBarTitleText": "语音导览"
-			}
-		},
-		{
-			"path": "pages/voice/guide",
-			"style": {
-				"navigationBarTitleText": "导览详情"
-			}
-		},
-		{
-			"path": "pages/productList/productList",
-			"style": {
-				"navigationBarTitleText": "商品列表"
-			}
-		},
-		{
-			"path": "pages/productList/productDetails",
-			"style": {
-				"navigationBarTitleText": "商品详情"
-			}
-		},
-		{
-			"path": "pages/productList/orderProd",
-			"style": {
-				"navigationBarTitleText": "订单填写"
-			}
-		},
-		{
-			"path": "pages/address/address",
-			"style": {
-				"navigationBarTitleText": "收货地址"
-			}
-		},
-		{
-			"path": "pages/address/myaddress",
-			"style": {
-				"navigationBarTitleText": "编辑地址"
-			}
-		},
-		{
-			"path": "pages/introduce/introduce",
-			"style": {
-				"navigationBarTitleText": "景区简介"
-			}
-		},
-		{
-			"path": "pages/menber/menber",
-			"style": {
-				"navigationBarTitleText": "会员票型"
-			}
-		},
-		{
-			"path": "pages/menber/recharge",
-			"style": {
-				"navigationBarTitleText": "会员预定"
-			}
-		},
-		{
-			"path": "pages/menber/members",
-			"style": {
-				"navigationBarTitleText": "我的卡包"
-			}
-		},
-		{
-			"path": "pages/menber/car",
-			"style": {
-				"navigationBarTitleText": "会员卡"
-			}
-		},
-		{
-			"path": "pages/menber/balance",
-			"style": {
-				"navigationBarTitleText": "会员流水"
-			}
-		},
-		{
-			"path": "pages/subPack/mindTike/mindTike",
-			"style": {
-				"navigationBarTitleText": "推荐票型"
-			}
-		},
-		{
-			"path": "pages/notice/notice",
-			"style": {
-				"navigationBarTitleText": "公告列表"
-			}
-		},
-		{
-			"path": "pages/notice/noticList",
-			"style": {
-				"navigationBarTitleText": "公告详情"
-			}
-		},
-		{
-			"path": "pages/stop/stop",
-			"style": {
-				"navigationBarTitleText": "停车缴费"
-			}
-		},
-		{
-			"path": "pages/stop/paySuccese",
-			"style": {
-				"navigationBarTitleText": "缴费成功"
-			}
-		},
-		{
-			"path": "pages/timeticket/timeticket",
-			"style": {
-				"navigationBarTitleText": "计时票"
-			}
-		},
-		{
-			"path": "pages/timeticket/timedelit",
-			"style": {
-				"navigationBarTitleText": "计时票详情"
-			}
-		},
-		{
-			"path": "pages/timeticket/timereserve",
-			"style": {
-				"navigationBarTitleText": "计时票预约"
-			}
-		},
-		{
-			"path": "pages/route/route",
-			"style": {
-				"navigationBarTitleText": "游览线路"
-			}
-		},
-		{
-			"path": "pages/route/delte",
-			"style": {
-				"navigationBarTitleText": "线路详情"
-			}
-		},
-		{
-			"path": "pages/coinDiscon/coinDiscon",
-			"style": {
-				"navigationBarTitleText": "我的优惠券"
-			}
-		},
-		{
-			"path": "pages/rollcenter/rollcenter",
-			"style": {
-				"navigationBarTitleText": "优惠券中心"
-			}
-		},
-		{
-			"path": "pages/rollcenter/rolldetails",
-			"style": {
-				"navigationBarTitleText": "优惠券详情"
-			}
-		},
-		{
-			"path": "pages/seat/detailsSeat",
-			"style": {
-				"navigationBarTitleText": "选座购票"
-			}
-		},
-		{
-			"path": "pages/seat/brief",
-			"style": {
-				"navigationBarTitleText": "场馆信息"
-			}
-		},
-		{
-			"path": "pages/seat/seatcal",
-			"style": {
-				"navigationBarTitleText": "节目详情"
-			}
-		},
-		{
-			"path": "pages/seat/seat",
-			"style": {
-				"navigationBarTitleText": "选座购票"
-			}
-		},
-		{
-			"path": "pages/seat/seatWeb",
-			"style": {
-				"navigationBarTitleText": "在线选座"
-			}
-		},
-		{
-			"path": "pages/ticketCode/Invoice",
-			"style": {
-				"navigationBarTitleText": "发票"
-			}
-		},
-		{
-			"path": "pages/ticketCode/redBokd",
-			"style": {
-				"navigationBarTitleText": "补录人脸"
-			}
-		},
-		{
-			"path": "pages/ticketCode/returnticket",
-			"style": {
-				"navigationBarTitleText": "申请退票"
-			}
-		},
-		{
-			"path": "pages/ticketCode/ticketCode",
-			"style": {
-				"navigationBarTitleText": "票码凭证"
-			}
-		},
-		{
-			"path": "pages/complaint/complaint",
-			"style": {
-				"navigationBarTitleText": "我的留言"
-			}
-		},
-		{
-			"path": "pages/complaint/complaintdel",
-			"style": {
-				"navigationBarTitleText": "提交留言"
-			}
-		},
-		{
-			"path": "pages/complaint/reply",
-			"style": {
-				"navigationBarTitleText": "留言详情"
-			}
-		},
-		{
-			"path": "pages/subPack/rescue/rescue",
-			"style": {
-				"navigationBarTitleText": "紧急救援"
-			}
-		},
-		{
-			"path": "pages/subPack/my/headPortrait",
-			"style": {
-				"navigationBarTitleText": "编辑资料"
-			}
-		},
-		{
-			"path": "pages/subPack/realName/realName",
-			"style": {
-				"navigationBarTitleText": "实名认证"
-			}
-		},
-		{
-			"path": "pages/subPack/seat/seatpay",
-			"style": {
-				"navigationBarTitleText": "确认支付"
-			}
-		},
-		{
-			"path": "pages/subPack/distribution/myDist",
-			"style": {
-				"navigationBarTitleText": "我的资料"
-			}
-		},
-		{
-			"path": "pages/subPack/distribution/finUind",
-			"style": {
-				"navigationBarTitleText": "结账记录"
-			}
-		},
-		{
-			"path": "pages/subPack/distribution/disorde",
-			"style": {
-				"navigationBarTitleText": "流水明细"
-			}
-		},
-		{
-			"path": "pages/subPack/distribution/findshor",
-			"style": {
-				"navigationBarTitleText": "分销商品"
-			}
-		},
-		{
-			"path": "pages/subPack/distribution/finenoti",
-			"style": {
-				"navigationBarTitleText": "提现说明"
-			}
-		},
-		{
-			"path": "pages/subPack/distribution/finticer",
-			"style": {
-				"navigationBarTitleText": "申请提现"
-			}
-		},
-		{
-			"path": "pages/subPack/distribution/disbindMy",
-			"style": {
-				"navigationBarTitleText": "分销中心"
-			}
-		},
-		{
-			"path": "pages/subPack/distribution/distribution",
-			"style": {
-				"navigationBarTitleText": "分销申请"
-			}
-		},
-		{
-			"path": "pages/subPack/voucherCode/voucherCode",
-			"style": {
-				"navigationBarTitleText": "激活票码"
-			}
-		},
-		{
-			"path": "pages/subPack/coinsup/coinsup",
-			"style": {
-				"navigationBarTitleText": "协议详情"
-			}
-		},
-		{
-			"path": "pages/map1/map1",
-			"style": {
-				"navigationBarTitleText": "地图导览"
-			}
 		}
-
 	],
+	"subPackages": [
+		{
+			"root": "pages/information",
+			"pages": [
+				{
+					"path": "information",
+					"style": {
+						"navigationBarTitleText": "授权登录"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/details",
+			"pages": [
+				{
+					"path": "details",
+					"style": {
+						"navigationBarTitleText": "门票详情"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/reserve",
+			"pages": [
+				{
+					"path": "reserve",
+					"style": {
+						"navigationBarTitleText": "门票预定"
+					}
+				},
+				{
+					"path": "resMenber",
+					"style": {
+						"navigationBarTitleText": "门票预订"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/tourist",
+			"pages": [
+				{
+					"path": "tourist",
+					"style": {
+						"navigationBarTitleText": "常用人员"
+					}
+				},
+				{
+					"path": "addTourist",
+					"style": {
+						"navigationBarTitleText": "添加常用人员"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/payment",
+			"pages": [
+				{
+					"path": "payment",
+					"style": {
+						"navigationBarTitleText": "支付"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/voice",
+			"pages": [
+				{
+					"path": "voice",
+					"style": {
+						"navigationBarTitleText": "语音导览"
+					}
+				},
+				{
+					"path": "guide",
+					"style": {
+						"navigationBarTitleText": "导览详情"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/productList",
+			"pages": [
+				{
+					"path": "productList",
+					"style": {
+						"navigationBarTitleText": "商品列表"
+					}
+				},
+				{
+					"path": "productDetails",
+					"style": {
+						"navigationBarTitleText": "商品详情"
+					}
+				},
+				{
+					"path": "orderProd",
+					"style": {
+						"navigationBarTitleText": "订单填写"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/address",
+			"pages": [
+				{
+					"path": "address",
+					"style": {
+						"navigationBarTitleText": "收货地址"
+					}
+				},
+				{
+					"path": "myaddress",
+					"style": {
+						"navigationBarTitleText": "编辑地址"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/introduce",
+			"pages": [
+				{
+					"path": "introduce",
+					"style": {
+						"navigationBarTitleText": "景区简介"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/menber",
+			"pages": [
+				{
+					"path": "menber",
+					"style": {
+						"navigationBarTitleText": "会员票型"
+					}
+				},
+				{
+					"path": "recharge",
+					"style": {
+						"navigationBarTitleText": "会员预定"
+					}
+				},
+				{
+					"path": "members",
+					"style": {
+						"navigationBarTitleText": "我的卡包"
+					}
+				},
+				{
+					"path": "car",
+					"style": {
+						"navigationBarTitleText": "会员卡"
+					}
+				},
+				{
+					"path": "balance",
+					"style": {
+						"navigationBarTitleText": "会员流水"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/subPack/mindTike",
+			"pages": [
+				{
+					"path": "mindTike",
+					"style": {
+						"navigationBarTitleText": "推荐票型"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/notice",
+			"pages": [
+				{
+					"path": "notice",
+					"style": {
+						"navigationBarTitleText": "公告列表"
+					}
+				},
+				{
+					"path": "noticList",
+					"style": {
+						"navigationBarTitleText": "公告详情"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/stop",
+			"pages": [
+				{
+					"path": "stop",
+					"style": {
+						"navigationBarTitleText": "停车缴费"
+					}
+				},
+				{
+					"path": "paySuccese",
+					"style": {
+						"navigationBarTitleText": "缴费成功"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/timeticket",
+			"pages": [
+				{
+					"path": "timeticket",
+					"style": {
+						"navigationBarTitleText": "计时票"
+					}
+				},
+				{
+					"path": "timedelit",
+					"style": {
+						"navigationBarTitleText": "计时票详情"
+					}
+				},
+				{
+					"path": "timereserve",
+					"style": {
+						"navigationBarTitleText": "计时票预约"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/route",
+			"pages": [
+				{
+					"path": "route",
+					"style": {
+						"navigationBarTitleText": "游览线路"
+					}
+				},
+				{
+					"path": "delte",
+					"style": {
+						"navigationBarTitleText": "线路详情"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/coinDiscon",
+			"pages": [
+				{
+					"path": "coinDiscon",
+					"style": {
+						"navigationBarTitleText": "我的优惠券"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/rollcenter",
+			"pages": [
+				{
+					"path": "rollcenter",
+					"style": {
+						"navigationBarTitleText": "优惠券中心"
+					}
+				},
+				{
+					"path": "rolldetails",
+					"style": {
+						"navigationBarTitleText": "优惠券详情"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/seat",
+			"pages": [
+				{
+					"path": "detailsSeat",
+					"style": {
+						"navigationBarTitleText": "选座购票"
+					}
+				},
+				{
+					"path": "brief",
+					"style": {
+						"navigationBarTitleText": "场馆信息"
+					}
+				},
+				{
+					"path": "seatcal",
+					"style": {
+						"navigationBarTitleText": "节目详情"
+					}
+				},
+				{
+					"path": "seat",
+					"style": {
+						"navigationBarTitleText": "选座购票"
+					}
+				},
+				{
+					"path": "seatWeb",
+					"style": {
+						"navigationBarTitleText": "在线选座"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/ticketCode",
+			"pages": [
+				{
+					"path": "Invoice",
+					"style": {
+						"navigationBarTitleText": "发票"
+					}
+				},
+				{
+					"path": "redBokd",
+					"style": {
+						"navigationBarTitleText": "补录人脸"
+					}
+				},
+				{
+					"path": "returnticket",
+					"style": {
+						"navigationBarTitleText": "申请退票"
+					}
+				},
+				{
+					"path": "ticketCode",
+					"style": {
+						"navigationBarTitleText": "票码凭证"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/complaint",
+			"pages": [
+				{
+					"path": "complaint",
+					"style": {
+						"navigationBarTitleText": "我的留言"
+					}
+				},
+				{
+					"path": "complaintdel",
+					"style": {
+						"navigationBarTitleText": "提交留言"
+					}
+				},
+				{
+					"path": "reply",
+					"style": {
+						"navigationBarTitleText": "留言详情"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/map1",
+			"pages": [
+				{
+					"path": "map1",
+					"style": {
+						"navigationBarTitleText": "地图导览"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/ar",
+			"pages": [
+				{
+					"path": "ar",
+					"style": {
+						"navigationBarTitleText": ""
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/subPack/rescue",
+			"pages": [
+				{
+					"path": "rescue",
+					"style": {
+						"navigationBarTitleText": "紧急救援"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/subPack/my",
+			"pages": [
+				{
+					"path": "headPortrait",
+					"style": {
+						"navigationBarTitleText": "编辑资料"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/subPack/realName",
+			"pages": [
+				{
+					"path": "realName",
+					"style": {
+						"navigationBarTitleText": "实名认证"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/subPack/seat",
+			"pages": [
+				{
+					"path": "seatpay",
+					"style": {
+						"navigationBarTitleText": "确认支付"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/subPack/distribution",
+			"pages": [
+				{
+					"path": "myDist",
+					"style": {
+						"navigationBarTitleText": "我的资料"
+					}
+				},
+				{
+					"path": "finUind",
+					"style": {
+						"navigationBarTitleText": "结账记录"
+					}
+				},
+				{
+					"path": "disorde",
+					"style": {
+						"navigationBarTitleText": "流水明细"
+					}
+				},
+				{
+					"path": "findshor",
+					"style": {
+						"navigationBarTitleText": "分销商品"
+					}
+				},
+				{
+					"path": "finenoti",
+					"style": {
+						"navigationBarTitleText": "提现说明"
+					}
+				},
+				{
+					"path": "finticer",
+					"style": {
+						"navigationBarTitleText": "申请提现"
+					}
+				},
+				{
+					"path": "disbindMy",
+					"style": {
+						"navigationBarTitleText": "分销中心"
+					}
+				},
+				{
+					"path": "distribution",
+					"style": {
+						"navigationBarTitleText": "分销申请"
+					}
+				},
+				{
+					"path": "saveFenXiao",
+					"style": {
+						"navigationBarTitleText": "我的分销码"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/subPack/voucherCode",
+			"pages": [
+				{
+					"path": "voucherCode",
+					"style": {
+						"navigationBarTitleText": "激活票码"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/subPack/coinsup",
+			"pages": [
+				{
+					"path": "coinsup",
+					"style": {
+						"navigationBarTitleText": "协议详情"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/subPack/humanity",
+			"pages": [
+				{
+					"path": "humanity",
+					"style": {
+						"navigationBarTitleText": "人文风光",
+						"navigationStyle": "custom"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/subPack/restaurant",
+			"pages": [
+				{
+					"path": "restaurant",
+					"style": {
+						"navigationBarTitleText": "扫码点餐"
+					}
+				},
+				{
+					"path": "order-details",
+					"style": {
+						"navigationBarTitleText": "订单详情"
+					}
+				}
+			]
+		}
+	],
+	"preloadRule": {
+		"pages/index/index": {
+			"network": "all",
+			"packages": [
+				"pages/details",
+				"pages/reserve",
+				"pages/payment"
+			]
+		}
+	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

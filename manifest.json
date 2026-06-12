@@ -52,7 +52,10 @@
 	"mp-weixin": {
 		"appid": "wx9ba0af180d6da300",
 		"lazyCodeLoading": "requiredComponents",
-		"mergeVirtualHostAttributes": true,
+		"mergeVirtualHostAttributes": false,
+		"optimization": {
+			"subPackages": true
+		},
 		"setting": {
 			"urlCheck": false,
 			"postcss": true,

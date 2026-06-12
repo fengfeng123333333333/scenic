@@ -112,13 +112,13 @@ function goToGuide(id) {
 // ==================== 骨架屏 ====================
 .voice-page__skeleton {
   padding: 24rpx 32rpx;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 20rpx;
 }
 
 .skeleton-card {
-  width: calc(50% - 10rpx);
+  width: 100%;
   background: var(--color-bg-card);
   border-radius: var(--radius-card);
   overflow: hidden;
@@ -141,15 +141,15 @@ function goToGuide(id) {
 
 // ==================== 导览网格 ====================
 .voice-page__grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   padding: 24rpx 32rpx;
   gap: 20rpx;
 }
 
 // ==================== 导览卡片 ====================
 .guide-card {
-  width: calc(50% - 10rpx);
+  width: 100%;
   border-radius: var(--radius-card);
   overflow: hidden;
   position: relative;

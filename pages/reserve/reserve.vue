@@ -62,6 +62,7 @@
           :defaultDate="selectedDate"
           :color="calendarColor"
           :formatter="calendarFormatter"
+          :showToday="false"
           showTitle
           title="选择游玩日期"
           closeOnClickOverlay
@@ -440,6 +441,7 @@ import {
 import { onLoad, onShow, onReady } from "@dcloudio/uni-app";
 import { useToast } from "@/util/toast.js";
 import { useStore } from "@/store/index.js";
+import dayjs from "dayjs";
 import RequestLoading from "@/components/loading/request-loading.vue";
 
 // ==================== 页面路由常量 ====================
@@ -961,13 +963,8 @@ function handleCalendarClose() {
 }
 
 function calendarFormatter(day) {
-  if (!day) return day;
-  // uview-plus 某些版本 day 对象无 year 字段，优先用 day.date 兜底
-  const dateStr =
-    day.date ||
-    (day.year
-      ? `${day.year}-${String(day.month).padStart(2, "0")}-${String(day.day).padStart(2, "0")}`
-      : "");
+  if (!day || !day.date) return day;
+  const dateStr = dayjs(day.date).format("YYYY-MM-DD");
   if (!dateStr) return day;
   const stockList = ticketInfo.value.TicketStockList || [];
   const found = stockList.find((item) => item.date === dateStr);

@@ -35,18 +35,26 @@
 	const festivalTabIcons = computed(() => {
 		if (getStoredThemeKey() === "national-day") {
 			return [
-				"/static/images/tab-国.jpg",
-				"/static/images/tab-庆.jpg",
-				"/static/images/tab-快.jpg",
-				"/static/images/tab-乐.jpg",
+				// "/static/images/tab-国.jpg",
+				// "/static/images/tab-庆.jpg",
+				// "/static/images/tab-快.jpg",
+				// "/static/images/tab-乐.jpg",
+				"https://cdn.huibaitech.com/qrcode/public/holiday/guo.jpg",
+				"https://cdn.huibaitech.com/qrcode/public/holiday/qing.jpg",
+				"https://cdn.huibaitech.com/qrcode/public/holiday/kuai.jpg",
+				"https://cdn.huibaitech.com/qrcode/public/holiday/le.jpg",
 			];
 		}
 		if (getStoredThemeKey() === "dragon-boat") {
 			return [
-				"/static/images/tab-端.jpg",
-				"/static/images/tab-午.jpg",
-				"/static/images/tab-安.jpg",
-				"/static/images/tab-康.jpg",
+				// "/static/images/tab-端.jpg",
+				// "/static/images/tab-午.jpg",
+				// "/static/images/tab-安.jpg",
+				// "/static/images/tab-康.jpg",
+				"https://cdn.huibaitech.com/qrcode/public/holiday/duan.jpg",
+				"https://cdn.huibaitech.com/qrcode/public/holiday/wu.jpg",
+				"https://cdn.huibaitech.com/qrcode/public/holiday/an.jpg",
+				"https://cdn.huibaitech.com/qrcode/public/holiday/kang.jpg",
 			];
 		}
 		return [];
