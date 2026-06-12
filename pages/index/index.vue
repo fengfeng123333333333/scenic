@@ -15,13 +15,14 @@
     <MyContent v-show="currentTab === 3" :active="currentTab === 3" />
 
     <!-- 底部导航栏 -->
-    <tab-bar :current="String(currentTab)" @change="onTabChange" />
+    <tab-bar :current="String(currentTab)" :festivalIcons="festivalTabIcons" @change="onTabChange" />
   </view>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
+import { getStoredThemeKey } from "@/styles/themes.js";
 import HomeContent from "./home-content.vue";
 import OrderContent from "./order-content.vue";
 import TicketContent from "./ticket-content.vue";
@@ -29,6 +30,18 @@ import MyContent from "./my-content.vue";
 
 const currentTab = ref(0);
 const orderStatus = ref(0);
+
+const festivalTabIcons = computed(() => {
+  if (getStoredThemeKey() === "national-day") {
+    return [
+      "/static/images/tab-国.jpg",
+      "/static/images/tab-庆.jpg",
+      "/static/images/tab-快.jpg",
+      "/static/images/tab-乐.jpg",
+    ];
+  }
+  return [];
+});
 
 onLoad((option) => {
   console.log("66666666666666666666");

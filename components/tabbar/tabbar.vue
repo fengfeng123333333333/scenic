@@ -9,7 +9,15 @@
       :key="index"
       @click="tabbarChange(index)"
     >
+      <image
+        v-if="festivalIcons && festivalIcons.length === 4"
+        :src="festivalIcons[index]"
+        class="tabbar-item__icon-img"
+        :class="{ 'tabbar-item__icon-img--active': current == index }"
+        mode="aspectFit"
+      />
       <u-icon
+        v-else
         :name="current == index ? item.selectedIcon : item.icon"
         :color="
           current == index
@@ -33,6 +41,7 @@ import { ref } from "vue";
 
 defineProps({
   current: String,
+  festivalIcons: { type: Array, default: () => [] },
 });
 
 const emit = defineEmits(["tabbarHeight", "change"]);
@@ -102,5 +111,18 @@ function tabbarChange(index) {
 .item-text--active {
   color: var(--color-primary) !important;
   font-weight: 600;
+}
+
+.tabbar-item__icon-img {
+  width: 48rpx;
+  height: 48rpx;
+  opacity: 0.45;
+  filter: grayscale(0.6);
+  transition: all 200ms ease-in-out;
+}
+
+.tabbar-item__icon-img--active {
+  opacity: 1;
+  filter: none;
 }
 </style>
