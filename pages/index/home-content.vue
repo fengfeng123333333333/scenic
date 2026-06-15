@@ -7,7 +7,7 @@
 			<view class="hero" :class="heroFestivalClass">
 				<ScaleSwiper :banList="banList" :autoplay="true" :zoomDuration="2500" />
 				<!-- 国庆烟花 Canvas -->
-				<canvas v-if="isFestival" type="2d" id="fireworkCanvas" class="hero__firework" />
+				<canvas v-if="showFirework" type="2d" id="fireworkCanvas" class="hero__firework" />
 				<view class="hero__weather" v-if="weather.Weather">
 					<text class="hero__weather-text">{{ weather.Weather }}</text>
 				</view>
@@ -276,7 +276,7 @@
 		computed,
 		getCurrentInstance,
 		watch,
-		onMounted,
+		nextTick,
 		onBeforeUnmount
 	} from "vue";
 	import store from "../../store/index.js";
@@ -336,7 +336,8 @@
 	// ==================== 主题切换（本地演示） ====================
 	const showThemePanel = ref(false);
 	const currentThemeKey = ref(getStoredThemeKey());
-	const isFestival = computed(() => ["national-day", "dragon-boat"].includes(currentThemeKey.value), );
+	const isFestival = computed(() => ["national-day", "dragon-boat"].includes(currentThemeKey.value));
+	const showFirework = computed(() => currentThemeKey.value === "national-day");
 	const festivalText = computed(() => {
 		if (currentThemeKey.value === "dragon-boat") {
 			return {
@@ -494,9 +495,21 @@
 		}
 	}
 
-	onMounted(() => {
-		if (isFestival.value) {
-			startFirework();
+	watch(pageReady, (val) => {
+		if (val && showFirework.value) {
+			nextTick(() => {
+				startFirework();
+			});
+		}
+	});
+
+	watch(showFirework, (val) => {
+		if (val && pageReady.value) {
+			nextTick(() => {
+				startFirework();
+			});
+		} else {
+			stopFirework();
 		}
 	});
 
@@ -505,7 +518,6 @@
 	});
 
 	const myRequest = (options) => uni.$myRequest(options);
-	console.log("777777777777777777777");
 	watch(
 		() => props.active,
 		(val) => {
