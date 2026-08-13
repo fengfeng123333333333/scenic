@@ -10,8 +10,10 @@
     <PageLoading v-if="!pageReady" />
 
     <template v-else>
+      <!-- 空状态 -->
+      <Kong v-if="!description" text="暂无简介信息" />
       <!-- 简介正文 -->
-      <view class="introduce-page__content">
+      <view v-else class="introduce-page__content">
         <f-parse :content="description" />
       </view>
     </template>
@@ -22,6 +24,7 @@
 import { ref } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import PageLoading from "@/components/loading/page-loading.vue";
+import Kong from "@/components/kong/kong.vue";
 
 // ==================== 页面路由常量 ====================
 // （当前页无跳转需求，预留扩展）

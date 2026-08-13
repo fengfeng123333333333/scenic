@@ -24,6 +24,9 @@
 	import {
 		getStoredThemeKey
 	} from "@/styles/themes.js";
+	import {
+		parseVidFromScene
+	} from "@/util/helper.js";
 	import HomeContent from "./home-content.vue";
 	import OrderContent from "./order-content.vue";
 	import TicketContent from "./ticket-content.vue";
@@ -67,6 +70,15 @@
 			currentTab.value = tab;
 		}
 		orderStatus.value = Number(option?.status) || 0;
+
+		const sceneVid = parseVidFromScene(option?.scene);
+		if (sceneVid) {
+			uni.setStorageSync("vid", sceneVid);
+		}
+		// 分享直传的 vid（明文，无需 decode）
+		if (option?.vid) {
+			uni.setStorageSync("vid", option.vid);
+		}
 	});
 
 	onMounted(() => {
@@ -101,9 +113,10 @@
 <script>
 	export default {
 		onShareAppMessage() {
+			let vid = uni.getStorageSync("vid")
 			return {
 				title: "小程序",
-				path: "/pages/index/index"
+				path: "/pages/index/index?vid=" + vid
 			};
 		},
 	};

@@ -53,6 +53,12 @@
 		"appid": "wx9ba0af180d6da300",
 		"lazyCodeLoading": "requiredComponents",
 		"mergeVirtualHostAttributes": false,
+		"permission": {
+			"scope.userLocation": {
+				"desc": "用于获取景区位置信息，提供导航服务"
+			}
+		},
+		"requiredPrivateInfos": ["getLocation"],
 		"optimization": {
 			"subPackages": true
 		},

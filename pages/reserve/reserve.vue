@@ -169,38 +169,49 @@
           :model="item"
           labelWidth="80px"
         >
-          <view class="form-card">
-            <u-form-item label="姓名" prop="name">
+          <view
+            class="form-card"
+            v-for="gIndex in identityGroupIndices"
+            :key="'group' + gIndex"
+          >
+            <view class="group-label" v-if="identityGroupCount > 1">
+              游客{{ gIndex + 1 }}
+            </view>
+            <view class="form-card__row">
+              <text class="form-card__row-label">
+                <text v-if="ticketInfo.NeedTouristName == 1" class="form-card__required">*</text>
+                姓名
+              </text>
               <input
-                class="form-card__input"
+                class="form-card__input form-card__input--inline"
                 type="text"
-                v-model="item.name"
+                v-model="item['name_' + gIndex]"
                 placeholder="请输入姓名"
               />
-            </u-form-item>
-            <u-form-item
-              label="电话"
-              prop="phone"
-              :required="ticketInfo.NeedTouristPhone == 1"
-            >
+            </view>
+            <view class="form-card__row">
+              <text class="form-card__row-label">
+                <text v-if="ticketInfo.NeedTouristPhone == 1" class="form-card__required">*</text>
+                电话
+              </text>
               <input
-                class="form-card__input"
+                class="form-card__input form-card__input--inline"
                 type="number"
-                v-model="item.phone"
+                v-model="item['phone_' + gIndex]"
                 placeholder="请输入电话"
                 maxlength="11"
               />
-            </u-form-item>
-            <u-form-item
-              label="身份证"
-              prop="identity"
-              :required="ticketInfo.NeedTouristIDCard == 1"
-            >
+            </view>
+            <view class="form-card__row">
+              <text class="form-card__row-label">
+                <text v-if="ticketInfo.NeedTouristIDCard == 1" class="form-card__required">*</text>
+                身份证
+              </text>
               <view class="form-card__id-wrap">
                 <input
                   class="form-card__input form-card__input--id"
                   type="text"
-                  v-model="item.identity"
+                  v-model="item['identity_' + gIndex]"
                   placeholder="请输入身份证"
                   maxlength="18"
                 />
@@ -209,11 +220,11 @@
                     name="account"
                     color="var(--color-primary)"
                     size="22"
-                    @click="goToCommonTourist(index)"
+                    @click="goToCommonTourist(index, gIndex)"
                   />
                 </view>
               </view>
-            </u-form-item>
+            </view>
           </view>
         </u-form>
       </view>
@@ -473,6 +484,18 @@ const dateList = ref([]);
 const timeList = ref([]);
 const endDate = ref("");
 
+// ==================== 身份证分组（多组身份信息） ====================
+const identityGroupCount = computed(() => {
+  if (ticketInfo.value?.NeedTouristIDCard === 1) {
+    return Math.max(ticketInfo.value?.NeedTouristIDCardNumber || 1, 1);
+  }
+  return 1;
+});
+const identityGroupIndices = computed(() => {
+  return Array.from({ length: identityGroupCount.value }, (_, i) => i);
+});
+const activeGroupIndex = ref(0);
+
 // ==================== 选择状态 ====================
 const selectPoint = ref(0);
 const selectedDate = ref("");
@@ -503,35 +526,8 @@ const formData = ref([
     indPhone: "",
   },
 ]);
-const touristFormRefs = []; // 普通数组，避免 ref 解包歧义
-const touristRules = reactive({
-  name: {
-    rules: [
-      {
-        required: false,
-        errorMessage: "请输入游客姓名",
-      },
-    ],
-  },
-  phone: {
-    rules: [
-      {
-        required: false,
-        format: "phone",
-        errorMessage: "请输入游客电话号码",
-      },
-    ],
-  },
-  identity: {
-    rules: [
-      {
-        required: false,
-        format: "identity",
-        errorMessage: "请输入游客身份证号码",
-      },
-    ],
-  },
-});
+const touristFormRefs = [];
+const touristRules = ref({});
 
 // ==================== 联系人表单 ====================
 const contactForm = reactive({
@@ -609,11 +605,10 @@ onMounted(() => {
   uni.$on("selectTourist", (data) => {
     const item = formData.value[data.index];
     if (item) {
-      Object.assign(item, {
-        identity: data.item.TouristIDCard || "",
-        name: data.item.TouristName || "",
-        phone: data.item.TouristPhone || "",
-      });
+      const gi = activeGroupIndex.value;
+      item["name_" + gi] = data.item.TouristName || "";
+      item["phone_" + gi] = data.item.TouristPhone || "";
+      item["identity_" + gi] = data.item.TouristIDCard || "";
     }
   });
 });
@@ -725,6 +720,18 @@ function initTicketData() {
   }
 
   buildDateQuickList(stockList);
+  initFormGroupFields();
+}
+
+function initFormGroupFields() {
+  const groupCount = identityGroupCount.value;
+  formData.value.forEach((item) => {
+    for (let i = 0; i < groupCount; i++) {
+      if (item["name_" + i] === undefined) item["name_" + i] = "";
+      if (item["phone_" + i] === undefined) item["phone_" + i] = "";
+      if (item["identity_" + i] === undefined) item["identity_" + i] = "";
+    }
+  });
 }
 
 function buildDateQuickList(stockList) {
@@ -757,12 +764,39 @@ function buildDateQuickList(stockList) {
 
 function applyDynamicRules() {
   const t = ticketInfo.value;
-  if (touristRules.identity?.rules?.[0]) {
-    touristRules.identity.rules[0].required = t.NeedTouristIDCard === 1;
+  const groupCount = identityGroupCount.value;
+  const rules = {};
+
+  for (let i = 0; i < groupCount; i++) {
+    rules["name_" + i] = {
+      rules: [
+        {
+          required: t.NeedTouristName === 1,
+          errorMessage: "请输入游客姓名",
+        },
+      ],
+    };
+    rules["phone_" + i] = {
+      rules: [
+        {
+          required: t.NeedTouristPhone === 1,
+          format: "phone",
+          errorMessage: "请输入游客电话号码",
+        },
+      ],
+    };
+    rules["identity_" + i] = {
+      rules: [
+        {
+          required: t.NeedTouristIDCard === 1,
+          format: "identity",
+          errorMessage: "请输入游客身份证号码",
+        },
+      ],
+    };
   }
-  if (touristRules.phone?.rules?.[0]) {
-    touristRules.phone.rules[0].required = t.NeedTouristPhone === 1;
-  }
+  touristRules.value = rules;
+
   if (contactRules.phone?.rules?.[0]) {
     contactRules.phone.rules[0].required = t.NeedContactsPhone === 1;
   }
@@ -831,30 +865,45 @@ function recalcWithCoupon() {
 // ==================== 表单校验 ====================
 /** 直接 JS 校验（不依赖 u-form ref 捕获，100% 可控） */
 function validateTouristForms() {
-  const errs = [];
-  formData.value.map((item, idx) => {
-    // 身份证：required 或 有值时校验格式
-    if (touristRules.identity.rules[0].required) {
-      if (!item.identity || !item.identity.trim()) {
-        errs.push({
-          field: "identity",
-          msg: touristRules.identity.rules[0].errorMessage,
-        });
-      }
-    }
+  const groupCount = identityGroupCount.value;
+  for (let g = 0; g < groupCount; g++) {
+    const idRule = touristRules.value["identity_" + g];
+    const phoneRule = touristRules.value["phone_" + g];
+    const nameRule = touristRules.value["name_" + g];
 
-    // 电话：required 或 有值时校验格式
-    if (touristRules.phone.rules[0].required) {
-      if (!item.phone || !item.phone.trim()) {
-        errs.push({
-          field: "phone",
-          msg: touristRules.phone.rules[0].errorMessage,
-        });
+    for (let i = 0; i < formData.value.length; i++) {
+      const item = formData.value[i];
+      if (nameRule?.rules?.[0]?.required) {
+        if (
+          item["name_" + g] === undefined ||
+          !String(item["name_" + g]).trim()
+        ) {
+          return [{ field: "name_" + g, msg: nameRule.rules[0].errorMessage }];
+        }
+      }
+      if (phoneRule?.rules?.[0]?.required) {
+        if (
+          item["phone_" + g] === undefined ||
+          !String(item["phone_" + g]).trim()
+        ) {
+          return [
+            { field: "phone_" + g, msg: phoneRule.rules[0].errorMessage },
+          ];
+        }
+      }
+      if (idRule?.rules?.[0]?.required) {
+        if (
+          item["identity_" + g] === undefined ||
+          !String(item["identity_" + g]).trim()
+        ) {
+          return [
+            { field: "identity_" + g, msg: idRule.rules[0].errorMessage },
+          ];
+        }
       }
     }
-  });
-  console.log("reeeeeeeeeeeeee", errs);
-  return errs.length === 0 ? [] : errs;
+  }
+  return [];
 }
 
 /** 直接 JS 校验联系人信息（与游客信息一致的校验模式） */
@@ -901,9 +950,10 @@ function goToPayment(orderData, openid) {
   });
 }
 
-function goToCommonTourist(index) {
+function goToCommonTourist(formIndex, groupIndex = 0) {
+  activeGroupIndex.value = groupIndex;
   uni.navigateTo({
-    url: `${PAGE_ROUTES.commonTourist}?key=${index}`,
+    url: `${PAGE_ROUTES.commonTourist}?key=${formIndex}`,
   });
 }
 
@@ -992,14 +1042,17 @@ function handleQuantityChange(e) {
 
   if (newVal > oldVal) {
     for (let i = oldVal; i < newVal; i++) {
-      formData.value.push({
-        identity: "",
-        name: "",
-        phone: "",
+      const item = {
         img: [],
         indPhone: "",
         induc: "",
-      });
+      };
+      for (let g = 0; g < identityGroupCount.value; g++) {
+        item["name_" + g] = "";
+        item["phone_" + g] = "";
+        item["identity_" + g] = "";
+      }
+      formData.value.push(item);
       const faceCount = ticketInfo.value.NeedFaceNumber || 0;
       for (let j = 0; j < faceCount; j++) {
         formData.value[i].img.push({
@@ -1257,13 +1310,18 @@ async function createOrder() {
     ? Number(couponDiscountAmount.value)
     : totalPrice.value;
 
-  const touristList = formData.value.map((item) => ({
-    ticketID: store.tickId,
-    touristName: item.name || "",
-    touristPhone: item.phone || "",
-    idType: 0,
-    touristIDCard: item.identity || "",
-  }));
+  const touristList = [];
+  formData.value.forEach((item) => {
+    for (let g = 0; g < identityGroupCount.value; g++) {
+      touristList.push({
+        ticketID: store.tickId,
+        touristName: item["name_" + g] || "",
+        touristPhone: item["phone_" + g] || "",
+        idType: 0,
+        touristIDCard: item["identity_" + g] || "",
+      });
+    }
+  });
 
   const faceList = [];
   if (ticketInfo.value.NeedFace == 1) {
@@ -1654,6 +1712,13 @@ async function createOrder() {
   position: relative;
 }
 
+.group-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--color-primary);
+  padding: 12rpx 0 8rpx;
+}
+
 .form-card__input {
   width: 100%;
   height: 80rpx;
@@ -1706,6 +1771,11 @@ async function createOrder() {
   color: var(--color-text);
   width: 80px;
   flex-shrink: 0;
+}
+
+.form-card__required {
+  color: red;
+  margin-right: 2rpx;
 }
 
 .form-card__row-value {

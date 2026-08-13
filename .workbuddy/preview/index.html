@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>深圳马戏团小程序 · 首页视觉优化（不增内容）</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700&family=Noto+Serif+SC:wght@400;600;700;900&family=Manrope:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    /* ============================================================
+       GLOBAL · 工具栏 + 双机对比舞台
+       ============================================================ */
+    :root {
+      --bg: #ece6dc;
+      --ink: #1c1411;
+      --ink-soft: #4a3f3a;
+      --ink-mute: #8a7e74;
+      --wine: #7a1f2b;
+      --wine-deep: #5a1620;
+      --cream: #f5eedc;
+      --paper: #fffcf5;
+      --gold: #b4843c;
+      --gold-soft: #d6b274;
+      --line: rgba(28, 20, 17, 0.12);
+      --line-strong: rgba(28, 20, 17, 0.24);
+      --shadow-card: 0 2px 8px rgba(28, 20, 17, 0.06), 0 8px 24px rgba(28, 20, 17, 0.06);
+      --shadow-soft: 0 1px 3px rgba(28, 20, 17, 0.04), 0 6px 18px rgba(28, 20, 17, 0.05);
+      --serif: "Playfair Display", "Noto Serif SC", Georgia, "Times New Roman", serif;
+      --serif-cn: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", serif;
+      --sans: "Manrope", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(28, 20, 17, 0.96);
+      backdrop-filter: blur(12px);
+      color: #f5eedc;
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .toolbar__brand { display: flex; align-items: center; gap: 14px; }
+    .toolbar__logo {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--wine) 0%, var(--wine-deep) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif);
+      font-size: 18px; font-weight: 800;
+      color: var(--gold-soft);
+      border: 1px solid var(--gold);
+    }
+    .toolbar__title {
+      font-family: var(--serif-cn);
+      font-size: 16px; font-weight: 700; letter-spacing: 0.04em;
+    }
+    .toolbar__sub {
+      font-size: 11px; color: var(--gold-soft);
+      letter-spacing: 0.18em; text-transform: uppercase; margin-top: 2px;
+    }
+    .toolbar__switch {
+      display: flex; gap: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px; padding: 4px;
+    }
+    .toolbar__switch button {
+      border: none; background: transparent; color: rgba(255, 255, 255, 0.65);
+      padding: 8px 18px; font-size: 13px; font-weight: 600;
+      border-radius: 999px; cursor: pointer; transition: all 0.2s ease;
+      font-family: var(--sans);
+    }
+    .toolbar__switch button.is-active { background: var(--cream); color: var(--ink); }
+    .toolbar__switch button:hover:not(.is-active) { color: #fff; }
+
+    .stage {
+      display: flex; gap: 40px; padding: 56px 32px 80px;
+      max-width: 1600px; margin: 0 auto; flex-wrap: wrap; justify-content: center;
+    }
+
+    .phone {
+      width: 390px;
+      background: #111; border-radius: 50px; padding: 14px;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 30px 60px -20px rgba(0, 0, 0, 0.35), 0 18px 36px -18px rgba(0, 0, 0, 0.4);
+      position: relative; flex-shrink: 0;
+    }
+    .phone::before {
+      content: ""; position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+      width: 120px; height: 28px; background: #000; border-radius: 0 0 18px 18px; z-index: 10;
+    }
+    .phone__notch { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); width: 100px; height: 24px; background: #000; border-radius: 0 0 14px 14px; z-index: 11; }
+    .phone__speaker { position: absolute; top: 24px; left: 50%; transform: translateX(20px); width: 8px; height: 8px; border-radius: 50%; background: #222; z-index: 12; }
+    .phone__camera { position: absolute; top: 22px; left: 50%; transform: translateX(-32px); width: 14px; height: 14px; border-radius: 50%; background: #1a1a1a; box-shadow: inset 0 0 0 2px #2a2a2a, inset 0 0 0 3px #0e0e0e; z-index: 12; }
+    .phone__screen { position: relative; width: 100%; height: 780px; border-radius: 38px; overflow: hidden; background: #fff; }
+    .phone__screen-inner { width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; }
+    .phone__screen-inner::-webkit-scrollbar { display: none; }
+
+    .phone__label {
+      text-align: center; color: var(--ink);
+      font-family: var(--serif-cn); font-size: 14px; font-weight: 700;
+      letter-spacing: 0.18em; margin-top: 18px; text-transform: uppercase;
+    }
+    .phone__label small {
+      display: block; font-family: var(--sans); font-size: 11px; font-weight: 500;
+      color: var(--ink-mute); letter-spacing: 0.12em; margin-top: 6px; text-transform: none;
+    }
+
+    /* ============================================================
+       原版（BEFORE）—— 完全保留
+       ============================================================ */
+    .before {
+      background: #f4e9d6; color: #5a3a1a;
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      min-height: 100%;
+    }
+    .before__hero {
+      position: relative; width: 100%; height: 280px;
+      background: linear-gradient(180deg, #d8b894 0%, #c0a07a 100%); overflow: hidden;
+    }
+    .before__hero::before {
+      content: "FAMILY TIME"; position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%); font-size: 32px; font-weight: 800;
+      color: rgba(255, 255, 255, 0.3); letter-spacing: 8px;
+    }
+    .before__hero::after { content: "深圳马戏团 · 亲子同乐"; position: absolute; bottom: 30px; left: 24px; color: white; font-size: 14px; font-weight: 600; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); }
+    .before__notice {
+      position: absolute; top: 90px; left: 16px; width: 75%;
+      background: rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 6px 12px;
+      color: white; font-size: 11px;
+    }
+    .before__info {
+      background: #fff; margin: -16px 16px 0; border-radius: 12px; padding: 12px 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); position: relative; z-index: 2;
+    }
+    .before__row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: #5a3a1a; padding: 4px 0; }
+    .before__row b { color: #8a4a1a; font-weight: 700; font-size: 13px; }
+    .before__row span { color: #8a7e74; font-size: 11px; width: 56px; }
+    .before__grid {
+      margin: 16px; background: #fff; border-radius: 12px; padding: 16px 8px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+    .before__cell { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .before__icon { width: 32px; height: 32px; color: #b07735; }
+    .before__cell-label { font-size: 10px; color: #8a4a1a; text-align: center; line-height: 1.2; }
+    .before__tabs { margin: 16px; background: #fff; border-radius: 12px; padding: 12px 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); }
+    .before__tab-list { display: flex; gap: 12px; border-bottom: 1px solid #f0e6d2; padding-bottom: 8px; margin-bottom: 12px; }
+    .before__tab-list span { font-size: 11px; color: #8a7e74; padding: 4px 8px; }
+    .before__tab-list span.is-active { color: #8a4a1a; font-weight: 700; border-bottom: 2px solid #8a4a1a; }
+    .before__product { display: flex; gap: 8px; padding: 8px; }
+    .before__product img { width: 80px; height: 80px; border-radius: 8px; background: #d4b894; object-fit: cover; }
+    .before__product-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .before__product-name { font-size: 12px; font-weight: 600; color: #5a3a1a; }
+    .before__product-price { display: flex; align-items: baseline; gap: 6px; }
+    .before__product-price b { color: #b07735; font-size: 16px; font-weight: 800; }
+    .before__product-price s { color: #b8a890; font-size: 10px; }
+    .before__product-tag { font-size: 9px; color: #b07735; border: 1px solid #b07735; border-radius: 8px; padding: 1px 6px; align-self: flex-start; }
+    .before__tabbar {
+      position: sticky; bottom: 0; background: #fff; border-top: 1px solid #f0e6d2;
+      display: flex; padding: 8px 0 12px;
+    }
+    .before__tabbar-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+      color: #b8a890; font-size: 10px;
+    }
+    .before__tabbar-item.is-active { color: #8a4a1a; font-weight: 600; }
+    .before__tabbar-item svg { width: 20px; height: 20px; }
+
+    /* ============================================================
+       优化版（AFTER）—— 内容 100% 不变，仅视觉升级
+       保留：Banner / 公告 / 营业·地址·电话 / 14 宫格 / 商品 Tab+卡 / 底部 4 Tab
+       ============================================================ */
+    .after {
+      background: var(--cream); color: var(--ink); font-family: var(--sans); min-height: 100%;
+    }
+
+    /* status bar（纯手机壳装饰，非内容） */
+    .after__status {
+      height: 28px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;
+      font-size: 11px; font-weight: 600; color: var(--ink); background: var(--cream);
+    }
+
+    /* —— HERO（轮播图 + 品牌浮层 + 公告浮层）—— */
+    .after__hero {
+      position: relative; width: 100%; height: 280px; overflow: hidden;
+      background: linear-gradient(135deg, #8a3a3e 0%, #5a1620 100%);
+    }
+    /* 轮播占位（用户自己的 banner 图，这里用渐变占位 + 主题纹理） */
+    .after__hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(120% 120% at 80% 10%, rgba(212, 178, 116, 0.5) 0%, transparent 55%),
+        linear-gradient(135deg, #9c3344 0%, #7a1f2b 45%, #5a1620 100%);
+    }
+    /* 细条纹纹理，像马戏团帐篷顶 */
+    .after__hero-bg::after {
+      content: "";
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(135deg, transparent 0 22px, rgba(245, 238, 220, 0.05) 22px 24px);
+      opacity: 0.8;
+    }
+    /* 品牌浮层（标题直接叠在 banner 上，不新增独立 header） */
+    .after__hero-title {
+      position: absolute; left: 24px; bottom: 24px; z-index: 3;
+    }
+    .after__hero-title h1 {
+      font-family: var(--serif-cn); font-size: 28px; font-weight: 900;
+      color: var(--cream); margin: 0; letter-spacing: 0.04em; line-height: 1.1;
+      text-shadow: 0 2px 12px rgba(28, 20, 17, 0.4);
+    }
+    .after__hero-title span {
+      font-family: var(--serif); font-style: italic; font-size: 11px;
+      letter-spacing: 0.22em; color: var(--gold-soft); display: block; margin-top: 4px;
+    }
+    /* 公告浮层（喇叭 + 滚动文字） */
+    .after__notice {
+      position: absolute; top: 44px; left: 16px; right: 16px; z-index: 3;
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(28, 20, 17, 0.35); backdrop-filter: blur(6px);
+      border: 1px solid rgba(245, 238, 220, 0.18);
+      border-radius: 999px; padding: 7px 14px;
+    }
+    .after__notice svg { width: 14px; height: 14px; color: var(--gold-soft); flex-shrink: 0; }
+    .after__notice-text {
+      font-size: 11px; color: var(--cream); white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis; letter-spacing: 0.02em;
+    }
+
+    /* —— 信息卡（营业时间 / 地址 / 电话） —— */
+    .after__info {
+      background: var(--paper); margin: -18px 16px 0; border-radius: 18px; padding: 6px 18px;
+      box-shadow: 0 4px 14px rgba(28, 20, 17, 0.08); position: relative; z-index: 4;
+      border: 1px solid var(--line);
+    }
+    .after__row {
+      display: flex; align-items: center; gap: 14px; padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .after__row:last-child { border-bottom: none; }
+    .after__row-ico {
+      width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(122, 31, 43, 0.08);
+    }
+    .after__row-ico svg { width: 18px; height: 18px; color: var(--wine); }
+    .after__row-ico--gold { background: rgba(180, 132, 60, 0.12); }
+    .after__row-ico--gold svg { color: var(--gold); }
+    .after__row-body { flex: 1; min-width: 0; }
+    .after__row-label {
+      font-size: 10px; color: var(--ink-mute); letter-spacing: 0.1em; text-transform: uppercase;
+      font-weight: 600; margin-bottom: 3px;
+    }
+    .after__row-value {
+      font-size: 14px; color: var(--ink); font-weight: 600; line-height: 1.3;
+    }
+
+    /* —— 九宫格（14 个，4×4 网格，按分组主题色）—— */
+    .after__grid {
+      margin: 18px 16px 0; background: var(--paper); border-radius: 20px;
+      padding: 22px 14px; box-shadow: var(--shadow-soft); border: 1px solid var(--line);
+    }
+    .after__grid-title {
+      font-family: var(--serif-cn); font-size: 13px; font-weight: 700; color: var(--ink);
+      letter-spacing: 0.08em; padding: 0 8px 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .after__grid-title::before {
+      content: ""; width: 3px; height: 14px; background: var(--wine); border-radius: 2px;
+    }
+    .after__cells {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px 4px;
+    }
+    .after__cell {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      cursor: pointer; transition: transform 0.18s ease;
+    }
+    .after__cell:active { transform: scale(0.92); }
+    .after__cell-ico {
+      width: 50px; height: 50px; border-radius: 15px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; transition: all 0.2s ease;
+    }
+    .after__cell-ico svg { width: 24px; height: 24px; }
+    .after__cell:hover .after__cell-ico { transform: translateY(-2px); }
+    /* 分组主题色：购票=酒红 / 导览=金棕 / 会员=墨绿 / 资讯=墨黑 */
+    .g-tickets .after__cell-ico { background: rgba(122, 31, 43, 0.10); color: var(--wine); }
+    .g-guide .after__cell-ico { background: rgba(180, 132, 60, 0.12); color: var(--gold); }
+    .g-member .after__cell-ico { background: rgba(45, 106, 71, 0.10); color: #2d6a47; }
+    .g-info .after__cell-ico { background: rgba(28, 20, 17, 0.06); color: var(--ink-soft); }
+    .after__cell-label {
+      font-size: 11px; color: var(--ink-soft); text-align: center; line-height: 1.25;
+      font-weight: 500; max-width: 64px;
+    }
+
+    /* —— 商品区（Tabs + 卡） —— */
+    .after__shop {
+      margin: 22px 16px 0;
+    }
+    .after__shop-head {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+    }
+    .after__shop-head h2 {
+      font-family: var(--serif-cn); font-size: 15px; font-weight: 700; color: var(--ink);
+      letter-spacing: 0.06em; margin: 0;
+    }
+    .after__shop-head::before { content: ""; width: 3px; height: 15px; background: var(--gold); border-radius: 2px; }
+    .after__tabs {
+      display: flex; gap: 18px; border-bottom: 1px solid var(--line); margin-bottom: 16px;
+    }
+    .after__tabs span {
+      font-size: 13px; color: var(--ink-mute); padding: 8px 0 11px; cursor: pointer;
+      position: relative; font-weight: 600;
+    }
+    .after__tabs span.is-active { color: var(--ink); }
+    .after__tabs span.is-active::after {
+      content: ""; position: absolute; left: 50%; bottom: -1px; transform: translateX(-50%);
+      width: 22px; height: 2px; background: var(--wine); border-radius: 2px;
+    }
+    .after__goods { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .after__good {
+      background: var(--paper); border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+      cursor: pointer; transition: all 0.2s ease;
+    }
+    .after__good:hover { transform: translateY(-2px); box-shadow: var(--shadow-card); }
+    .after__good-img {
+      width: 100%; aspect-ratio: 4/3; position: relative;
+      background: linear-gradient(135deg, #e8d4b0, #c8a878);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .after__good-img--b { background: linear-gradient(135deg, #c8a878, #8a6a48); }
+    .after__good-img svg { width: 48px; height: 48px; color: rgba(122, 31, 43, 0.35); }
+    .after__good-ribbon {
+      position: absolute; top: 10px; left: 0;
+      background: var(--wine); color: var(--cream);
+      font-size: 9px; font-weight: 700; padding: 4px 10px 4px 8px; letter-spacing: 0.04em;
+    }
+    .after__good-ribbon::before {
+      content: ""; position: absolute; right: -6px; top: 0; bottom: 0; width: 0; height: 0;
+      border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 6px solid var(--wine);
+    }
+    .after__good-body { padding: 12px 14px 14px; }
+    .after__good-name {
+      font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.4;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 36px;
+    }
+    .after__good-price { display: flex; align-items: baseline; gap: 6px; margin-top: 10px; }
+    .after__good-price .sym { font-family: var(--serif); font-size: 13px; color: var(--wine); font-weight: 700; }
+    .after__good-price .num { font-family: var(--serif); font-size: 20px; font-weight: 800; color: var(--wine); line-height: 1; }
+    .after__good-price s { font-size: 11px; color: var(--ink-mute); }
+
+    /* —— 底部 Tab —— */
+    .after__tabbar {
+      position: sticky; bottom: 0; background: var(--paper); border-top: 1px solid var(--line);
+      display: flex; padding: 10px 0 18px; margin-top: 28px;
+      box-shadow: 0 -2px 12px rgba(28, 20, 17, 0.04);
+    }
+    .after__tab-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+      color: var(--ink-mute); font-size: 10px; font-weight: 500;
+    }
+    .after__tab-item.is-active { color: var(--wine); }
+    .after__tab-item svg { width: 22px; height: 22px; }
+    .after__tab-item.is-active svg { stroke: var(--wine); }
+
+    /* 切换 */
+    .stage.is-single { gap: 0; }
+    .stage.is-single .phone:not(.is-shown) { display: none; }
+
+    .notes { max-width: 1100px; margin: 0 auto 80px; padding: 0 32px; }
+    .notes__title {
+      font-family: var(--serif-cn); font-size: 26px; font-weight: 800; color: var(--ink);
+      margin: 40px 0 8px; letter-spacing: 0.04em;
+    }
+    .notes__title small {
+      display: block; font-family: var(--serif); font-style: italic; font-size: 13px;
+      color: var(--gold); letter-spacing: 0.16em; margin-bottom: 6px; font-weight: 500;
+    }
+    .notes__lead { font-size: 13px; color: var(--ink-soft); line-height: 1.7; max-width: 720px; margin-bottom: 24px; }
+    .notes__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-top: 8px; }
+    .note-card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; }
+    .note-card__no { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--gold); font-weight: 700; }
+    .note-card__title { font-family: var(--serif-cn); font-size: 14px; font-weight: 700; color: var(--ink); margin: 4px 0 6px; }
+    .note-card__body { font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
+
+    .footer { text-align: center; padding: 40px 32px 60px; color: var(--ink-mute); font-size: 11px; letter-spacing: 0.12em; }
+    .footer .em { color: var(--gold); font-style: italic; font-family: var(--serif); }
+
+    @media (max-width: 900px) {
+      .stage { padding: 32px 16px; gap: 24px; }
+      .toolbar { padding: 14px 16px; }
+      .toolbar__title { font-size: 14px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="toolbar">
+    <div class="toolbar__brand">
+      <div class="toolbar__logo">M</div>
+      <div>
+        <div class="toolbar__title">深圳马戏团 · 首页视觉优化</div>
+        <div class="toolbar__sub">ONLY RESTYLE · NO NEW CONTENT</div>
+      </div>
+    </div>
+    <div class="toolbar__switch" id="switch">
+      <button data-mode="both" class="is-active">对比</button>
+      <button data-mode="before">原版</button>
+      <button data-mode="after">优化版</button>
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+
+    <!-- ========== BEFORE ========== -->
+    <div class="annotate-wrap">
+      <div class="phone is-shown" data-side="before">
+        <div class="phone__notch"></div>
+        <div class="phone__camera"></div>
+        <div class="phone__speaker"></div>
+        <div class="phone__screen">
+          <div class="phone__screen-inner">
+            <div class="before">
+              <div class="before__hero">
+                <div class="before__notice">📢 营业时间 08:00 - 18:00</div>
+              </div>
+              <div class="before__info">
+                <div class="before__row"><span>营业时间：</span><b>08:00 - 18:00</b></div>
+                <div class="before__row"><span>景区地址：</span><b>深圳马戏团 24号</b></div>
+                <div class="before__row"><span>联系电话：</span><b>15000402842</b></div>
+              </div>
+              <div class="before__grid">
+                <div class="before__cell"><svg class="before__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h18v4H3zM5 12v8h14v-8M9 16h6"/></svg><span class="before__cell-label">景区门票</span></div>
+                <div class="before__cell"><svg class="before__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11v4a7 7 0 0 0 14 0v-4M12 18v3"/></svg><span class="before__cell-label">语音导游</span></div>
+                <div class="before__cell"><svg class="before__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 7h12l-2 12H8zM9 7V4h6v3"/></svg><span class="before__cell-label">当地特产</span></div>
+                <div class="before__cell"><svg class="before__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3l-6 6 6 6M15 3l6 6-6 6M3 12h18"/></svg><span class="before__cell-label">地图导览</span></div>
+                <div class="before__cell"><svg class="before__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h6"/></svg><span class="before__cell-label">景区介绍</span></div>
+                <div class="before__cell"><svg class="before__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 19v-7l7-7 7 7v7M9 19v-5h6v5"/></svg><span class="before__cell-label">演艺选座</span></div>
+                <div class="before__cell"><svg class="before__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg><span class="before__cell-label">会员充值</span></div>
+                <div class="before__cell"><svg class="before__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l13-6v14L3 13zM16 9l5-2v10l-5-2"/></svg><span class="before__cell-label">景区公告</span></div>
+                <div class="before__cell"><svg class="before__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="11" width="18" height="7" rx="2"/><circle cx="7" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/><path d="M6 11V7a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v4"/></svg><span class="before__cell-label">智慧停车</span></div>
+                <div class="before__cell"><svg class="before__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg><span class="before__cell-label">计时票</span></div>
+                <div class="before__cell"><svg class="before__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M4 12h16M8 18v2M16 18v2"/></svg><span class="before__cell-label">乘车路线</span></div>
+                <div class="before__cell"><svg class="before__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 5h4v4H5zM15 5h4v4h-4zM5 15h4v4H5zM15 15h4v4h-4z"/></svg><span class="before__cell-label">联系我们</span></div>
+                <div class="before__cell"><svg class="before__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12V8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M16 6V4M8 6V4M12 12v6M9 15l3 3 3-3"/></svg><span class="before__cell-label">领券中心</span></div>
+                <div class="before__cell"><svg class="before__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="17" r="2"/><circle cx="18" cy="17" r="2"/><path d="M4 17h4l3-9h6l1 5h2"/></svg><span class="before__cell-label">精品路线</span></div>
+              </div>
+              <div class="before__tabs">
+                <div class="before__tab-list">
+                  <span class="is-active">景区门票</span><span>当地特产</span><span>会员充值</span><span>领券中心</span>
+                </div>
+                <div class="before__product">
+                  <img alt="" />
+                  <div class="before__product-body">
+                    <div class="before__product-name">新景区单人票</div>
+                    <div class="before__product-tag">热销</div>
+                    <div class="before__product-price"><b>¥0.01</b><s>¥0.01</s></div>
+                  </div>
+                </div>
+              </div>
+              <div style="height: 60px;"></div>
+              <div class="before__tabbar">
+                <div class="before__tabbar-item is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7v9a2 2 0 0 1-2 2h-4v-7H9v7H5a2 2 0 0 1-2-2z"/></svg>首页</div>
+                <div class="before__tabbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>订单</div>
+                <div class="before__tabbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h18v4H3zM5 12v8h14v-8M9 16h6"/></svg>购票</div>
+                <div class="before__tabbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>我的</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="phone__label">BEFORE · 原版<small>内容原样 · 仅作基线</small></div>
+    </div>
+
+    <!-- ========== AFTER（仅视觉优化，内容不变） ========== -->
+    <div class="annotate-wrap">
+      <div class="phone is-shown" data-side="after">
+        <div class="phone__notch"></div>
+        <div class="phone__camera"></div>
+        <div class="phone__speaker"></div>
+        <div class="phone__screen">
+          <div class="phone__screen-inner">
+            <div class="after">
+
+              <div class="after__status"><span>15:51</span><span>📶 🔋</span></div>
+
+              <!-- HERO：轮播图（占位）+ 品牌浮层 + 公告浮层 -->
+              <section class="after__hero">
+                <div class="after__hero-bg"></div>
+                <!-- 公告浮层（喇叭 + 滚动文字） -->
+                <div class="after__notice">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l13-6v14L3 13zM16 9l5-2v10l-5-2M3 11v2a2 2 0 0 0 2 2h2"/></svg>
+                  <span class="after__notice-text">深圳马戏团诚邀您共度欢乐时光 · 最新演出场次已开放 ·</span>
+                </div>
+                <!-- 品牌浮层 -->
+                <div class="after__hero-title">
+                  <h1>深圳马戏团</h1>
+                  <span>SHENZHEN GRAND CIRCUS</span>
+                </div>
+              </section>
+
+              <!-- 信息卡：营业时间 / 地址 / 电话 -->
+              <div class="after__info">
+                <div class="after__row">
+                  <div class="after__row-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+                  <div class="after__row-body">
+                    <div class="after__row-label">营业时间</div>
+                    <div class="after__row-value">08:00 - 18:00</div>
+                  </div>
+                </div>
+                <div class="after__row">
+                  <div class="after__row-ico after__row-ico--gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                  <div class="after__row-body">
+                    <div class="after__row-label">景区地址</div>
+                    <div class="after__row-value">深圳马戏团 24号</div>
+                  </div>
+                </div>
+                <div class="after__row">
+                  <div class="after__row-ico after__row-ico--gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.86 19.86 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+                  <div class="after__row-body">
+                    <div class="after__row-label">联系电话</div>
+                    <div class="after__row-value">15000402842</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 九宫格：14 个，分组主题色 -->
+              <div class="after__grid">
+                <div class="after__grid-title">便捷服务</div>
+                <div class="after__cells">
+
+                  <!-- 购票类 -->
+                  <div class="after__cell g-tickets">
+                    <div class="after__cell-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18v4H3zM5 12v8h14v-8M9 16h6"/></svg></div>
+                    <span class="after__cell-label">景区门票</span>
+                  </div>
+                  <div class="after__cell g-tickets">
+                    <div class="after__cell-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19v-7l7-7 7 7v7M9 19v-5h6v5"/></svg></div>
+                    <span class="after__cell-label">演艺选座</span>
+                  </div>
+                  <div class="after__cell g-tickets">
+                    <div class="after__cell-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg></div>
+                    <span class="after__cell-label">计时票</span>
+                  </div>
+
+                  <!-- 导览类 -->
+                  <div class="after__cell g-guide">
+                    <div class="after__cell-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11v4a7 7 0 0 0 14 0v-4M12 18v3"/></svg></div>
+                    <span class="after__cell-label">语音导游</span>
+                  </div>
+                  <div class="after__cell g-guide">
+                    <div class="after__cell-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3l-6 6 6 6M15 3l6 6-6 6M3 12h18"/></svg></div>
+                    <span class="after__cell-label">地图导览</span>
+                  </div>
+                  <div class="after__cell g-guide">
+                    <div class="after__cell-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M4 12h16M8 18v2M16 18v2"/></svg></div>
+                    <span class="after__cell-label">乘车路线</span>
+                  </div>
+                  <div class="after__cell g-guide">
+                    <div class="after__cell-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="17" r="2"/><circle cx="18" cy="17" r="2"/><path d="M4 17h4l3-9h6l1 5h2"/></svg></div>
+                    <span class="after__cell-label">精品路线</span>
+                  </div>
+
+                  <!-- 会员类 -->
+                  <div class="after__cell g-member">
+                    <div class="after__cell-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg></div>
+                    <span class="after__cell-label">会员充值</span>
+                  </div>
+                  <div class="after__cell g-member">
+                    <div class="after__cell-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M16 6V4M8 6V4M12 12v6M9 15l3 3 3-3"/></svg></div>
+                    <span class="after__cell-label">领券中心</span>
+                  </div>
+                  <div class="after__cell g-member">
+                    <div class="after__cell-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="7" rx="2"/><circle cx="7" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/><path d="M6 11V7a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v4"/></svg></div>
+                    <span class="after__cell-label">智慧停车</span>
+                  </div>
+
+                  <!-- 资讯类 -->
+                  <div class="after__cell g-info">
+                    <div class="after__cell-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h6"/></svg></div>
+                    <span class="after__cell-label">景区介绍</span>
+                  </div>
+                  <div class="after__cell g-info">
+                    <div class="after__cell-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l13-6v14L3 13zM16 9l5-2v10l-5-2"/></svg></div>
+                    <span class="after__cell-label">景区公告</span>
+                  </div>
+                  <div class="after__cell g-info">
+                    <div class="after__cell-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h4v4H5zM15 5h4v4h-4zM5 15h4v4H5zM15 15h4v4h-4z"/></svg></div>
+                    <span class="after__cell-label">联系我们</span>
+                  </div>
+                  <div class="after__cell g-info">
+                    <div class="after__cell-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg></div>
+                    <span class="after__cell-label">当地特产</span>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- 商品区：Tabs + 卡 -->
+              <section class="after__shop">
+                <div class="after__shop-head"><h2>精选好物</h2></div>
+                <div class="after__tabs">
+                  <span class="is-active">景区门票</span>
+                  <span>当地特产</span>
+                  <span>会员充值</span>
+                  <span>领券中心</span>
+                </div>
+                <div class="after__goods">
+                  <div class="after__good">
+                    <div class="after__good-img">
+                      <span class="after__good-ribbon">热销</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 1 1 4 2.83M12 17v.01"/></svg>
+                    </div>
+                    <div class="after__good-body">
+                      <div class="after__good-name">新景区单人票</div>
+                      <div class="after__good-price">
+                        <span class="sym">¥</span><span class="num">0.01</span><s>¥0.01</s>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="after__good">
+                    <div class="after__good-img after__good-img--b">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 9l4 12h12l4-12-6 4-4-8-4 8z"/></svg>
+                    </div>
+                    <div class="after__good-body">
+                      <div class="after__good-name">当地特色纪念礼盒</div>
+                      <div class="after__good-price">
+                        <span class="sym">¥</span><span class="num">68</span><s>¥98</s>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <div style="height: 20px;"></div>
+
+              <!-- 底部 Tab -->
+              <div class="after__tabbar">
+                <div class="after__tab-item is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a2 2 0 0 1-2 2h-4v-7H9v7H5a2 2 0 0 1-2-2z"/></svg>首页</div>
+                <div class="after__tab-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>订单</div>
+                <div class="after__tab-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18v4H3zM5 12v8h14v-8M9 16h6"/></svg>购票</div>
+                <div class="after__tab-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>我的</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="phone__label">AFTER · 视觉优化<small>内容原样 · 仅重新设计</small></div>
+    </div>
+
+  </div>
+
+  <!-- ============== 视觉优化要点 ============== -->
+  <section class="notes">
+    <h3 class="notes__title">
+      <small>WHAT · CHANGED</small>
+      只动了视觉，没动内容
+    </h3>
+    <p class="notes__lead">
+      以下所有改动都是「重新排列 / 重新上色 / 重绘图标 / 调整间距字体」——截图里有的每一块（轮播、公告、营业时间、地址、电话、14 个功能入口、商品 Tab、商品卡、底部 4 个 Tab）都原样保留，没有任何新增模块、新增文案或新增数据。
+    </p>
+    <div class="notes__grid">
+      <div class="note-card">
+        <div class="note-card__no">01</div>
+        <div class="note-card__title">统一品牌配色</div>
+        <div class="note-card__body">把全站米色 + 棕色通用色，换成酒红 #7A1F2B + 金棕 #B4843C + 奶油 #F5EEDC 三色体系，立刻有"马戏团"调性。</div>
+      </div>
+      <div class="note-card">
+        <div class="note-card__no">02</div>
+        <div class="note-card__title">Banner 加品牌浮层</div>
+        <div class="note-card__body">标题"深圳马戏团"直接叠在轮播图上（带帐篷纹理背景），不再让大图空着；公告做成半透明胶囊浮在上面。</div>
+      </div>
+      <div class="note-card">
+        <div class="note-card__no">03</div>
+        <div class="note-card__title">信息卡精致化</div>
+        <div class="note-card__body">营业/地址/电话三行，左侧加主题色圆角图标、上方英文小标、细分割线、圆角上浮卡片，比原来的纯文本行高级。</div>
+      </div>
+      <div class="note-card">
+        <div class="note-card__no">04</div>
+        <div class="note-card__title">14 图标重绘分组</div>
+        <div class="note-card__body">全部图标用线性 SVG 重绘，按"购票/导览/会员/资讯"分四组上不同主题色，视觉有节奏而非一团棕。</div>
+      </div>
+      <div class="note-card">
+        <div class="note-card__no">05</div>
+        <div class="note-card__title">图标容器升级</div>
+        <div class="note-card__body">方角小图标 → 圆角大色块（50×50 圆角矩形），悬浮微抬升，按压回弹，触感更明确。</div>
+      </div>
+      <div class="note-card">
+        <div class="note-card__no">06</div>
+        <div class="note-card__title">标题用衬线体</div>
+        <div class="note-card__body">"便捷服务 / 精选好物"等区块标题换成思源宋体（Noto Serif SC），比系统黑体更有质感。</div>
+      </div>
+      <div class="note-card">
+        <div class="note-card__no">07</div>
+        <div class="note-card__title">价格用衬线大字</div>
+        <div class="note-card__body">商品价 ¥0.01 用 Playfair Display 斜体放大，金红配色，比原版小号加粗更有"价签"感。</div>
+      </div>
+      <div class="note-card">
+        <div class="note-card__no">08</div>
+        <div class="note-card__title">商品卡重做</div>
+        <div class="note-card__body">保留 ¥0.01 + 热销标签，图区加品牌渐变占位 + 丝带角标，卡片圆角加大、悬浮浮起。</div>
+      </div>
+      <div class="note-card">
+        <div class="note-card__no">09</div>
+        <div class="note-card__title">Tab 高亮下划线</div>
+        <div class="note-card__body">商品 Tab 选中态从"文字加粗"改为"酒红下划线 + 加深"，底部 4 Tab 选中态同步用酒红。</div>
+      </div>
+      <div class="note-card">
+        <div class="note-card__no">10</div>
+        <div class="note-card__title">留白与卡片阴影</div>
+        <div class="note-card__body">整体加大区块间距、统一圆角与柔和投影，呼吸感更强，告别原来挤在一起的扁平卡片。</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    Restyling only · <span class="em">SHENZHEN GRAND CIRCUS</span> · 内容清单与截图 100% 一致
+  </div>
+
+  <script>
+    const stage = document.getElementById('stage');
+    const switcher = document.getElementById('switch');
+    const phones = document.querySelectorAll('.phone');
+    switcher.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      switcher.querySelectorAll('button').forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      const mode = btn.dataset.mode;
+      phones.forEach(p => {
+        if (mode === 'both') p.classList.add('is-shown');
+        else p.classList.toggle('is-shown', p.dataset.side === mode);
+      });
+    });
+    document.querySelectorAll('.after__tabs, .before__tab-list').forEach(tabs => {
+      tabs.addEventListener('click', (e) => {
+        const t = e.target.closest('span');
+        if (!t) return;
+        tabs.querySelectorAll('span').forEach(s => s.classList.remove('is-active'));
+        t.classList.add('is-active');
+      });
+    });
+  </script>
+</body>
+
+</html>

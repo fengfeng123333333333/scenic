@@ -89,7 +89,7 @@
 		<RequestLoading v-if="payLoading" text="正在支付..." />
 
 		<!-- 购买人信息弹窗 -->
-		<u-popup :show="showBuyerPopup" mode="center" closeable="true" :round="20" :closeOnClickOverlay="true"
+		<u-popup :show="showBuyerPopup" mode="center" :closeable="true" :round="20" :closeOnClickOverlay="true"
 			@close="showBuyerPopup = false">
 			<view class="buyer-popup">
 				<view class="buyer-popup__title">购买人信息</view>
@@ -138,7 +138,20 @@
 		/** 支付完成后跳转的首页（Tab 页） */
 		home: "/pages/index/index",
 	};
-
+	const ALLOWED_KEYS = ["cusid",
+		"appid",
+		"version",
+		"trxamt",
+		"reqsn",
+		"notify_url",
+		"body",
+		"remark",
+		"randomstr",
+		"paytype",
+		"signtype",
+		"isdirectpay",
+		"sign"
+	]
 	// ==================== 数据 ====================
 	const banList = ref([]);
 	const ticketList = ref({});
@@ -234,7 +247,6 @@
 	}
 
 	// ==================== 支付处理 ====================
-
 	/** 处理跳转其他小程序支付 */
 	function handleMiniProgramPay(payData) {
 		const {
@@ -278,6 +290,78 @@
 		uni.requestPayment(payParams);
 	}
 
+	function filterExtraFields(apiData) {
+		const cleaned = {};
+		ALLOWED_KEYS.forEach(key => {
+			// 只有当接口数据中存在该字段时才保留
+			if (key in apiData) {
+				cleaned[key] = apiData[key];
+			}
+		});
+		return cleaned;
+	}
+
+	function compareVersion(v1, v2) {
+		v1 = v1.split('.')
+		v2 = v2.split('.')
+		const len = Math.max(v1.length, v2.length)
+
+		while (v1.length < len) {
+			v1.push('0')
+		}
+		while (v2.length < len) {
+			v2.push('0')
+		}
+
+		for (let i = 0; i < len; i++) {
+			const num1 = parseInt(v1[i])
+			const num2 = parseInt(v2[i])
+
+			if (num1 > num2) {
+				return 1
+			} else if (num1 < num2) {
+				return -1
+			}
+		}
+
+		return 0
+	}
+
+	function handleEmbeddedMiniProgram(payData) {
+		const package_str = JSON.parse(payData.package_str);
+		const params = filterExtraFields(package_str);
+		params.sign = decodeURIComponent(params.sign);
+		// 如果没有申请半屏调用，不需要做判断，直接使用wx.navigateToMiniProgram拉起
+		const version = wx.getAppBaseInfo().SDKVersion
+		console.log("versionversionversion", version)
+		if (compareVersion(version, '2.26.2') >= 0) {
+			// openEmbeddedMiniProgram，需要小程序基础库版本不低于 2.26.2
+			if (payData.nonceStr && Number(payData.nonceStr) == 1) {
+				//半屏调用
+				wx.openEmbeddedMiniProgram({
+					appId: payData.paySign,
+					extraData: params,
+				})
+				payLoading.value = false;
+			} else {
+				console.log("全屏调用")
+				wx.navigateToMiniProgram({
+					appId: payData.paySign,
+					extraData: params,
+				})
+				payLoading.value = false;
+			}
+
+		} else {
+			//全屏调用， 没申请通联收银台半屏调用的商户直接使用以下方法拉起支付
+			console.log("全屏调用")
+			wx.navigateToMiniProgram({
+				appId: list.data.Data.paySign,
+				extraData: params,
+			})
+			payLoading.value = false;
+		}
+	}
 	// ==================== 业务方法 ====================
 
 	/** 点击"立即支付" */
@@ -350,7 +434,7 @@
 		try {
 			const openid = uni.getStorageSync("userinfo");
 			const res = await uni.$myRequest({
-				url: "/api/Applets/AppletsCreateMemberTicketOrder",
+				url: "/api/Applets/VirtualAppletsCreateMemberTicketOrder",
 				data: {
 					openId: openid.openid,
 					memberID: memberId.value,
@@ -376,11 +460,15 @@
 			if (payData.pay_type === "030") {
 				handleMiniProgramPay(payData);
 				return;
+			} else if (payData.pay_type === "040") {
+				handleEmbeddedMiniProgram(payData)
+			} else {
+				// JSAPI 微信支付
+				handleJsapiPay(payData);
 			}
 
-			// JSAPI 微信支付
-			handleJsapiPay(payData);
 		} catch (err) {
+			console.log("err", err)
 			payLoading.value = false;
 			showToast("网络异常，请重试");
 		} finally {

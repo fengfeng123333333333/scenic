@@ -19,7 +19,8 @@ export const myRequest = (options) => {
 			method: options.method || "GET", // 方法从options中获取，如果没有传入method，则默认为GET，
 			data: options.data || {}, // data从options中获取，如果没有传入data， 则默认一个空对象
 			header: {
-				AppID: uni.getAccountInfoSync().miniProgram.appId,
+				// AppID: uni.getAccountInfoSync().miniProgram.appId,
+				AppID: uni.getStorageSync("vid") || "",
 			},
 			success: (res) => {
 				// 用箭头函数，res是返回来的数据

@@ -6,8 +6,11 @@
 			<!-- <u-navbar :title="weather.ScenicName" leftIcon="home" :placeholder="true" :autoBack="true" :fixed="false" /> -->
 			<view class="hero" :class="heroFestivalClass">
 				<ScaleSwiper :banList="banList" :autoplay="true" :zoomDuration="2500" />
-				<!-- 国庆烟花 Canvas -->
-				<canvas v-if="showFirework" type="2d" id="fireworkCanvas" class="hero__firework" />
+				<view class="noticeDivTop" v-if="card.length> 0">
+					<u-notice-bar :text="card" direction="column" color="white" bgColor="none" speed="3000"
+						@click="swiperClick"></u-notice-bar>
+					<!-- <f-notice :text="card" :showArrow="false" :speed="3000" :opacity="1" @click="swiperClick" /> -->
+				</view>
 				<view class="hero__weather" v-if="weather.Weather">
 					<text class="hero__weather-text">{{ weather.Weather }}</text>
 				</view>
@@ -27,7 +30,7 @@
 			<view class="info-card">
 				<view class="row">
 					<view class="row__icon row__icon--secondary">
-						<u-icon name="clock" color="var(--color-primary)" size="20" />
+						<u-icon name="clock" color="var(--color-primary)" size="16" />
 					</view>
 					<view class="row__content">
 						<text class="label">{{ weather.OpeningHoursTitle }}</text>
@@ -36,16 +39,16 @@
 				</view>
 				<view class="row row--clickable" @click="dizhi">
 					<view class="row__icon row__icon--secondary">
-						<u-icon name="map" color="var(--color-primary)" size="20" />
+						<u-icon name="map" color="var(--color-primary)" size="16" />
 					</view>
 					<view class="row__content">
-						<text class="label">景区地址</text>
+						<text class="label">景区地址:</text>
 						<text class="value">{{ weather.Address }}</text>
 					</view>
 				</view>
 				<view class="row row--clickable" @click="calPhone">
 					<view class="row__icon row__icon--secondary">
-						<u-icon name="phone" color="var(--color-primary)" size="20" />
+						<u-icon name="phone" color="var(--color-primary)" size="16" />
 					</view>
 					<view class="row__content">
 						<text class="label">{{ weather.PhoneTitle }}</text>
@@ -53,12 +56,9 @@
 					</view>
 				</view>
 			</view>
-			<!-- 	<view class="passenger-notice" v-if="weather.PassengerFlow != ''">
-				<u-notice-bar :text="String(weather.PassengerFlow)" />
-			</view> -->
-			<view class="noticeDiv" v-if="card.length> 0">
+			<!-- 	<view class="noticeDiv" v-if="card.length> 0">
 				<f-notice :text="card" :speed="3000" @click="swiperClick" />
-			</view>
+			</view> -->
 			<view class="noticeDiv" v-if="weather.PassengerFlow">
 				<f-notice :text="weather.PassengerFlowList" :speed="3000" />
 			</view>
@@ -66,9 +66,7 @@
 				<view class="icon-grid">
 					<view class="item" v-for="(item, index) in title" :key="item.ID"
 						@click="menPiao(item.PageUrl, item.Title, item)">
-						<view class="icon-bg">
-							<image class="item__icon" :src="item.ImageUrl" mode="aspectFit" />
-						</view>
+						<image class="item__icon" :src="item.ImageUrl" mode="aspectFit" />
 						<text class="item__label">{{ item.Title }}</text>
 					</view>
 				</view>
@@ -202,18 +200,6 @@
 				</view>
 			</template>
 
-			<!-- 国庆飘落粒子 -->
-			<template v-if="isFestival">
-				<view class="confetti confetti--1">✦</view>
-				<view class="confetti confetti--2">✧</view>
-				<view class="confetti confetti--3">✦</view>
-				<view class="confetti confetti--4">✧</view>
-				<view class="confetti confetti--5">✦</view>
-				<view class="confetti confetti--6">✧</view>
-				<view class="confetti confetti--7">✦</view>
-				<view class="confetti confetti--8">✧</view>
-			</template>
-
 		</template>
 		<!-- 阅读规定 -->
 		<u-popup ref="noticeModle" :show="noticePopShow" mode="center" :overlay="true" :mask-click="false">
@@ -276,8 +262,7 @@
 		computed,
 		getCurrentInstance,
 		watch,
-		nextTick,
-		onBeforeUnmount
+		nextTick
 	} from "vue";
 	import store from "../../store/index.js";
 	import IndexSkeleton from "../../components/skeleton/index_skeleton.vue";
@@ -337,7 +322,6 @@
 	const showThemePanel = ref(false);
 	const currentThemeKey = ref(getStoredThemeKey());
 	const isFestival = computed(() => ["national-day", "dragon-boat"].includes(currentThemeKey.value));
-	const showFirework = computed(() => currentThemeKey.value === "national-day");
 	const festivalText = computed(() => {
 		if (currentThemeKey.value === "dragon-boat") {
 			return {
@@ -388,6 +372,7 @@
 
 	function handleThemeSwitch(key) {
 		applyTheme(key);
+		store.state.themeVars = getThemeVars(key);
 		currentThemeKey.value = key;
 		showThemePanel.value = false;
 		setTimeout(() => {
@@ -396,126 +381,6 @@
 			});
 		}, 300);
 	}
-
-	// ==================== 国庆烟花 Canvas ====================
-	const fireworkTimer = ref(null);
-	const fireworkAniId = ref(null);
-
-	class Particle {
-		constructor(x, y, color) {
-			this.x = x;
-			this.y = y;
-			const angle = Math.random() * Math.PI * 2;
-			const speed = Math.random() * 4 + 2;
-			this.vx = Math.cos(angle) * speed;
-			this.vy = Math.sin(angle) * speed;
-			this.color = color;
-			this.alpha = 1;
-			this.decay = Math.random() * 0.015 + 0.008;
-			this.radius = Math.random() * 2.5 + 1;
-		}
-
-		update() {
-			this.x += this.vx;
-			this.y += this.vy;
-			this.vy += 0.04;
-			this.alpha -= this.decay;
-		}
-
-		draw(ctx) {
-			ctx.save();
-			ctx.globalAlpha = Math.max(this.alpha, 0);
-			ctx.fillStyle = this.color;
-			ctx.beginPath();
-			ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-			ctx.fill();
-			ctx.restore();
-		}
-	}
-
-	function startFirework() {
-		const query = uni.createSelectorQuery().in(proxy);
-		query.select("#fireworkCanvas").fields({
-			node: true,
-			size: true
-		}).exec((res) => {
-			if (!res || !res[0] || !res[0].node) return;
-			const canvas = res[0].node;
-			const width = res[0].width;
-			const height = res[0].height;
-			canvas.width = width;
-			canvas.height = height;
-			const ctx = canvas.getContext("2d");
-			let particles = [];
-
-			function launch() {
-				const colors = ["#FF3D3D", "#FFD700", "#FF6B35", "#FF4444", "#FFAA00", "#FF6666", "#FFCC00"];
-				const cx = Math.random() * width * 0.7 + width * 0.15;
-				const cy = Math.random() * height * 0.5 + height * 0.15;
-				const color = colors[Math.floor(Math.random() * colors.length)];
-				for (let i = 0; i < 80; i++) {
-					particles.push(new Particle(cx, cy, color));
-				}
-				// 拖尾粒子（慢速衰减，更小）
-				for (let i = 0; i < 20; i++) {
-					const p = new Particle(cx + (Math.random() - 0.5) * 10, cy + (Math.random() - 0.5) * 10,
-						color);
-					p.decay = 0.004;
-					p.radius = 1.2;
-					p.vx *= 0.3;
-					p.vy *= 0.3;
-					particles.push(p);
-				}
-			}
-
-			function animate() {
-				ctx.clearRect(0, 0, width, height);
-				particles = particles.filter((p) => p.alpha > 0.01);
-				particles.forEach((p) => {
-					p.update();
-					p.draw(ctx);
-				});
-				fireworkAniId.value = canvas.requestAnimationFrame(animate);
-			}
-
-			animate();
-			launch();
-			fireworkTimer.value = setInterval(launch, 1500);
-		});
-	}
-
-	function stopFirework() {
-		if (fireworkTimer.value) {
-			clearInterval(fireworkTimer.value);
-			fireworkTimer.value = null;
-		}
-		if (fireworkAniId.value) {
-			cancelAnimationFrame(fireworkAniId.value);
-			fireworkAniId.value = null;
-		}
-	}
-
-	watch(pageReady, (val) => {
-		if (val && showFirework.value) {
-			nextTick(() => {
-				startFirework();
-			});
-		}
-	});
-
-	watch(showFirework, (val) => {
-		if (val && pageReady.value) {
-			nextTick(() => {
-				startFirework();
-			});
-		} else {
-			stopFirework();
-		}
-	});
-
-	onBeforeUnmount(() => {
-		stopFirework();
-	});
 
 	const myRequest = (options) => uni.$myRequest(options);
 	watch(
@@ -946,9 +811,10 @@
 <script>
 	export default {
 		onShareAppMessage() {
+			let vid = uni.getStorageSync("vid")
 			return {
 				title: "小程序",
-				path: "/pages/index/index"
+				path: "/pages/index/index?vid=" + vid
 			};
 		},
 	};
@@ -1111,12 +977,7 @@
 	.row {
 		display: flex;
 		align-items: center;
-		height: 90rpx;
-		padding: 16rpx 0;
-	}
-
-	.row+.row {
-		border-top: 1rpx solid var(--color-border-light);
+		height: 60rpx;
 	}
 
 	.row__icon {
@@ -1503,6 +1364,7 @@
 		border-radius: var(--radius-sm, 16rpx);
 		background: var(--color-bg);
 		border: 2rpx solid transparent;
+		box-sizing: border-box;
 		transition: all 120ms ease;
 	}
 
@@ -1579,9 +1441,16 @@
 		}
 	}
 
+	.noticeDivTop {
+		position: relative;
+		bottom: 120rpx;
+		left: 8rpx;
+		z-index: 1000;
+		width: 80%;
+	}
+
 	/* ====== 国庆节日装饰 ====== */
 	.hero__festival {
-		position: relative;
 		overflow: hidden;
 		width: 100%;
 		margin-bottom: 52rpx;
@@ -1771,87 +1640,6 @@
 
 		50% {
 			transform: translateY(-24rpx) scale(1.05);
-		}
-	}
-
-	/* ====== 飘落粒子 ====== */
-	.confetti {
-		position: fixed;
-		z-index: 801;
-		pointer-events: none;
-		font-size: 32rpx;
-		color: #E6B422;
-		opacity: 0;
-		animation: confettiFall 4s linear infinite;
-	}
-
-	.confetti--1 {
-		left: 5%;
-		animation-delay: 0s;
-		animation-duration: 3.5s;
-	}
-
-	.confetti--2 {
-		left: 15%;
-		animation-delay: 0.8s;
-		animation-duration: 4.2s;
-	}
-
-	.confetti--3 {
-		left: 28%;
-		animation-delay: 1.6s;
-		animation-duration: 3.8s;
-	}
-
-	.confetti--4 {
-		left: 40%;
-		animation-delay: 0.4s;
-		animation-duration: 4.5s;
-	}
-
-	.confetti--5 {
-		left: 55%;
-		animation-delay: 2.0s;
-		animation-duration: 3.2s;
-	}
-
-	.confetti--6 {
-		left: 68%;
-		animation-delay: 1.2s;
-		animation-duration: 4.0s;
-	}
-
-	.confetti--7 {
-		left: 80%;
-		animation-delay: 2.4s;
-		animation-duration: 3.6s;
-	}
-
-	.confetti--8 {
-		left: 92%;
-		animation-delay: 0.6s;
-		animation-duration: 4.8s;
-	}
-
-	@keyframes confettiFall {
-		0% {
-			top: -10%;
-			opacity: 0;
-			transform: translateX(0) rotate(0deg);
-		}
-
-		10% {
-			opacity: 0.8;
-		}
-
-		90% {
-			opacity: 0.6;
-		}
-
-		100% {
-			top: 110%;
-			opacity: 0;
-			transform: translateX(40rpx) rotate(720deg);
 		}
 	}
 

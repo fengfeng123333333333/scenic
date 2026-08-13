@@ -1,40 +1,38 @@
 {
-	"pages": [
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "",
-				"navigationStyle": "custom"
-			}
+	"pages": [{
+		"path": "pages/index/index",
+		"style": {
+			"navigationBarTitleText": "",
+			"navigationStyle": "custom"
 		}
-	],
-	"subPackages": [
-		{
+	}, {
+		"path": "pages/guide/guide",
+		"style": {
+			"navigationBarTitleText": "",
+			"navigationStyle": "custom"
+		}
+	}],
+	"subPackages": [{
 			"root": "pages/information",
-			"pages": [
-				{
-					"path": "information",
-					"style": {
-						"navigationBarTitleText": "授权登录"
-					}
+			"pages": [{
+				"path": "information",
+				"style": {
+					"navigationBarTitleText": "授权登录"
 				}
-			]
+			}]
 		},
 		{
 			"root": "pages/details",
-			"pages": [
-				{
-					"path": "details",
-					"style": {
-						"navigationBarTitleText": "门票详情"
-					}
+			"pages": [{
+				"path": "details",
+				"style": {
+					"navigationBarTitleText": "门票详情"
 				}
-			]
+			}]
 		},
 		{
 			"root": "pages/reserve",
-			"pages": [
-				{
+			"pages": [{
 					"path": "reserve",
 					"style": {
 						"navigationBarTitleText": "门票预定"
@@ -50,8 +48,7 @@
 		},
 		{
 			"root": "pages/tourist",
-			"pages": [
-				{
+			"pages": [{
 					"path": "tourist",
 					"style": {
 						"navigationBarTitleText": "常用人员"
@@ -67,19 +64,16 @@
 		},
 		{
 			"root": "pages/payment",
-			"pages": [
-				{
-					"path": "payment",
-					"style": {
-						"navigationBarTitleText": "支付"
-					}
+			"pages": [{
+				"path": "payment",
+				"style": {
+					"navigationBarTitleText": "支付"
 				}
-			]
+			}]
 		},
 		{
 			"root": "pages/voice",
-			"pages": [
-				{
+			"pages": [{
 					"path": "voice",
 					"style": {
 						"navigationBarTitleText": "语音导览"
@@ -95,8 +89,7 @@
 		},
 		{
 			"root": "pages/productList",
-			"pages": [
-				{
+			"pages": [{
 					"path": "productList",
 					"style": {
 						"navigationBarTitleText": "商品列表"
@@ -118,8 +111,7 @@
 		},
 		{
 			"root": "pages/address",
-			"pages": [
-				{
+			"pages": [{
 					"path": "address",
 					"style": {
 						"navigationBarTitleText": "收货地址"
@@ -135,19 +127,16 @@
 		},
 		{
 			"root": "pages/introduce",
-			"pages": [
-				{
-					"path": "introduce",
-					"style": {
-						"navigationBarTitleText": "景区简介"
-					}
+			"pages": [{
+				"path": "introduce",
+				"style": {
+					"navigationBarTitleText": "景区简介"
 				}
-			]
+			}]
 		},
 		{
 			"root": "pages/menber",
-			"pages": [
-				{
+			"pages": [{
 					"path": "menber",
 					"style": {
 						"navigationBarTitleText": "会员票型"
@@ -181,19 +170,16 @@
 		},
 		{
 			"root": "pages/subPack/mindTike",
-			"pages": [
-				{
-					"path": "mindTike",
-					"style": {
-						"navigationBarTitleText": "推荐票型"
-					}
+			"pages": [{
+				"path": "mindTike",
+				"style": {
+					"navigationBarTitleText": "推荐票型"
 				}
-			]
+			}]
 		},
 		{
 			"root": "pages/notice",
-			"pages": [
-				{
+			"pages": [{
 					"path": "notice",
 					"style": {
 						"navigationBarTitleText": "公告列表"
@@ -209,8 +195,7 @@
 		},
 		{
 			"root": "pages/stop",
-			"pages": [
-				{
+			"pages": [{
 					"path": "stop",
 					"style": {
 						"navigationBarTitleText": "停车缴费"
@@ -226,8 +211,7 @@
 		},
 		{
 			"root": "pages/timeticket",
-			"pages": [
-				{
+			"pages": [{
 					"path": "timeticket",
 					"style": {
 						"navigationBarTitleText": "计时票"
@@ -249,8 +233,7 @@
 		},
 		{
 			"root": "pages/route",
-			"pages": [
-				{
+			"pages": [{
 					"path": "route",
 					"style": {
 						"navigationBarTitleText": "游览线路"
@@ -266,19 +249,16 @@
 		},
 		{
 			"root": "pages/coinDiscon",
-			"pages": [
-				{
-					"path": "coinDiscon",
-					"style": {
-						"navigationBarTitleText": "我的优惠券"
-					}
+			"pages": [{
+				"path": "coinDiscon",
+				"style": {
+					"navigationBarTitleText": "我的优惠券"
 				}
-			]
+			}]
 		},
 		{
 			"root": "pages/rollcenter",
-			"pages": [
-				{
+			"pages": [{
 					"path": "rollcenter",
 					"style": {
 						"navigationBarTitleText": "优惠券中心"
@@ -294,8 +274,7 @@
 		},
 		{
 			"root": "pages/seat",
-			"pages": [
-				{
+			"pages": [{
 					"path": "detailsSeat",
 					"style": {
 						"navigationBarTitleText": "选座购票"
@@ -329,8 +308,7 @@
 		},
 		{
 			"root": "pages/ticketCode",
-			"pages": [
-				{
+			"pages": [{
 					"path": "Invoice",
 					"style": {
 						"navigationBarTitleText": "发票"
@@ -358,8 +336,7 @@
 		},
 		{
 			"root": "pages/complaint",
-			"pages": [
-				{
+			"pages": [{
 					"path": "complaint",
 					"style": {
 						"navigationBarTitleText": "我的留言"
@@ -381,74 +358,61 @@
 		},
 		{
 			"root": "pages/map1",
-			"pages": [
-				{
-					"path": "map1",
-					"style": {
-						"navigationBarTitleText": "地图导览"
-					}
+			"pages": [{
+				"path": "map1",
+				"style": {
+					"navigationBarTitleText": "地图导览"
 				}
-			]
+			}]
 		},
 		{
 			"root": "pages/ar",
-			"pages": [
-				{
-					"path": "ar",
-					"style": {
-						"navigationBarTitleText": ""
-					}
+			"pages": [{
+				"path": "ar",
+				"style": {
+					"navigationBarTitleText": ""
 				}
-			]
+			}]
 		},
 		{
 			"root": "pages/subPack/rescue",
-			"pages": [
-				{
-					"path": "rescue",
-					"style": {
-						"navigationBarTitleText": "紧急救援"
-					}
+			"pages": [{
+				"path": "rescue",
+				"style": {
+					"navigationBarTitleText": "紧急救援"
 				}
-			]
+			}]
 		},
 		{
 			"root": "pages/subPack/my",
-			"pages": [
-				{
-					"path": "headPortrait",
-					"style": {
-						"navigationBarTitleText": "编辑资料"
-					}
+			"pages": [{
+				"path": "headPortrait",
+				"style": {
+					"navigationBarTitleText": "编辑资料"
 				}
-			]
+			}]
 		},
 		{
 			"root": "pages/subPack/realName",
-			"pages": [
-				{
-					"path": "realName",
-					"style": {
-						"navigationBarTitleText": "实名认证"
-					}
+			"pages": [{
+				"path": "realName",
+				"style": {
+					"navigationBarTitleText": "实名认证"
 				}
-			]
+			}]
 		},
 		{
 			"root": "pages/subPack/seat",
-			"pages": [
-				{
-					"path": "seatpay",
-					"style": {
-						"navigationBarTitleText": "确认支付"
-					}
+			"pages": [{
+				"path": "seatpay",
+				"style": {
+					"navigationBarTitleText": "确认支付"
 				}
-			]
+			}]
 		},
 		{
 			"root": "pages/subPack/distribution",
-			"pages": [
-				{
+			"pages": [{
 					"path": "myDist",
 					"style": {
 						"navigationBarTitleText": "我的资料"
@@ -506,42 +470,55 @@
 		},
 		{
 			"root": "pages/subPack/voucherCode",
-			"pages": [
-				{
-					"path": "voucherCode",
-					"style": {
-						"navigationBarTitleText": "激活票码"
-					}
+			"pages": [{
+				"path": "voucherCode",
+				"style": {
+					"navigationBarTitleText": "激活票码"
 				}
-			]
+			}]
 		},
 		{
 			"root": "pages/subPack/coinsup",
-			"pages": [
-				{
-					"path": "coinsup",
-					"style": {
-						"navigationBarTitleText": "协议详情"
-					}
+			"pages": [{
+				"path": "coinsup",
+				"style": {
+					"navigationBarTitleText": "协议详情"
 				}
-			]
+			}]
 		},
 		{
 			"root": "pages/subPack/humanity",
-			"pages": [
-				{
-					"path": "humanity",
-					"style": {
-						"navigationBarTitleText": "人文风光",
-						"navigationStyle": "custom"
-					}
+			"pages": [{
+				"path": "humanity",
+				"style": {
+					"navigationBarTitleText": "人文风光",
+					"navigationStyle": "custom"
 				}
-			]
+			}]
+		},
+		{
+			"root": "pages/subPack/other",
+			"pages": [{
+				"path": "otherservice",
+				"style": {
+					"navigationBarTitleText": "酒店介绍",
+					"navigationStyle": "custom"
+				}
+			}]
+		},
+		{
+			"root": "pages/subPack/activitydetail",
+			"pages": [{
+				"path": "activitydetail",
+				"style": {
+					"navigationBarTitleText": "",
+					"navigationStyle": "custom"
+				}
+			}]
 		},
 		{
 			"root": "pages/subPack/restaurant",
-			"pages": [
-				{
+			"pages": [{
 					"path": "restaurant",
 					"style": {
 						"navigationBarTitleText": "扫码点餐"
@@ -583,5 +560,13 @@
 			"^f-tabs$": "@/components/f-tabs/f-tabs.vue",
 			"^uni-popup$": "@/components/uni-popup/uni-popup.vue"
 		}
-	}
+	},
+	"permission": {
+		"scope.userLocation": {
+			"desc": "用于获取景区位置信息，提供导航服务"
+		}
+	},
+	"requiredPrivateInfos": [
+		"getLocation"
+	]
 }

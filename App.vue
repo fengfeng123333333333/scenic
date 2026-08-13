@@ -15,9 +15,21 @@
 	import {
 		registerToastRef
 	} from "@/util/toast.js";
-
+	import {
+		parseVidFromScene
+	} from "@/util/helper.js";
+	async function virtualAppletsConfigFun(vid) {
+		const res = await uni.$myRequest({
+			url: "/api/Applets/VirtualAppletsConfig",
+			method: "POST",
+			data: {
+				AppID: vid || "",
+			},
+		});
+	}
 	// ==================== 应用启动 ====================
 	onLaunch((options) => {
+		console.log("onLaunchonLaunchonLaunch", options)
 		initTheme();
 
 		// 版本更新检测
@@ -45,18 +57,55 @@
 	});
 
 	// ==================== 进入前台 ====================
-	onShow((options) => {
+	onShow(async (options) => {
+		// 从扫码入口的 scene 参数中解析并存储 vid
+		const sceneVid = parseVidFromScene(options?.query?.scene);
+		if (sceneVid) {
+			uni.setStorageSync("vid", sceneVid);
+		}
+		// 分享直传的 vid（明文，无需 decode）
+		if (options?.query?.vid) {
+			uni.setStorageSync("vid", options.query.vid);
+		}
+
+		// 审核模式兜底：无 vid 时检查是否为审核环境
+		if (!uni.getStorageSync("vid")) {
+			try {
+				const reviewRes = await uni.$myRequest({
+					url: "/api/Applets/AppletsGetReviewStatus",
+					method: "GET",
+				});
+				if (reviewRes.data?.Code === 200 && reviewRes.data?.Data?.IsReviewMode === 0) {
+					const defaultVid = reviewRes.data?.Data?.DefaultVid;
+					if (defaultVid) {
+						uni.setStorageSync("vid", defaultVid);
+					}
+				}
+			} catch (e) {
+				console.log("审核状态检查失败:", e);
+			}
+		}
+
+		// 无 vid → 跳转引导页
+		if (!uni.getStorageSync("vid")) {
+			uni.reLaunch({
+				url: "/pages/guide/guide"
+			});
+			return;
+		}
+
 		// 静默登录
 		console.log("optionsoptionsoptions", options)
+		virtualAppletsConfigFun(uni.getStorageSync("vid"))
 		if (!uni.getStorageSync("userinfo")) {
 			uni.login({
 				provider: "weixin",
 				success: async (loginRes) => {
 					const res = await uni.$myRequest({
-						url: "/api/Applets/AppletsLogin",
+						url: "/api/Applets/VirtualAppletsLogin",
 						method: "POST",
 						data: {
-							code: loginRes.code
+							code: loginRes.code,
 						},
 					});
 					uni.setStorage({
@@ -70,6 +119,9 @@
 		// 支付页面返回 → 跳转首页订单 Tab
 		if (options?.referrerInfo?.appId) {
 			if (uni.getStorageSync("skipAutoJump") === "1") return;
+			if (options.referrerInfo.extraData.code == 'cancel') {
+				return
+			}
 			const paymentPaths = [
 				"pages/payment/payment",
 				"pages/menber/recharge",

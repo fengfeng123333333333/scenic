@@ -182,24 +182,28 @@
 		<u-toast ref="uToastRef" />
 
 		<!-- 绑卡弹窗 -->
-		<u-popup :show="show1" closeable mode="center" @close="close">
+		<u-popup :show="show1" closeable mode="center" @close="close" :round="20">
 			<view class="popup-bind">
+				<view class="section-header">
+					<view class="section-header__bar" />
+					<text class="section-header__title">会员卡绑定</text>
+				</view>
 				<view class="popup-bind__scan">
-					<u-button type="primary" text="扫一扫" @click="scan" />
+					<button class="popup-bind__btn" @click="scan">扫一扫</button>
 				</view>
 				<view class="popup-bind__form">
 					<view class="popup-bind__row">
-						<text>输入卡号:</text>
-						<u-input border="surround" v-model="pass" />
+						<text class="popup-bind__label">卡号</text>
+						<u-input border="surround" v-model="pass" placeholder="请输入卡号" />
 					</view>
 					<view class="popup-bind__row">
-						<text>验证码:</text>
-						<u-input border="surround" v-model="pass1" />
+						<text class="popup-bind__label">验证码</text>
+						<u-input border="surround" v-model="pass1" placeholder="请输入验证码" />
 					</view>
 				</view>
 				<view class="popup-bind__actions">
-					<u-button type="primary" :text="contxt" @click="huoqu" />
-					<u-button :disabled="disabled" type="primary" text="提交" @click="tijiao" />
+					<button class="popup-bind__btn" @click="huoqu">{{ contxt }}</button>
+					<button class="popup-bind__btn" :disabled="disabled" @click="tijiao">提交</button>
 				</view>
 			</view>
 		</u-popup>
@@ -833,43 +837,92 @@
 		margin-top: 40rpx;
 	}
 
+	/* ====== 分区标题 ====== */
+	.section-header {
+		display: flex;
+		align-items: center;
+		padding: 8rpx 8rpx 16rpx;
+	}
+
+	.section-header__bar {
+		width: 6rpx;
+		height: 32rpx;
+		background: var(--color-primary);
+		border-radius: 3rpx;
+		margin-right: 12rpx;
+	}
+
+	.section-header__title {
+		font-size: 30rpx;
+		font-weight: 600;
+		color: var(--color-text);
+	}
+
 	/* ====== 绑卡弹窗 ====== */
 	.popup-bind {
-		width: 700rpx;
-		padding: 20rpx;
+		width: 640rpx;
+		padding: 32rpx 28rpx;
+		background: var(--color-bg-card);
+		border-radius: var(--radius-card);
 	}
 
 	.popup-bind__scan {
-		padding: 0 10rpx;
 		margin-bottom: 24rpx;
 	}
 
 	.popup-bind__form {
-		padding: 0 10rpx;
+		display: flex;
+		flex-direction: column;
+		gap: 20rpx;
 	}
 
 	.popup-bind__row {
 		display: flex;
 		align-items: center;
-		margin-top: 32rpx;
-
-		text {
-			width: 130rpx;
-			font-size: 28rpx;
-			color: var(--color-text);
-			text-align: right;
-			margin-right: 10rpx;
-		}
+		gap: 16rpx;
 
 		:deep(.u-input) {
 			flex: 1;
 		}
 	}
 
+	.popup-bind__label {
+		width: 120rpx;
+		font-size: 28rpx;
+		font-weight: 600;
+		color: var(--color-text);
+		flex-shrink: 0;
+		text-align: right;
+	}
+
+	.popup-bind__btn {
+		flex: 1;
+		height: 72rpx;
+		font-size: 28rpx;
+		font-weight: 600;
+		color: var(--color-text-on-primary);
+		background: var(--color-primary);
+		border: none;
+		border-radius: var(--radius-button);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: all 0.12s ease;
+	}
+
+	.popup-bind__btn:active {
+		opacity: 0.88;
+		transform: scale(0.96);
+	}
+
+	.popup-bind__btn:disabled {
+		opacity: 0.5;
+		transform: none;
+	}
+
 	.popup-bind__actions {
 		display: flex;
-		justify-content: space-between;
-		padding: 40rpx 10rpx 10rpx;
+		padding-top: 32rpx;
 		gap: 20rpx;
 	}
 </style>

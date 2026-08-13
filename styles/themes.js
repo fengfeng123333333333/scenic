@@ -455,7 +455,7 @@ const themes = {
 // ============================================================================
 
 /** 默认主题key */
-const DEFAULT_THEME = "natural-ecology";
+const DEFAULT_THEME = "culture-classic";
 
 /** localStorage 存储 key */
 const STORAGE_KEY = "app-theme";
